@@ -1,0 +1,247 @@
+.formulario-encomenda {
+    display: grid;
+    grid-template-columns: .78fr 1.22fr;
+    gap: clamp(35px, 7vw, 100px);
+    padding: 100px max(7vw, 32px);
+    background: #fbe1df
+}
+
+.formulario-intro {
+    padding-top: 18px
+}
+
+.formulario-intro>p:not(.sobretitulo) {
+    max-width: 390px;
+    margin: 22px 0;
+    color: #77554c;
+    line-height: 1.7
+}
+
+.passos {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 42px;
+    color: #a27b72;
+    font-size: 14px;
+    text-align: center
+}
+
+.passos span {
+    display: grid;
+    place-items: center;
+    width: 39px;
+    height: 39px;
+    border: 1px solid #d6a4a2;
+    border-radius: 50%;
+    line-height: 1
+}
+
+.passos small {
+    position: relative;
+    top: 12px;
+    font-size: 10px;
+    white-space: nowrap
+}
+
+.passos .ativo {
+    color: #fff;
+    background: #4b2a20;
+    border-color: #4b2a20
+}
+
+.passos i {
+    width: 40px;
+    height: 1px;
+    background: #d6a4a2
+}
+
+.formulario {
+    padding: 32px;
+    background: #fffaf5;
+    border-radius: 27px;
+    box-shadow: 0 15px 45px #85504b15
+}
+
+.linha-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px
+}
+
+.linha-form.tres {
+    grid-template-columns: repeat(3, 1fr)
+}
+
+.linha-form.quantidade {
+    grid-template-columns: 120px 1fr
+}
+
+label {
+    display: block;
+    color: #68483e;
+    font-size: 12px;
+    font-weight: 700
+}
+
+input,
+select,
+textarea {
+    display: block;
+    width: 100%;
+    margin-top: 7px;
+    padding: 12px 13px;
+    border: 1px solid #ead8cf;
+    border-radius: 10px;
+    background: #fff;
+    color: #513128;
+    font: 400 13px 'DM Sans', sans-serif;
+    outline: none
+}
+
+textarea {
+    resize: vertical
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: #d97a85;
+    box-shadow: 0 0 0 3px #e974831c
+}
+
+.referencia {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 23px 0 27px;
+    padding: 16px;
+    border-radius: 13px;
+    background: #fff3e7
+}
+
+.referencia>div:first-child {
+    display: grid;
+    gap: 3px
+}
+
+.referencia b {
+    font-size: 13px
+}
+
+.referencia b small,
+.referencia span {
+    font-weight: 400;
+    color: #99786e;
+    font-size: 11px
+}
+
+.upload {
+    margin-left: auto;
+    padding: 10px 13px;
+    border: 1px dashed #c7807e;
+    border-radius: 9px;
+    color: #b65b67;
+    white-space: nowrap;
+    cursor: pointer
+}
+
+.upload input {
+    display: none
+}
+
+.upload span {
+    margin-right: 5px;
+    color: #b65b67;
+    font-size: 17px
+}
+
+.preview {
+    display: flex !important;
+    align-items: center !important;
+    gap: 7px;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 3;
+    max-width: 210px;
+    padding: 7px;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: 0 8px 20px #603d3320
+}
+
+.preview img {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    object-fit: cover
+}
+
+.preview small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.preview button {
+    border: 0;
+    background: transparent;
+    color: #b65b67;
+    font-size: 21px;
+    cursor: pointer
+}
+
+.enviar {
+    width: 100%;
+    justify-content: center
+}
+
+.sucesso {
+    margin: 16px 0 0;
+    color: #7e4650;
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.5
+}
+
+@media(max-width:760px) {
+    .formulario-encomenda {
+        grid-template-columns: 1fr;
+        padding: 75px 21px
+    }
+
+    .linha-form,
+    .linha-form.tres,
+    .linha-form.quantidade {
+        grid-template-columns: 1fr
+    }
+
+    .formulario {
+        padding: 22px 16px
+    }
+
+    .referencia {
+        align-items: flex-start;
+        flex-direction: column
+    }
+
+    .upload {
+        margin-left: 0
+    }
+
+    .passos {
+        margin-bottom: 25px
+    }
+
+    .preview {
+        right: auto;
+        left: 0
+    }
+
+    .formulario-encomenda .botao {
+        display: inline-flex
+    }
+}

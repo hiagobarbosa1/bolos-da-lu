@@ -1,0 +1,88 @@
+.loja-fisica {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 28px 80px;
+  color: #4b2a20;
+}
+
+.loja-fisica-cabecalho { margin-bottom: 28px; }
+.loja-fisica-cabecalho .sobretitulo { margin: 0 0 12px; }
+.loja-fisica-cabecalho h2 {
+  margin: 0;
+  font: 700 clamp(30px, 3vw, 44px)/1.2 'Playfair Display', serif;
+}
+
+.loja-fisica-fotos {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 22px;
+}
+
+.loja-fisica-fotos figure { min-width: 0; margin: 0; }
+.loja-fisica-fotos img {
+  display: block;
+  width: 100%;
+  height: clamp(240px, 26vw, 340px);
+  object-fit: cover;
+  border-radius: 22px;
+  box-shadow: 0 12px 26px -14px #96745c66;
+}
+.loja-fisica-localizacao {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-top: 28px;
+  padding: 28px 32px;
+  border: 1px solid #f1ded3;
+  border-radius: 22px;
+  background: linear-gradient(110deg, #fcebe6, #fff7eb);
+}
+.loja-fisica-pin {
+  display: grid;
+  place-items: center;
+  flex: 0 0 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #f7d7d9;
+  color: #b34e65;
+}
+.loja-fisica-pin svg { width: 26px; height: 26px; }
+.loja-fisica-endereco { flex: 1; }
+.loja-fisica-endereco p {
+  margin: 0 0 8px;
+  color: #bd5967;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+.loja-fisica-endereco address { font-style: normal; line-height: 1.6; }
+.loja-fisica-endereco strong { display: block; font-size: clamp(17px, 1.6vw, 21px); }
+.loja-fisica-endereco address span { color: #8a6455; font-size: 14px; }
+.loja-fisica-endereco i { margin: 0 6px; font-style: normal; }
+.loja-fisica-mapa {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 13px 24px;
+  border-radius: 30px;
+  background: #4b2a20;
+  color: #fffaf5;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.loja-fisica-mapa:hover { background: #704633; }
+.loja-fisica-mapa:focus-visible { outline: 3px solid #bd5967; outline-offset: 4px; }
+@media (max-width: 760px) {
+  .loja-fisica { padding: 0 20px 48px; }
+  .loja-fisica-fotos { grid-template-columns: 1fr 1fr; gap: 24px 16px; }
+  .loja-fisica-fotos figure:first-child { grid-column: 1 / -1; }
+  .loja-fisica-fotos img { height: auto; aspect-ratio: 1; }
+  .loja-fisica-fotos figure:first-child img { aspect-ratio: 2; }
+  .loja-fisica-localizacao { flex-wrap: wrap; gap: 16px; padding: 22px 18px; }
+  .loja-fisica-pin { flex-basis: 44px; height: 44px; }
+  .loja-fisica-endereco { flex-basis: calc(100% - 60px); }
+  .loja-fisica-mapa { width: 100%; box-sizing: border-box; }
+}

@@ -1,0 +1,238 @@
+.produtos-admin article {
+    align-items: center
+}
+
+.produtos-admin img,
+.sem-imagem {
+    width: 58px;
+    height: 58px;
+    border-radius: 10px;
+    object-fit: cover
+}
+
+.sem-imagem {
+    display: grid;
+    place-items: center;
+    background: #f9e2d4;
+    font-size: 25px
+}
+
+.dados-produto {
+    flex: 1
+}
+
+.dados-produto small {
+    max-width: 430px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.acoes-produto {
+    display: flex;
+    align-items: center;
+    gap: 7px
+}
+
+.acoes-produto small {
+    margin: 0
+}
+
+.switch {
+    position: relative;
+    width: 34px;
+    height: 19px
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0
+}
+
+.switch span {
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: #d5b9ae;
+    cursor: pointer
+}
+
+.switch span:before {
+    content: '';
+    position: absolute;
+    left: 3px;
+    bottom: 3px;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: white;
+    transition: .2s
+}
+
+.switch input:checked+span {
+    background: #7cab73
+}
+
+.switch input:checked+span:before {
+    transform: translateX(15px)
+}
+
+.produto-modal {
+    position: fixed;
+    z-index: 70;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: #2e1711a8
+}
+
+.produto-form {
+    position: relative;
+    width: min(100%, 560px);
+    max-height: calc(100vh - 40px);
+    overflow: auto;
+    padding: 30px;
+    border-radius: 20px;
+    background: #fffaf5;
+    color: #4b2a20;
+    box-shadow: 0 20px 70px #2d120b88
+}
+
+.produto-form h2 {
+    margin: 0 0 22px;
+    font: 700 31px 'Playfair Display', serif
+}
+
+.campos-produto {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px
+}
+
+.campos-produto label {
+    font-size: 12px;
+    font-weight: 700
+}
+
+.campos-produto input,
+.campos-produto select,
+.campos-produto textarea {
+    width: 100%;
+    margin-top: 6px;
+    padding: 11px;
+    border: 1px solid #e7d3ca;
+    border-radius: 8px;
+    background: #fff;
+    color: #4b2a20;
+    font: 400 13px 'DM Sans', sans-serif
+}
+
+.campo-total {
+    grid-column: 1/-1
+}
+
+.imagem-upload-produto input[type=file] {
+    padding: 9px;
+    cursor: pointer
+}
+
+.imagem-upload-produto span {
+    display: block;
+    margin-top: 7px;
+    color: #8a6558;
+    font-size: 11px;
+    font-weight: 400
+}
+
+.imagem-upload-produto img {
+    display: block;
+    width: 112px;
+    height: 82px;
+    margin-top: 10px;
+    border-radius: 9px;
+    object-fit: cover
+}
+
+.erro-upload-produto {
+    margin: 0 0 16px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #fde5e2;
+    color: #ad3e45;
+    font-size: 12px;
+    line-height: 1.4
+}
+
+.disponivel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    grid-column: 1/-1
+}
+
+.disponivel input {
+    width: auto;
+    margin: 0
+}
+
+.botoes-form {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px
+}
+
+.botoes-form button {
+    border: 0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    background: #f0ded6;
+    color: #704b3f;
+    font-weight: 700;
+    cursor: pointer
+}
+
+.botoes-form button[type=submit] {
+    background: #4b2a20;
+    color: #fff
+}
+
+.fechar-produto {
+    position: absolute;
+    right: 20px;
+    top: 19px;
+    border: 0;
+    background: transparent;
+    color: #70483a;
+    font-size: 27px;
+    cursor: pointer
+}
+
+@media(max-width:760px) {
+    .campos-produto {
+        grid-template-columns: 1fr
+    }
+
+    .campo-total {
+        grid-column: auto
+    }
+
+    .acoes-produto {
+        flex-wrap: wrap;
+        justify-content: flex-end
+    }
+
+    .produtos-admin article {
+        align-items: flex-start
+    }
+
+    .produto-form {
+        padding: 25px 19px
+    }
+
+    .produto-form h2 {
+        font-size: 27px
+    }
+}

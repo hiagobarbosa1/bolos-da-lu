@@ -1,0 +1,95 @@
+.auth-modal {
+    position: fixed;
+    z-index: 60;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: #2f1812b8
+}
+
+.auth-caixa {
+    position: relative;
+    display: grid;
+    gap: 13px;
+    width: min(100%, 400px);
+    padding: 34px;
+    border-radius: 23px;
+    background: #fffaf5;
+    box-shadow: 0 20px 70px #28120ca0;
+    color: #4b2a20
+}
+
+.auth-marca {
+    margin: 0;
+    color: #e97483;
+    font: 800 25px 'Playfair Display', serif
+}
+
+.auth-caixa h2 {
+    margin: 2px 0 0;
+    font: 700 30px 'Playfair Display', serif
+}
+
+.auth-caixa>p:not(.auth-marca) {
+    margin: 0 0 6px;
+    color: #816258;
+    font-size: 13px;
+    line-height: 1.5
+}
+
+.auth-caixa label {
+    font-size: 12px;
+    font-weight: 700
+}
+
+.auth-caixa input {
+    width: 100%;
+    margin-top: 5px;
+    padding: 11px;
+    border: 1px solid #e7d3cb;
+    border-radius: 8px;
+    background: #fff;
+    font: 400 13px 'DM Sans', sans-serif
+}
+
+.auth-caixa>button:not(.fechar-auth) {
+    margin-top: 5px;
+    padding: 13px;
+    border: 0;
+    border-radius: 9px;
+    background: #4b2a20;
+    color: white;
+    font-weight: 700;
+    cursor: pointer
+}
+
+.auth-caixa>small {
+    text-align: center;
+    color: #87675d;
+    font-size: 11px
+}
+
+.auth-caixa small a {
+    color: #bb5968;
+    font-weight: 700
+}
+
+.fechar-auth {
+    position: absolute;
+    top: 19px;
+    right: 19px;
+    border: 0;
+    background: transparent;
+    color: #694337;
+    font-size: 27px;
+    cursor: pointer
+}
+
+.auth-erro {
+    padding: 9px;
+    border-radius: 7px;
+    background: #f9dddd;
+    color: #9c3f49;
+    font-size: 11px
+}

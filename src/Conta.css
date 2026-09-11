@@ -1,0 +1,51 @@
+.conta {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    color: #684137;
+    font-size: 12px;
+    font-weight: 700
+}
+
+.conta button {
+    padding: 8px 11px;
+    border: 1px solid #d8b4a8;
+    border-radius: 20px;
+    background: transparent;
+    color: #704237;
+    font: 700 12px 'DM Sans', sans-serif;
+    cursor: pointer
+}
+
+.conta .meus-pedidos-topo { background: #e97483; border-color: #e97483; color: #fffaf5; }
+
+.aviso-admin {
+    position: fixed;
+    z-index: 40;
+    right: 20px;
+    bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 360px;
+    padding: 13px 15px;
+    border-radius: 11px;
+    background: #4b2a20;
+    color: #fffaf5;
+    box-shadow: 0 10px 30px #371b1455;
+    font-size: 12px
+}
+
+.aviso-admin button {
+    border: 0;
+    background: transparent;
+    color: #fff;
+    font-size: 21px;
+    cursor: pointer
+}
+
+@media(max-width:760px) {
+    .conta span {
+        display: none
+    }
+}

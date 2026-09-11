@@ -1,0 +1,38 @@
+.aviso-conta-fundo { position: fixed; z-index: 91; inset: 0; display: grid; place-items: center; padding: 20px; background: #4b2a2038; backdrop-filter: blur(5px); animation: fundo-aviso-entra .25s ease-out both }
+.aviso-conta {
+    width: min(520px, 100%);
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    box-sizing: border-box;
+    padding: 27px 25px;
+    border: 1px solid #e5aea9;
+    border-radius: 22px;
+    background: #fffaf5;
+    color: #4b2a20;
+    box-shadow: 0 22px 55px #4b2a2050;
+    animation: aviso-conta-entra .35s ease-out both
+}
+
+.icone-aviso-conta { display: grid; place-items: center; flex: 0 0 54px; width: 54px; height: 54px; border-radius: 50%; background: #f8d9de; color: #df6979; font-size: 25px }
+.aviso-conta div { display: grid; gap: 5px; flex: 1 }
+.aviso-conta small { color: #d65c6d; font: 800 10px 'DM Sans', sans-serif; letter-spacing: 1.3px }
+.aviso-conta b { font: 700 16px/1.4 'DM Sans', sans-serif }
+.aviso-conta button {
+    border: 0;
+    background: transparent;
+    color: #765044;
+    font-size: 29px;
+    cursor: pointer
+}
+
+@keyframes aviso-conta-entra { from { opacity: 0; transform: translateY(10px) scale(.96) } to { opacity: 1; transform: translateY(0) scale(1) } }
+@keyframes fundo-aviso-entra { from { opacity: 0 } to { opacity: 1 } }
+
+.confirmar-saida { display: grid; justify-items: center; width: min(480px, 100%); padding: 32px; border: 1px solid #e5aea9; border-radius: 22px; background: #fffaf5; color: #4b2a20; text-align: center; box-shadow: 0 22px 55px #4b2a2050; animation: aviso-conta-entra .35s ease-out both }
+.confirmar-saida>span { display: grid; place-items: center; width: 53px; height: 53px; margin-bottom: 10px; border-radius: 50%; background: #f8d9de; color: #df6979; font-size: 24px }
+.confirmar-saida h2 { margin: -5px 0 10px; font: 700 34px 'Playfair Display', serif }
+.confirmar-saida>p:not(.sobretitulo) { max-width: 330px; margin: 0; color: #795a4e; font: 14px/1.6 'DM Sans', sans-serif }
+.confirmar-saida>div { display: flex; width: 100%; gap: 10px; margin-top: 25px }
+.confirmar-saida button { flex: 1; padding: 13px; border: 1px solid #deb7ac; border-radius: 9px; background: transparent; color: #674238; font: 800 13px 'DM Sans', sans-serif; cursor: pointer }
+.confirmar-saida button.confirmar { border-color: #4b2a20; background: #4b2a20; color: #fffaf5 }

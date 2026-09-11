@@ -1,0 +1,42 @@
+.carrinho{overflow-y:auto}.itens-carrinho{flex:none;max-height:245px;min-height:110px;overflow-y:auto;margin-right:-7px;padding-right:7px}.itens-carrinho article{min-height:104px}.itens-carrinho article>div{min-width:0}.itens-carrinho b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.carrinho form{flex:none;padding-bottom:5px}@media(max-height:700px){.itens-carrinho{max-height:175px}.carrinho{padding-top:20px;padding-bottom:20px}}
+
+.icone-agendamento,.icone-pagamento{display:none}
+.carrinho.carrinho-checkout{width:min(100%,520px);padding:24px;background:linear-gradient(160deg,#fffaf5,#fcf6ef)}
+.carrinho.carrinho-checkout .opcoes-entrega{gap:4px;margin:0 0 12px;padding:4px;border:1px solid #efdfcd;border-radius:24px;background:#fbf5ed;box-shadow:inset 0 1px 0 #fff}
+.carrinho.carrinho-checkout .opcoes-entrega button{min-height:46px;border:0;border-radius:19px;background:transparent;color:#684737;transition:background .18s}
+.carrinho.carrinho-checkout .opcoes-entrega button.selecionada{background:linear-gradient(110deg,#f8dba2,#f7d18a);color:#4b2a20;box-shadow:0 2px 5px #cda26018}
+.carrinho.carrinho-checkout .agendamento-retirada{position:relative;margin-top:0;padding:18px;border:1px solid #f0e4d7;border-radius:14px;background:linear-gradient(135deg,#fffdf9,#fff7ed);box-shadow:0 4px 14px #78533708}
+.carrinho.carrinho-checkout .icone-agendamento,.carrinho.carrinho-checkout .icone-pagamento{display:grid;place-items:center;width:36px;height:36px;flex-shrink:0;border-radius:50%;color:#758f91;background:#eaf0ec}
+.carrinho.carrinho-checkout .icone-agendamento{position:absolute;top:16px;left:16px}
+.icone-agendamento svg,.icone-pagamento svg{width:19px;height:19px}
+.carrinho.carrinho-checkout .agendamento-titulo{margin-left:46px;min-height:32px;gap:8px;align-items:center;justify-content:flex-start}
+.carrinho.carrinho-checkout .agendamento-titulo b{font-size:14px}.carrinho.carrinho-checkout .agendamento-titulo>span{padding:5px 8px;background:#ffe5e8;color:#c66379;font-size:9px;border-radius:14px}
+.carrinho.carrinho-checkout .agendamento-retirada>p{margin:8px 0 0 46px;font-size:12px;line-height:1.45;color:#896c5f}
+.carrinho.carrinho-checkout .agendamento-campos{margin-top:12px;gap:14px}.carrinho.carrinho-checkout .agendamento-campos label{font-size:12px}
+.carrinho.carrinho-checkout input,.carrinho.carrinho-checkout select{min-height:44px;border:1px solid #e9dfd5;border-radius:9px;background:#fff;box-shadow:0 2px 5px #6c422207;font-size:14px}
+.carrinho.carrinho-checkout .agendamento-retirada>small{margin-top:12px;font-size:11px}
+.carrinho.carrinho-checkout .agendamento-retirada>.horarios-indisponiveis{display:flex;align-items:center;gap:8px;padding:12px;border-radius:9px;background:#fce8e4;color:#c75269}
+.carrinho.carrinho-checkout .horarios-indisponiveis>span{display:grid;place-items:center;flex-shrink:0;width:16px;height:16px;border-radius:50%;background:#ec6782;color:#fff;font-size:11px;font-weight:800}
+.carrinho.carrinho-checkout .cartao-pagamento{display:flex;gap:12px;margin-top:14px;padding:18px;border:1px solid #f0e4d7;border-radius:14px;background:#fffdf9;box-shadow:0 4px 14px #78533708}
+.carrinho.carrinho-checkout .icone-pagamento{background:#fce9c7;color:#946a3e}.campos-pagamento{min-width:0;flex:1}
+.carrinho.carrinho-checkout .campos-pagamento label{margin-top:2px;font-size:14px}.carrinho.carrinho-checkout .aviso-pagamento{margin-top:9px;font-size:11px;color:#977b6a}
+.carrinho.carrinho-checkout .total-carrinho{align-items:center;margin:17px 0 12px;font-size:17px;font-weight:800}.carrinho.carrinho-checkout .total-carrinho b{font-size:22px;letter-spacing:-.5px}
+.carrinho.carrinho-checkout .finalizar{padding:13px;border-radius:9px;background:linear-gradient(100deg,#4b2a20,#69392a);box-shadow:0 3px 8px #4b2a201c}
+.assinatura-carrinho{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:17px;color:#b98a7c;font:700 8px 'DM Sans',sans-serif;letter-spacing:2px;text-transform:uppercase}.assinatura-carrinho::before,.assinatura-carrinho::after{content:'';height:1px;flex:1;background:#eedbd0}.assinatura-carrinho>span{color:#e68d9c;font-size:17px;line-height:1}
+.carrinho.carrinho-checkout button:focus-visible,.carrinho.carrinho-checkout input:focus-visible,.carrinho.carrinho-checkout select:focus-visible{outline:2px solid #bd5967;outline-offset:3px}
+@media(max-width:360px){.carrinho.carrinho-checkout .agendamento-campos{grid-template-columns:1fr}.carrinho.carrinho-checkout .agendamento-titulo{align-items:flex-start;flex-direction:column}.carrinho.carrinho-checkout .agendamento-retirada{padding:13px}.carrinho.carrinho-checkout .cartao-pagamento{padding:11px}}
+
+.carrinho.carrinho-checkout .opcoes-entrega button{display:flex;align-items:center;justify-content:center;gap:10px;font-size:14px}.carrinho.carrinho-checkout .icone-modalidade{font-size:20px;filter:grayscale(1) sepia(.7)}
+@media(max-width:500px){.carrinho.carrinho-checkout{padding:18px}.carrinho.carrinho-checkout .agendamento-titulo{flex-wrap:wrap}.carrinho.carrinho-checkout .agendamento-retirada>p{font-size:11px}.carrinho.carrinho-checkout .agendamento-campos{gap:10px}.carrinho.carrinho-checkout .cartao-pagamento{padding:14px}.carrinho.carrinho-checkout .agendamento-titulo b{font-size:13px}}
+
+.carrinho.carrinho-checkout{box-sizing:border-box}.carrinho.carrinho-checkout .agendamento-campos label{min-width:0}.carrinho.carrinho-checkout .agendamento-campos input,.carrinho.carrinho-checkout .campos-pagamento select{box-sizing:border-box;width:100%}.carrinho.carrinho-checkout .campos-pagamento select{margin-top:9px}.carrinho.carrinho-checkout .agendamento-titulo>span{line-height:1.3}.carrinho.carrinho-checkout .finalizar:disabled{opacity:.6;cursor:wait}
+@media(max-width:500px){.carrinho.carrinho-checkout .agendamento-campos input,.carrinho.carrinho-checkout .agendamento-campos select,.carrinho.carrinho-checkout .campos-pagamento select{font-size:16px}.carrinho.carrinho-checkout .agendamento-retirada{padding:14px}.carrinho.carrinho-checkout .icone-agendamento{top:14px;left:14px}.carrinho.carrinho-checkout .agendamento-titulo,.carrinho.carrinho-checkout .agendamento-retirada>p{margin-left:44px}}
+
+.carrinho.carrinho-checkout .previsao-entrega-hora{margin:14px 0 0 46px;font-size:22px;line-height:1.35;color:#75432e}
+.carrinho.carrinho-checkout .endereco-entrega{margin-top:14px;padding:18px;border:1px solid #f0e4d7;border-radius:14px;background:#fffdf9;box-shadow:0 4px 14px #78533708}
+.carrinho.carrinho-checkout .cabecalho-endereco{display:flex;gap:12px;align-items:center}.carrinho.carrinho-checkout .titulo-endereco b{font-size:14px;color:#4b2a20}
+.carrinho.carrinho-checkout .icone-endereco{display:grid;place-items:center;flex-shrink:0;width:36px;height:36px;border-radius:50%;background:#eaf0ec;color:#758f91}.icone-endereco svg{width:19px;height:19px;flex-shrink:0}
+.carrinho.carrinho-checkout .titulo-endereco button{min-height:44px;margin-top:12px;border:1px solid #eed8b8;background:#fff1d8;color:#80582f;box-shadow:none;font-size:12px}.carrinho.carrinho-checkout .titulo-endereco button:hover{transform:none;background:#f8e4bd;box-shadow:none}
+.carrinho.carrinho-checkout .endereco-entrega label{font-size:12px}.carrinho.carrinho-checkout .endereco-entrega input{box-sizing:border-box;width:100%;min-width:0}.carrinho.carrinho-checkout .linha-endereco{grid-template-columns:minmax(0,.65fr) minmax(0,1.35fr);gap:12px}.carrinho.carrinho-checkout .linha-endereco label{min-width:0}
+.carrinho.carrinho-checkout .privacidade-localizacao{margin-top:12px;font-size:10px;line-height:1.5;color:#977b6a}.carrinho.carrinho-checkout .localizacao-ok{border:0;background:#fff1d8;color:#80582f}
+@media(max-width:500px){.carrinho.carrinho-checkout .endereco-entrega{padding:14px}.carrinho.carrinho-checkout .endereco-entrega input{font-size:16px}.carrinho.carrinho-checkout .previsao-entrega-hora{margin-left:44px;font-size:20px}}

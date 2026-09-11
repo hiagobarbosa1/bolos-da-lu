@@ -1,0 +1,1 @@
+.opcoes-entrega{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0 6px}.opcoes-entrega button{border:1px solid #e5ccc3;border-radius:8px;background:#fff;padding:10px;color:#765247;font:700 12px 'DM Sans',sans-serif;cursor:pointer}.opcoes-entrega button.selecionada{border-color:#4b2a20;background:#4b2a20;color:#fff}

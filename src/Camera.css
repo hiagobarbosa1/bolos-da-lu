@@ -1,0 +1,137 @@
+.acoes-imagem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto
+}
+
+.camera-botao {
+    padding: 10px 13px;
+    border: 1px solid #4b2a20;
+    border-radius: 9px;
+    background: #4b2a20;
+    color: #fff;
+    font: 700 12px 'DM Sans', sans-serif;
+    white-space: nowrap;
+    cursor: pointer
+}
+
+.camera-botao:hover {
+    background: #683729
+}
+
+.erro-camera {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin: 7px 0 0 !important;
+    color: #a64d59 !important;
+    font-size: 11px !important;
+    line-height: 1.4 !important
+}
+
+.camera-modal {
+    position: fixed;
+    z-index: 95;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: #2f1812b8
+}
+
+.camera-caixa {
+    width: min(100%, 560px);
+    overflow: hidden;
+    border-radius: 24px;
+    background: #fffaf5;
+    box-shadow: 0 24px 70px #26100cb0
+}
+
+.camera-cabecalho {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    padding: 19px 21px 15px;
+    color: #4b2a20
+}
+
+.camera-cabecalho div {
+    display: grid;
+    gap: 4px
+}
+
+.camera-cabecalho small {
+    color: #83675e;
+    font-size: 12px
+}
+
+.camera-cabecalho button {
+    border: 0;
+    background: transparent;
+    color: #6a4338;
+    font-size: 28px;
+    line-height: .7;
+    cursor: pointer
+}
+
+.camera-video {
+    aspect-ratio: 4/3;
+    background: #2f1812
+}
+
+.camera-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover
+}
+
+.camera-acoes {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 13px;
+    padding: 17px 21px
+}
+
+.camera-cancelar {
+    border: 0;
+    background: transparent;
+    color: #76564c;
+    font: 700 13px 'DM Sans', sans-serif;
+    cursor: pointer
+}
+
+.camera-acoes .botao {
+    cursor: pointer
+}
+
+@media(max-width:760px) {
+    .acoes-imagem {
+        width: 100%;
+        margin: 0
+    }
+
+    .camera-botao,
+    .acoes-imagem .upload {
+        flex: 1;
+        text-align: center
+    }
+
+    .camera-caixa {
+        border-radius: 18px
+    }
+
+    .camera-modal {
+        padding: 13px
+    }
+
+    .erro-camera {
+        position: static;
+        margin-top: 5px !important
+    }
+
+    .referencia:has(.erro-camera) {
+        padding-bottom: 16px
+    }
+}

@@ -218,7 +218,7 @@ function App() {
   }
 
   function cardDocePronta(doce, classe = '') {
-    return <article className={classe} key={doce.id} data-aos="fade-up" onClick={(evento) => abrirDetalhesDoce(evento, doce)}>{doce.imagem ? <img src={doce.imagem} alt={doce.nome}/> : <div className="doce-sem-imagem">🧁</div>}<button className="favoritar-pronta" onClick={(evento) => evento.stopPropagation()} aria-label={`Favoritar ${doce.nome}`}>♡</button><div><h3>{doce.nome}</h3><strong>R$ {Number(doce.preco).toFixed(2)}</strong><em>● {doce.quantidade_disponivel} disponíveis</em><button className="adicionar-pronta" onClick={(evento) => { evento.stopPropagation(); adicionarAoCarrinho(doce, 'pronta_entrega') }}>🛒 Adicionar</button></div></article>
+    return <article className={classe} key={doce.id} data-aos="fade-up" onClick={(evento) => abrirDetalhesDoce(evento, doce)}>{doce.imagem ? <img src={doce.imagem} alt={doce.nome}/> : <div className="doce-sem-imagem">🧁</div>}<div><h3>{doce.nome}</h3><strong>R$ {Number(doce.preco).toFixed(2)}</strong><em>● {doce.quantidade_disponivel} disponíveis</em><button className="adicionar-pronta" onClick={(evento) => { evento.stopPropagation(); adicionarAoCarrinho(doce, 'pronta_entrega') }}>🛒 Adicionar</button></div></article>
   }
 
   function abrirDetalhesProduto(evento, produto) {

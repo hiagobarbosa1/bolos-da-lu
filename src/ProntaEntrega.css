@@ -20,7 +20,6 @@
 .pronta-entrega-banner .grade-pronta article:hover img { transform: scale(1.05) }
 .pronta-entrega-banner .grade-pronta img, .pronta-entrega-banner .doce-sem-imagem { display: block; width: 100%; min-height: 0; height: 230px; object-fit: cover; background: #f8ced0 }
 .pronta-entrega-banner .doce-sem-imagem { display: grid; place-items: center; font-size: 45px }
-.favoritar-pronta { position: absolute; top: 10px; right: 10px; display: grid; place-items: center; width: 32px; height: 32px; border: 0; border-radius: 50%; background: #fffdfb; color: #d95f70; font-size: 22px; cursor: pointer }
 .pronta-entrega-banner .grade-pronta article>div:last-child { padding: 18px }
 .pronta-entrega-banner .grade-pronta h3 { min-height: 38px; margin: 0 0 8px; font: 700 clamp(14px, 1.15vw, 18px)/1.1 'Playfair Display', serif }
 .pronta-entrega-banner .grade-pronta strong, .pronta-entrega-banner .grade-pronta em { display: block }

@@ -33,6 +33,58 @@
 @media(max-width:500px){.carrinho.carrinho-checkout .agendamento-campos input,.carrinho.carrinho-checkout .agendamento-campos select,.carrinho.carrinho-checkout .campos-pagamento select{font-size:16px}.carrinho.carrinho-checkout .agendamento-retirada{padding:14px}.carrinho.carrinho-checkout .icone-agendamento{top:14px;left:14px}.carrinho.carrinho-checkout .agendamento-titulo,.carrinho.carrinho-checkout .agendamento-retirada>p{margin-left:44px}}
 
 .carrinho.carrinho-checkout .previsao-entrega-hora{margin:14px 0 0 46px;font-size:22px;line-height:1.35;color:#75432e}
+@media (max-width: 520px) {
+    .carrinho.carrinho-checkout .agendamento-campos {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .carrinho.carrinho-checkout .agendamento-campos label {
+        margin-top: 0;
+    }
+
+    .carrinho.carrinho-checkout input,
+    .carrinho.carrinho-checkout select {
+        display: block;
+        box-sizing: border-box;
+        min-width: 0;
+        width: 100%;
+        max-width: 100%;
+        min-height: 44px;
+        font-size: 16px;
+    }
+
+    .carrinho.carrinho-checkout input[type="date"] {
+        appearance: none;
+        -webkit-appearance: none;
+    }
+
+    .carrinho.carrinho-checkout input[type="date"]::-webkit-date-and-time-value {
+        min-width: 0;
+        text-align: left;
+    }
+
+    .carrinho.carrinho-checkout .cartao-pagamento {
+        position: relative;
+        display: block;
+    }
+
+    .carrinho.carrinho-checkout .icone-pagamento {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+    }
+
+    .carrinho.carrinho-checkout .campos-pagamento label {
+        padding-top: 8px;
+        text-indent: 48px;
+    }
+
+    .carrinho.carrinho-checkout .campos-pagamento select {
+        margin-top: 20px;
+        text-indent: 0;
+    }
+}
 .carrinho.carrinho-checkout .endereco-entrega{margin-top:14px;padding:18px;border:1px solid #f0e4d7;border-radius:14px;background:#fffdf9;box-shadow:0 4px 14px #78533708}
 .carrinho.carrinho-checkout .cabecalho-endereco{display:flex;gap:12px;align-items:center}.carrinho.carrinho-checkout .titulo-endereco b{font-size:14px;color:#4b2a20}
 .carrinho.carrinho-checkout .icone-endereco{display:grid;place-items:center;flex-shrink:0;width:36px;height:36px;border-radius:50%;background:#eaf0ec;color:#758f91}.icone-endereco svg{width:19px;height:19px;flex-shrink:0}

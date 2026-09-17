@@ -49,5 +49,7 @@
 
 @media (max-width: 880px) { .destaques-novo { padding-top: 54px; padding-bottom: 54px; } .grade-destaques { grid-template-columns: 1fr; } .destaque-principal, .destaques-secundarios { max-width: 670px; } .destaques-secundarios { margin-top: 0; } }
 @media (max-width: 560px) { .destaques-cabecalho { gap: 16px; } .destaques-intro h2 { font-size: 40px; white-space: normal; } .destaques-intro > p:last-child { white-space: normal; } .ver-todos-destaque { margin-top: 12px; white-space: nowrap; } .destaque-principal { grid-template-columns: 1fr; } .destaque-principal-imagem { min-height: 220px; grid-row: 1; } .destaque-principal-info { min-height: 270px; } .destaques-secundarios { grid-template-columns: 1fr; } .destaque-mini { grid-template-columns: 42% 1fr; grid-template-rows: 150px; } .destaque-mini-info { align-content: center; } }
+
+@media (max-width: 760px) { .destaques-novo { display: none } }
 @keyframes destaque-entra { from { opacity: 0; transform: translateY(22px) } to { opacity: 1; transform: translateY(0) } }
 @media (prefers-reduced-motion: reduce) { .destaques-intro, .destaque-principal, .destaque-mini { animation: none; transition: none } }

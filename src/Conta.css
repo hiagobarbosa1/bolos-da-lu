@@ -46,7 +46,7 @@
 
 @media(max-width:760px) {
     .conta span {
-        display: none
+        display: inline
     }
 }
 

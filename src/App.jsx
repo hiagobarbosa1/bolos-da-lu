@@ -237,7 +237,7 @@ function App() {
   return <main>
     <header className={`topo ${menuFlutuanteVisivel ? 'menu-flutuante-visivel' : ''}`}>
       <a className="marca" href="#inicio"><img src={logo} alt="Bolos da Lu"/></a>
-      <nav className={menuMobileAberto ? 'nav-aberta' : ''}><a href="#cardapio" onClick={() => setMenuMobileAberto(false)}>Cardápio</a><a href="#sobre" onClick={() => setMenuMobileAberto(false)}>Sobre nós</a><a href="#encomenda" onClick={() => setMenuMobileAberto(false)}>Encomendas</a></nav>
+      <nav className={menuMobileAberto ? 'nav-aberta' : ''}><a href="#cardapio" onClick={() => setMenuMobileAberto(false)}>Cardápio</a><a href="#sobre" onClick={() => setMenuMobileAberto(false)}>Sobre nós</a><a href="#encomenda" onClick={() => setMenuMobileAberto(false)}>Encomendas</a>{usuario && <button className="link-meus-pedidos-mobile" type="button" onClick={() => { setMenuMobileAberto(false); setMostrarMeusPedidos(true) }}>Meus pedidos</button>}</nav>
       <div className="acoes-topo">{usuario ? <div className="conta"><button className="meus-pedidos-topo" onClick={() => setMostrarMeusPedidos(true)}>Meus pedidos</button><span>Olá, {usuario.nome.split(' ')[0]}</span><button onClick={() => setConfirmarSaida(true)}>Sair</button></div> : <button className="botao pequeno" onClick={() => { setAuthCadastro(false); setMostrarAuth(true) }}>Entrar <b>→</b></button>}</div>
       <button className="botao-menu" type="button" onClick={() => setMenuMobileAberto((aberto) => !aberto)} aria-label="Abrir menu de navegação" aria-expanded={menuMobileAberto}><i /><i /><i /></button>
     </header>

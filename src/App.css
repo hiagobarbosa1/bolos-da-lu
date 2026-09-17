@@ -71,7 +71,7 @@ nav a:hover {
     padding: 10px;
     border: 1px solid #d6b7a8;
     border-radius: 10px;
-    background: #fff8f1;
+    background: transparent;
     cursor: pointer
 }
 
@@ -83,6 +83,8 @@ nav a:hover {
     border-radius: 2px;
     background: var(--chocolate)
 }
+
+.link-meus-pedidos-mobile { display: none }
 
 .botao {
     display: inline-flex;
@@ -734,16 +736,18 @@ h2 {
         gap: 0;
         padding: 8px 20px 16px;
         background: #f1e0ca;
-        border-bottom: 1px solid #ead3c8;
-        box-shadow: 0 12px 22px #4b2a2017
+        border: 0;
+        box-shadow: none
     }
 
     .topo nav.nav-aberta a { padding: 13px 4px; border-bottom: 1px solid #e5cfc2 }
     .topo nav.nav-aberta a:last-child { border-bottom: 0 }
+    .link-meus-pedidos-mobile { display: block; padding: 13px 4px; border: 0; border-top: 1px solid #e5cfc2; background: transparent; color: var(--chocolate); text-align: left; font: inherit; font-weight: 700; cursor: pointer }
     .botao-menu { display: block; flex: 0 0 auto }
 
     .acoes-topo { margin-left: auto }
     .acoes-topo .botao.pequeno { display: inline-flex; gap: 8px; padding: 10px 13px }
+    .conta .meus-pedidos-topo { display: none }
 
     .hero {
         grid-template-columns: 1fr;
@@ -758,7 +762,7 @@ h2 {
         height: auto;
         min-height: 0;
         max-height: none;
-        aspect-ratio: 1 / 1
+        aspect-ratio: 3 / 4
     }
 
     .hero-banners .carrossel-controle.anterior { left: 12px }
@@ -879,7 +883,7 @@ h2 {
     .acoes-topo { min-width: 0 }
     .botao-menu { width: 38px; height: 38px; padding: 8px }
     .acoes-topo .botao.pequeno { padding: 9px 10px; font-size: 12px }
-    .hero-banners .carrossel-banner { aspect-ratio: 1 / 1 }
+    .hero-banners .carrossel-banner { aspect-ratio: 3 / 4 }
     .hero-banners .carrossel-controle { width: 38px; height: 38px; font-size: 30px }
     .hero-banners .carrossel-dots { bottom: 14px }
     .secao { padding: 56px 16px }

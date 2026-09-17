@@ -64,6 +64,26 @@ nav a:hover {
     color: var(--rosa)
 }
 
+.botao-menu {
+    display: none;
+    width: 42px;
+    height: 42px;
+    padding: 10px;
+    border: 1px solid #d6b7a8;
+    border-radius: 10px;
+    background: #fff8f1;
+    cursor: pointer
+}
+
+.botao-menu i {
+    display: block;
+    width: 100%;
+    height: 2px;
+    margin: 4px 0;
+    border-radius: 2px;
+    background: var(--chocolate)
+}
+
 .botao {
     display: inline-flex;
     align-items: center;
@@ -699,9 +719,31 @@ h2 {
     }
 
     .topo nav,
-    .topo .botao {
+    .topo > .botao {
         display: none
     }
+
+    .topo { gap: 10px }
+
+    .topo nav.nav-aberta {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+        display: grid;
+        gap: 0;
+        padding: 8px 20px 16px;
+        background: #f1e0ca;
+        border-bottom: 1px solid #ead3c8;
+        box-shadow: 0 12px 22px #4b2a2017
+    }
+
+    .topo nav.nav-aberta a { padding: 13px 4px; border-bottom: 1px solid #e5cfc2 }
+    .topo nav.nav-aberta a:last-child { border-bottom: 0 }
+    .botao-menu { display: block; flex: 0 0 auto }
+
+    .acoes-topo { margin-left: auto }
+    .acoes-topo .botao.pequeno { display: inline-flex; gap: 8px; padding: 10px 13px }
 
     .hero {
         grid-template-columns: 1fr;
@@ -711,7 +753,13 @@ h2 {
 
     .hero.hero-banners { padding: 0; text-align: initial }
 
-    .hero-banners .carrossel-banner { height: 100vh; min-height: 390px }
+    .hero-banners .carrossel-banner {
+        width: 100vw;
+        height: auto;
+        min-height: 0;
+        max-height: none;
+        aspect-ratio: 1 / 1
+    }
 
     .hero-banners .carrossel-controle.anterior { left: 12px }
 
@@ -829,7 +877,9 @@ h2 {
     .topo { padding: 10px 14px; gap: 10px }
     .marca img { width: 138px; height: 42px }
     .acoes-topo { min-width: 0 }
-    .hero-banners .carrossel-banner { height: 72svh; min-height: 340px }
+    .botao-menu { width: 38px; height: 38px; padding: 8px }
+    .acoes-topo .botao.pequeno { padding: 9px 10px; font-size: 12px }
+    .hero-banners .carrossel-banner { aspect-ratio: 1 / 1 }
     .hero-banners .carrossel-controle { width: 38px; height: 38px; font-size: 30px }
     .hero-banners .carrossel-dots { bottom: 14px }
     .secao { padding: 56px 16px }

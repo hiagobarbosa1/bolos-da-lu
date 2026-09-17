@@ -83,6 +83,7 @@ function App() {
   const [pedidoWhatsApp, setPedidoWhatsApp] = useState(null)
   const [confirmarSaida, setConfirmarSaida] = useState(false)
   const [menuFlutuanteVisivel, setMenuFlutuanteVisivel] = useState(false)
+  const [menuMobileAberto, setMenuMobileAberto] = useState(false)
   const [referencia, setReferencia] = useState(null)
   const [mostrarEncomenda, setMostrarEncomenda] = useState(false)
   const [enviado, setEnviado] = useState(false)
@@ -236,8 +237,9 @@ function App() {
   return <main>
     <header className={`topo ${menuFlutuanteVisivel ? 'menu-flutuante-visivel' : ''}`}>
       <a className="marca" href="#inicio"><img src={logo} alt="Bolos da Lu"/></a>
-      <nav><a href="#cardapio">Cardápio</a><a href="#sobre">Sobre nós</a><a href="#encomenda">Encomendas</a></nav>
+      <nav className={menuMobileAberto ? 'nav-aberta' : ''}><a href="#cardapio" onClick={() => setMenuMobileAberto(false)}>Cardápio</a><a href="#sobre" onClick={() => setMenuMobileAberto(false)}>Sobre nós</a><a href="#encomenda" onClick={() => setMenuMobileAberto(false)}>Encomendas</a></nav>
       <div className="acoes-topo">{usuario ? <div className="conta"><button className="meus-pedidos-topo" onClick={() => setMostrarMeusPedidos(true)}>Meus pedidos</button><span>Olá, {usuario.nome.split(' ')[0]}</span><button onClick={() => setConfirmarSaida(true)}>Sair</button></div> : <button className="botao pequeno" onClick={() => { setAuthCadastro(false); setMostrarAuth(true) }}>Entrar <b>→</b></button>}</div>
+      <button className="botao-menu" type="button" onClick={() => setMenuMobileAberto((aberto) => !aberto)} aria-label="Abrir menu de navegação" aria-expanded={menuMobileAberto}><i /><i /><i /></button>
     </header>
     <button className="botao-carrinho" onClick={abrirCarrinho} aria-label="Abrir carrinho"><span className="icone-carrinho">🛒</span><b>{carrinho.reduce((total, item) => total + item.quantidade, 0)}</b></button>
 

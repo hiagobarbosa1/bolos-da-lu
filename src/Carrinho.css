@@ -24,7 +24,7 @@
 
 @media(max-width:760px) {
     .topo .acoes-topo .botao.pequeno {
-        display: none
+        display: inline-flex
     }
 
     .acoes-topo {

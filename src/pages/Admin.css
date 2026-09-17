@@ -274,6 +274,22 @@
     }
 }
 
+@media(max-width:480px) {
+    .admin aside { padding: 13px 10px }
+    .admin aside>a { margin-bottom: 10px; font-size: 21px }
+    .admin aside button { padding: 9px 8px; font-size: 11px }
+    .admin>section { padding: 20px 12px }
+    .admin header { align-items: flex-start; flex-direction: column; gap: 14px; margin-bottom: 24px }
+    .metricas { gap: 10px; margin-bottom: 28px }
+    .metricas article { padding: 16px }
+    .lista-admin article { align-items: flex-start; flex-direction: column; padding: 14px }
+    .lista-admin article > div:last-child { display: flex; flex-wrap: wrap; gap: 6px }
+    .lista-admin button { margin-left: 0 }
+    .admin-confirmacao-fundo { padding: 12px }
+    .admin-confirmacao { padding: 24px 18px }
+    .admin-confirmacao>div { flex-direction: column }
+}
+
 .confirmar-pix-admin{margin:8px 0;padding:9px;border:1px solid #d9c49f;border-radius:7px;background:#fff3d9;color:#79521b;font-size:11px;font-weight:700;cursor:pointer}.confirmar-pix-admin:disabled{opacity:.6;cursor:wait}
 .avaliacoes-admin article{align-items:flex-start}.avaliacoes-admin article>img{width:100px;height:100px;object-fit:cover;border-radius:12px}.avaliacoes-admin article>div{flex:1}.avaliacoes-admin article p{margin:8px 0;line-height:1.5;color:#765144}.estrelas-admin{display:block;color:#b9781e;letter-spacing:2px}.avaliacoes-admin article>button{border:0;border-radius:8px;background:#f7d9d3;color:#9f3d52;padding:9px 13px;cursor:pointer}.avaliacoes-admin article>button:disabled{opacity:.6}
 .admin-confirmacao-fundo{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:20px;background:#2f18128c;backdrop-filter:blur(3px)}.admin-confirmacao{width:min(430px,100%);box-sizing:border-box;padding:32px;border:1px solid #f0d5c8;border-radius:24px;background:#fffaf5;color:#4b2a20;box-shadow:0 24px 70px #2f181250;text-align:center}.admin-confirmacao-icone{display:grid;place-items:center;width:44px;height:44px;margin:0 auto 14px;border-radius:50%;background:#f7d9d3;color:#a83d55;font-weight:800;font-size:22px}.admin-confirmacao h2{margin:0 0 10px;font:700 27px 'Playfair Display',serif}.admin-confirmacao p{margin:0;line-height:1.6;color:#765144}.admin-confirmacao p strong{color:#4b2a20}.admin-confirmacao>div{display:flex;justify-content:center;gap:12px;margin-top:24px}.admin-confirmacao button{padding:11px 18px;border:1px solid #e3c5b8;border-radius:22px;background:transparent;color:#704633;font-weight:700;cursor:pointer}.admin-confirmacao button.confirmar{border-color:#bd5967;background:#bd5967;color:#fffaf5}.admin-confirmacao button:disabled{opacity:.6;cursor:wait}

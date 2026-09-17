@@ -34,6 +34,9 @@ import imagemKits from './assets/kit.png'
 import banner1 from './assets/banner1.png'
 import banner2 from './assets/banner2.png'
 import banner3 from './assets/banner3.png'
+import bannerMobile1 from './assets/bannermobile.png'
+import bannerMobile2 from './assets/bannermobile2.png'
+import bannerMobile3 from './assets/bannermobile3.png'
 import logo from './assets/logo2.png'
 import bannerProntaEntrega from './assets/bannerprontaentrega.png'
 import fotoLu from './assets/fotolu.png'
@@ -53,9 +56,9 @@ const categoriasCardapio = [
 ]
 
 const banners = [
-  { src: banner1, alt: 'Banner 1 da Bolos da Lu' },
-  { src: banner2, alt: 'Banner 2 da Bolos da Lu' },
-  { src: banner3, alt: 'Banner 3 da Bolos da Lu' },
+  { src: banner1, mobileSrc: bannerMobile1, alt: 'Banner 1 da Bolos da Lu' },
+  { src: banner2, mobileSrc: bannerMobile2, alt: 'Banner 2 da Bolos da Lu' },
+  { src: banner3, mobileSrc: bannerMobile3, alt: 'Banner 3 da Bolos da Lu' },
 ]
 
 function App() {
@@ -239,7 +242,7 @@ function App() {
     <button className="botao-carrinho" onClick={abrirCarrinho} aria-label="Abrir carrinho"><span className="icone-carrinho">🛒</span><b>{carrinho.reduce((total, item) => total + item.quantidade, 0)}</b></button>
 
     <section className="hero hero-banners" id="inicio">
-      <div className="carrossel-banner" aria-label="Carrossel de banners da loja"><div className="carrossel-track" style={{ transform: `translateX(-${bannerAtual * 100}%)` }}>{banners.map((banner) => <div className="carrossel-slide" key={banner.src}><img src={banner.src} alt={banner.alt}/></div>)}</div><button className="carrossel-controle anterior" type="button" onClick={() => mudarBanner(-1)} aria-label="Banner anterior">‹</button><button className="carrossel-controle proximo" type="button" onClick={() => mudarBanner(1)} aria-label="Próximo banner">›</button><div className="carrossel-dots" aria-label="Indicadores do carrossel">{banners.map((banner, index) => <button key={banner.src} type="button" className={`carrossel-dot ${index === bannerAtual ? 'ativo' : ''}`} onClick={() => setBannerAtual(index)} aria-label={`Ir para o banner ${index + 1}`}/>)}</div></div>
+      <div className="carrossel-banner" aria-label="Carrossel de banners da loja"><div className="carrossel-track" style={{ transform: `translateX(-${bannerAtual * 100}%)` }}>{banners.map((banner) => <div className="carrossel-slide" key={banner.src}><picture><source media="(max-width: 760px)" srcSet={banner.mobileSrc}/><img src={banner.src} alt={banner.alt}/></picture></div>)}</div><button className="carrossel-controle anterior" type="button" onClick={() => mudarBanner(-1)} aria-label="Banner anterior">‹</button><button className="carrossel-controle proximo" type="button" onClick={() => mudarBanner(1)} aria-label="Próximo banner">›</button><div className="carrossel-dots" aria-label="Indicadores do carrossel">{banners.map((banner, index) => <button key={banner.src} type="button" className={`carrossel-dot ${index === bannerAtual ? 'ativo' : ''}`} onClick={() => setBannerAtual(index)} aria-label={`Ir para o banner ${index + 1}`}/>)}</div></div>
     </section>
 
     <section className="pronta-entrega pronta-entrega-banner" id="pronta-entrega" style={{ backgroundImage: `url(${bannerProntaEntrega})` }}><div className="conteudo-pronta"><div className="cabecalho-pronta" data-aos="fade-right"><p className="sobretitulo">disponível hoje</p><h2><span>Doces à</span><i>pronta entrega</i></h2><p>Escolha suas delícias e aproveite enquanto ainda temos por aqui. ♥</p></div><div className="grade-pronta">{docesProntaEntrega.slice(0, 4).map((doce) => cardDocePronta(doce))}</div>{docesProntaEntrega.length > 0 && <button className="ver-todos-pronta" data-aos="zoom-in" onClick={() => setMostrarTodosPronta(true)}>Ver todos os produtos <b>→</b></button>}{docesProntaEntrega.length === 0 && <p className="sem-doces-pronta">Nenhum doce à pronta entrega disponível neste momento.</p>}</div></section>

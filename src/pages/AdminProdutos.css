@@ -236,3 +236,12 @@
         font-size: 27px
     }
 }
+
+@media(max-width:480px) {
+    .produto-modal { padding: 10px }
+    .produto-form { max-height: calc(100dvh - 20px); padding: 22px 14px }
+    .botoes-form { flex-direction: column-reverse }
+    .botoes-form button { width: 100% }
+    .produtos-admin article { gap: 9px }
+    .dados-produto small { max-width: 190px }
+}

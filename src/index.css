@@ -5,7 +5,8 @@
 }
 
 html {
-    scroll-behavior: smooth
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%
 }
 
 body {
@@ -14,6 +15,24 @@ body {
     background: #fffaf5;
     color: #4b2a20;
     font-family: 'DM Sans', sans-serif
+}
+
+img,
+svg,
+video,
+canvas {
+    max-width: 100%
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit
+}
+
+@media (max-width: 380px) {
+    body { min-width: 0 }
 }
 
 a {

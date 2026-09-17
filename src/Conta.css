@@ -49,3 +49,9 @@
         display: none
     }
 }
+
+@media(max-width:480px) {
+    .conta { gap: 5px }
+    .conta button { padding: 7px 8px; font-size: 10px }
+    .conta .meus-pedidos-topo { max-width: 86px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+}

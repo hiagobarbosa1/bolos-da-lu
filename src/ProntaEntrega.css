@@ -211,3 +211,18 @@
         grid-template-columns: 120px 1fr
     }
 }
+
+@media(max-width:480px) {
+    .conteudo-pronta { width: calc(100% - 32px); padding: 18% 0 14% }
+    .pronta-entrega.pronta-entrega-banner { min-height: 670px }
+    .cabecalho-pronta { margin-bottom: 24px }
+    .cabecalho-pronta h2 { font-size: clamp(38px, 12vw, 52px); letter-spacing: -2px }
+    .cabecalho-pronta h2 i { white-space: normal }
+    .pronta-entrega-banner .grade-pronta article { flex-basis: min(78vw, 245px) }
+    .modal-todos-pronta>section { padding: 28px 14px 20px }
+    .grade-todos-pronta { grid-template-columns: 1fr; gap: 14px }
+    .todos-pronta-card { display: grid; grid-template-columns: 110px minmax(0, 1fr) }
+    .todos-pronta-card img, .todos-pronta-card .doce-sem-imagem { height: 100% }
+    .todos-pronta-card>div:last-child { padding: 13px }
+    .todos-pronta-card h3 { min-height: 0; font-size: 17px }
+}

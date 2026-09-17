@@ -4,8 +4,8 @@
 }
 
 .pronta-entrega.pronta-entrega-banner { aspect-ratio: 1672 / 941; min-height: 0; padding: 0; background-color: #fff1e7; background-repeat: no-repeat; background-position: center; background-size: cover }
-.pronta-entrega-banner { position: relative; display: grid; align-items: center }
-.conteudo-pronta { width: min(84%, 1360px); margin: auto; padding: 3% 0 6% }
+.pronta-entrega-banner { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); align-items: center }
+.conteudo-pronta { min-width: 0; width: min(84%, 1360px); margin: auto; padding: 3% 0 6% }
 .cabecalho-pronta { max-width: 760px; margin-bottom: 34px }
 .cabecalho-pronta .sobretitulo { display: flex; align-items: center; gap: 15px; margin-bottom: 10px }
 .cabecalho-pronta .sobretitulo::after { content: ''; width: 70px; height: 1px; background: #d56b78 }
@@ -187,10 +187,12 @@
     }
 
     .pronta-entrega.pronta-entrega-banner { aspect-ratio: auto; min-height: 0; padding: 0; background: #fffaf5 !important; background-image: none !important }
-    .conteudo-pronta { width: calc(100% - 42px); padding: 14% 0 }
+    .conteudo-pronta { width: calc(100% - 42px); padding: 64px 0 48px }
     .cabecalho-pronta p:not(.sobretitulo) { max-width: 280px; overflow-wrap: anywhere }
-    .pronta-entrega-banner .grade-pronta { position: relative; z-index: 1; display: flex; gap: 12px; width: 100%; max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: 0 calc(100% - min(47vw, 180px) + 2px) 14px 2px; scroll-padding-inline: 2px; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; touch-action: pan-x; scrollbar-width: thin }
+    .pronta-entrega-banner .grade-pronta { position: relative; z-index: 1; display: flex; gap: 12px; min-width: 0; width: 100%; max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: 0 2px 14px; scroll-padding-inline: 2px; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; touch-action: pan-x pinch-zoom; scrollbar-width: thin }
     .pronta-entrega-banner .grade-pronta article { min-width: 0; flex: 0 0 min(47vw, 180px); scroll-snap-align: start }
+    /* Mantem os alvos do scroll-snap estaveis durante o gesto horizontal. */
+    .pronta-entrega-banner .grade-pronta article[data-aos] { opacity: 1; transform: none; transition: none }
     .pronta-entrega-banner .grade-pronta img, .pronta-entrega-banner .doce-sem-imagem { height: 120px }
     .pronta-entrega-banner .grade-pronta article>div:last-child { padding: 13px }
     .pronta-entrega-banner .grade-pronta h3 { min-height: 34px; font-size: 16px }
@@ -219,7 +221,7 @@
 }
 
 @media(max-width:480px) {
-    .conteudo-pronta { width: calc(100% - 32px); padding: 18% 0 14% }
+    .conteudo-pronta { width: calc(100% - 32px); padding: 64px 0 48px }
     .pronta-entrega.pronta-entrega-banner { min-height: 0 }
     .cabecalho-pronta { margin-bottom: 24px }
     .cabecalho-pronta h2 { font-size: clamp(38px, 12vw, 52px); letter-spacing: -2px }

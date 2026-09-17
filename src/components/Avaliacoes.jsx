@@ -60,6 +60,14 @@ export default function Avaliacoes({ usuario, aoEntrar }) {
   const [sucesso, setSucesso] = useState(false)
   const [versao, setVersao] = useState(0)
   const [slide, setSlide] = useState(0)
+  const [modoMobile, setModoMobile] = useState(() => window.matchMedia('(max-width: 760px)').matches)
+  useEffect(() => {
+    const consulta = window.matchMedia('(max-width: 760px)')
+    const atualizar = () => setModoMobile(consulta.matches)
+    atualizar()
+    consulta.addEventListener('change', atualizar)
+    return () => consulta.removeEventListener('change', atualizar)
+  }, [])
   useEffect(() => {
     let ativo = true
     listarAvaliacoes(pagina).then((resultado) => {
@@ -72,6 +80,15 @@ export default function Avaliacoes({ usuario, aoEntrar }) {
   }, [pagina, versao])
   function recarregar() { setErro(''); setCarregando(true); setVersao((valor) => valor + 1) }
   const media = itens.length ? (itens.reduce((total, item) => total + Number(item.nota), 0) / itens.length).toFixed(1) : '5.0'
+  const itensPorPagina = modoMobile ? 1 : 3
+  const totalPaginas = Math.max(1, Math.ceil(itens.length / itensPorPagina))
+  useEffect(() => { setSlide((atual) => Math.min(atual, totalPaginas - 1)) }, [totalPaginas])
+  useEffect(() => {
+    if (!modoMobile || itens.length < 2) return undefined
+    const intervalo = window.setInterval(() => setSlide((atual) => (atual + 1) % totalPaginas), 4500)
+    return () => window.clearInterval(intervalo)
+  }, [modoMobile, itens.length, totalPaginas])
+  const itensDoSlide = modoMobile ? itens : itens.slice(slide * itensPorPagina, (slide + 1) * itensPorPagina)
   return <section className="avaliacoes" aria-labelledby="avaliacoes-titulo">
     <div className="avaliacoes-decoracao" aria-hidden="true"><i className="avaliacoes-mancha rosa" /><svg viewBox="0 0 200 150" fill="none"><path d="M30 80C-5 35 30 25 42 57C50 10 90 23 60 70L43 95Z" /><path d="M100 110q25-50 40-35t-40 35m-3-10q-20-50-32-30t32 30m12 27 50-2" /></svg></div>
     <div className="avaliacoes-conteudo">
@@ -84,13 +101,13 @@ export default function Avaliacoes({ usuario, aoEntrar }) {
       <div id="avaliacao-escrever" hidden={!aberto}>
         {aberto && (usuario ? <Formulario key={usuario.id} usuario={usuario} aoPublicado={() => { setAberto(false); setSucesso(true); setPagina(0); recarregar() }} /> : <div className="avaliacao-login"><p>Entre na sua conta para compartilhar sua experiência e a foto do seu pedido.</p><button className="avaliacoes-botao" onClick={aoEntrar} type="button">Entrar para avaliar</button></div>)}
       </div>
-      <div className="avaliacoes-carrossel-wrap">{itens.length > 3 && <button className="avaliacoes-seta" type="button" aria-label="Avaliações anteriores" onClick={() => setSlide((valor) => Math.max(0, valor - 3))} disabled={slide === 0}>←</button>}<div className="avaliacoes-grade">{itens.slice(slide, slide + 3).map((item) => <article className="avaliacao-card" key={item.id}>
+      <div className="avaliacoes-carrossel-wrap">{itens.length > itensPorPagina && <button className="avaliacoes-seta" type="button" aria-label="Avaliações anteriores" onClick={() => setSlide((valor) => (valor - 1 + totalPaginas) % totalPaginas)}>←</button>}<div className={modoMobile ? 'avaliacoes-viewport' : ''}><div className="avaliacoes-grade" style={modoMobile ? { transform: `translateX(-${slide * 100}%)` } : undefined}>{itensDoSlide.map((item) => <article className="avaliacao-card" key={item.id}>
         <div className="avaliacao-card-topo"><div className="avaliacao-identidade"><span className="avaliacao-inicial" aria-hidden="true">{item.nome.trim().charAt(0).toUpperCase()}</span><div><strong>{item.nome}</strong><span className="avaliacao-estrelas" aria-label={`${item.nota} de 5 estrelas`}>{[1, 2, 3, 4, 5].map((valor) => <span key={valor} aria-hidden="true" className={valor <= item.nota ? 'preenchida' : ''}>★</span>)}</span></div></div><span className="avaliacao-aspas" aria-hidden="true">”</span></div>
         <p className="avaliacao-texto">{item.comentario}</p>
         {item.imagem && <a className="avaliacao-foto" href={item.imagem} target="_blank" rel="noopener noreferrer" aria-label={`Ampliar foto do pedido de ${item.nome} (nova aba)`}><img src={item.imagem} alt={`Foto do pedido compartilhada por ${item.nome}`} loading="lazy" /></a>}
         <div className="avaliacao-card-rodape"><time dateTime={item.criado_em}>{new Date(item.criado_em).toLocaleDateString('pt-BR')}</time></div>
-      </article>)}</div>{itens.length > 3 && <button className="avaliacoes-seta" type="button" aria-label="Próximas avaliações" onClick={() => setSlide((valor) => Math.min(Math.max(0, itens.length - 3), valor + 3))} disabled={slide + 3 >= itens.length}>→</button>}</div>
-      {itens.length > 3 && <div className="avaliacoes-indicadores">{Array.from({ length: Math.ceil(itens.length / 3) }, (_, indice) => <button type="button" key={indice} aria-label={`Página ${indice + 1} de avaliações`} aria-current={Math.floor(slide / 3) === indice ? 'page' : undefined} onClick={() => setSlide(indice * 3)} />)}</div>}
+      </article>)}</div></div>{itens.length > itensPorPagina && <button className="avaliacoes-seta" type="button" aria-label="Próximas avaliações" onClick={() => setSlide((valor) => (valor + 1) % totalPaginas)}>→</button>}</div>
+      {itens.length > itensPorPagina && <div className="avaliacoes-indicadores">{Array.from({ length: totalPaginas }, (_, indice) => <button type="button" key={indice} aria-label={`Página ${indice + 1} de avaliações`} aria-current={slide === indice ? 'page' : undefined} onClick={() => setSlide(indice)} />)}</div>}
       {carregando && <p role="status">Carregando avaliações…</p>}
       {erro && <div className="avaliacao-erro" role="alert">{erro} <button type="button" onClick={recarregar} disabled={carregando}>Tentar novamente</button></div>}
       {!carregando && !erro && !itens.length && <p className="avaliacoes-vazio">Cada pedido tem uma história. Seja a primeira pessoa a contar a sua!</p>}

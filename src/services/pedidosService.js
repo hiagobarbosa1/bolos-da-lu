@@ -78,7 +78,17 @@ export async function finalizarCarrinho({ dataEntrega, endereco, itens, formaPag
   const valorTotal = itens.reduce((total, item) => total + item.preco * item.quantidade, 0)
   const { data: pedido, error: erroPedido } = await supabase.from('pedidos').insert({ usuario_id: sessao.user.id, data_entrega: dataEntrega, endereco, forma_pagamento: formaPagamento, valor_total: valorTotal }).select().single()
   if (erroPedido) throw erroPedido
-  const itensPedido = itens.map((item) => ({ pedido_id: pedido.id, produto_id: item.tipo === 'produto' ? item.id : null, nome_produto: item.nome, tipo_item: item.tipo, quantidade: item.quantidade, observacao: item.observacao || null }))
+  const itensPedido = itens.map((item) => ({
+    pedido_id: pedido.id,
+    produto_id: item.tipo === 'produto' && !item.personalizado ? item.id : null,
+    nome_produto: item.nome,
+    tipo_item: item.personalizado ? 'bolo_personalizado' : item.tipo,
+    quantidade: item.quantidade,
+    tamanho: item.tamanho || null,
+    sabor: item.sabor || null,
+    decoracao: item.decoracao || null,
+    observacao: item.observacao || null,
+  }))
   const { error: erroItens } = await supabase.from('itens_pedido').insert(itensPedido)
   if (erroItens) throw erroItens
   return pedido

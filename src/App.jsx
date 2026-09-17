@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import './App.css'
 import './Encomenda.css'
-import './Camera.css'
 import Admin from './pages/Admin'
 import ModalEncomenda from './components/ModalEncomenda'
 import CarrosselBolos from './components/CarrosselBolos'
@@ -16,6 +15,7 @@ import { perfilAtual, sair } from './services/usuariosService'
 import './Conta.css'
 import { listarProdutos } from './services/produtosService'
 import { listarDocesProntaEntrega } from './services/docesProntaEntregaService'
+import { listarGaleriaBolos } from './services/galeriaBolosService'
 import CarrinhoCompra from './components/CarrinhoCompra'
 import './HomeProdutos.css'
 import './DestaquesProdutos.css'
@@ -62,6 +62,25 @@ const banners = [
   { src: banner3, mobileSrc: bannerMobile3, alt: 'Banner 3 da Bolos da Lu' },
 ]
 
+const precosBolosPersonalizados = {
+  'Prestígio': { P: 90, M: 170, G: 220 },
+  'Bombom de morango': { P: 100, M: 180, G: 230 },
+  'Doce de leite com gotas': { P: 90, M: 160, G: 210 },
+  'Maracujá trufado': { P: 100, M: 180, G: 230 },
+  Choconinho: { P: 90, M: 170, G: 220 },
+  'Dois amores': { P: 100, M: 180, G: 230 },
+  'Dois amores com bombom': { P: 110, M: 200, G: 250 },
+  'Leite Ninho': { P: 90, M: 170, G: 230 },
+  'Leite Ninho com morango': { P: 100, M: 180, G: 230 },
+  'Leite Ninho com abacaxi': { P: 100, M: 180, G: 230 },
+  'Leite Ninho com Nutella': { P: 110, M: 200, G: 250 },
+  'Doce de leite': { P: 80, M: 150, G: 200 },
+  'Doce de leite com morango': { P: 90, M: 160, G: 210 },
+  'Doce de leite com nozes': { P: 100, M: 170, G: 220 },
+  'Doce de leite com ameixa': { P: 90, M: 160, G: 210 },
+  'Torta de abacaxi': { P: 80, M: 150, G: 200 },
+}
+
 function App() {
   const [paginaAdmin, setPaginaAdmin] = useState(() => window.location.hash === '#admin')
   const [usuario, setUsuario] = useState(undefined)
@@ -77,6 +96,7 @@ function App() {
   const [carrinho, setCarrinho] = useState(() => JSON.parse(localStorage.getItem('bolos-da-lu-carrinho') || '[]'))
   const [carrinhoAberto, setCarrinhoAberto] = useState(false)
   const [doceAConfirmar, setDoceAConfirmar] = useState(null)
+  const [avisoEncomendaComPronta, setAvisoEncomendaComPronta] = useState(false)
   const [categoriaAberta, setCategoriaAberta] = useState(null)
   const [pedidoMisto, setPedidoMisto] = useState(false)
   const [avisoConta, setAvisoConta] = useState('')
@@ -86,13 +106,12 @@ function App() {
   const [menuFlutuanteVisivel, setMenuFlutuanteVisivel] = useState(false)
   const [menuMobileAberto, setMenuMobileAberto] = useState(false)
   const [referencia, setReferencia] = useState(null)
+  const [galeriaReferenciaAberta, setGaleriaReferenciaAberta] = useState(false)
+  const [fotosReferencia, setFotosReferencia] = useState([])
+  const [carregandoFotosReferencia, setCarregandoFotosReferencia] = useState(false)
+  const [erroFotosReferencia, setErroFotosReferencia] = useState('')
   const [mostrarEncomenda, setMostrarEncomenda] = useState(false)
-  const [enviado, setEnviado] = useState(false)
-  const [cameraAberta, setCameraAberta] = useState(false)
-  const [erroCamera, setErroCamera] = useState('')
   const [bannerAtual, setBannerAtual] = useState(0)
-  const videoRef = useRef(null)
-  const streamRef = useRef(null)
 
   useEffect(() => {
     const atualizarPagina = () => setPaginaAdmin(window.location.hash === '#admin')
@@ -145,7 +164,7 @@ function App() {
     return () => window.clearInterval(intervalo)
   }, [])
 
-  function incluirNoCarrinho(item, tipo, substituirItens = false) { setCarrinho((itens) => { const base = substituirItens ? itens.filter((atual) => atual.tipo === tipo) : itens; const existente = base.find((atual) => atual.id === item.id && atual.tipo === tipo); const limite = tipo === 'pronta_entrega' ? Number(item.quantidade_disponivel) : Infinity; return existente ? base.map((atual) => atual === existente ? { ...atual, quantidade: Math.min(atual.quantidade + 1, limite) } : atual) : limite > 0 ? [...base, { ...item, tipo, quantidade: 1 }] : base }); setCarrinhoAberto(true) }
+  function incluirNoCarrinho(item, tipo, substituirItens = false) { setCarrinho((itens) => { const base = substituirItens ? itens.filter((atual) => atual.tipo === tipo) : itens; const existente = base.find((atual) => atual.id === item.id && atual.tipo === tipo); const limite = tipo === 'pronta_entrega' ? Number(item.quantidade_disponivel) : Infinity; const quantidade = Math.max(1, Number(item.quantidade) || 1); return existente ? base.map((atual) => atual === existente ? { ...atual, quantidade: Math.min(atual.quantidade + quantidade, limite) } : atual) : limite > 0 ? [...base, { ...item, tipo, quantidade }] : base }); setCarrinhoAberto(true) }
   function adicionarAoCarrinho(item, tipo) { if (!usuario) { setAvisoCadastroCarrinho(true); return } if (carrinho.some((atual) => atual.tipo !== tipo)) { setDoceAConfirmar({ item, tipo }); return } incluirNoCarrinho(item, tipo) }
   function abrirCarrinho() { if (carrinho.some((item) => item.tipo === 'produto') && carrinho.some((item) => item.tipo === 'pronta_entrega')) { setPedidoMisto(true); return } setCarrinhoAberto(true) }
   function alterarQuantidade(item, mudanca) { setCarrinho((itens) => itens.flatMap((atual) => { if (atual.id !== item.id || atual.tipo !== item.tipo) return [atual]; const quantidade = atual.quantidade + mudanca; const atingiuEstoque = atual.tipo === 'pronta_entrega' && quantidade > Number(atual.quantidade_disponivel); return quantidade > 0 ? [{ ...atual, quantidade: atingiuEstoque ? atual.quantidade : quantidade }] : [] })) }
@@ -156,45 +175,35 @@ function App() {
     if (arquivo) setReferencia({ nome: arquivo.name, url: URL.createObjectURL(arquivo) })
   }
 
-  async function abrirCamera() {
-    setErroCamera('')
-    if (!navigator.mediaDevices?.getUserMedia) {
-      setErroCamera('A câmera não é compatível com este navegador. Envie uma imagem do seu dispositivo.')
-      return
-    }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false })
-      streamRef.current = stream
-      setCameraAberta(true)
-      window.setTimeout(() => { if (videoRef.current) videoRef.current.srcObject = stream }, 0)
-    } catch {
-      setErroCamera('Não foi possível acessar a câmera. Você pode permitir o acesso nas configurações ou enviar uma imagem.')
-    }
+  async function abrirGaleriaReferencia() {
+    setGaleriaReferenciaAberta(true)
+    setCarregandoFotosReferencia(true)
+    setErroFotosReferencia('')
+    try { setFotosReferencia(await listarGaleriaBolos()) }
+    catch { setErroFotosReferencia('Não foi possível carregar a galeria agora.') }
+    finally { setCarregandoFotosReferencia(false) }
   }
 
-  function fecharCamera() {
-    streamRef.current?.getTracks().forEach((track) => track.stop())
-    streamRef.current = null
-    setCameraAberta(false)
-  }
-
-  function confirmarFoto() {
-    const video = videoRef.current
-    if (!video?.videoWidth) return
-    const canvas = document.createElement('canvas')
-    canvas.width = video.videoWidth
-    canvas.height = video.videoHeight
-    canvas.getContext('2d').drawImage(video, 0, 0)
-    canvas.toBlob((blob) => {
-      if (!blob) return
-      setReferencia({ nome: 'foto-da-camera.jpg', url: URL.createObjectURL(blob) })
-      fecharCamera()
-    }, 'image/jpeg', 0.9)
+  function selecionarFotoGaleria(foto) {
+    setReferencia({ nome: 'Foto selecionada da galeria', url: foto.imagem })
+    setGaleriaReferenciaAberta(false)
   }
 
   function enviarPedido(event) {
     event.preventDefault()
-    setEnviado(true)
+    if (!usuario) { setAvisoCadastroCarrinho(true); return }
+    const dados = Object.fromEntries(new FormData(event.currentTarget))
+    const preco = precosBolosPersonalizados[dados.sabor]?.[dados.tamanho]
+    if (!preco) return
+    const detalhes = [`Sabor: ${dados.sabor}`, `Tamanho: ${dados.tamanho}`, dados.decoracao && `Decoração: ${dados.decoracao}`, dados.data_preferida && `Data preferida: ${dados.data_preferida.split('-').reverse().join('/')}`, dados.observacao && `Observação: ${dados.observacao}`, referencia && `Referência: ${referencia.nome}`].filter(Boolean).join(' | ')
+    const item = { id: `bolo-personalizado-${crypto.randomUUID()}`, nome: `Bolo personalizado ${dados.tamanho} — ${dados.sabor}`, preco, imagem: referencia?.url || bannerBoloPersonalizadoMobile, quantidade: Number(dados.quantidade), tamanho: dados.tamanho, sabor: dados.sabor, decoracao: dados.decoracao, observacao: detalhes, personalizado: true }
+    if (carrinho.some((atual) => atual.tipo === 'pronta_entrega')) {
+      setAvisoEncomendaComPronta(true)
+      return
+    }
+    incluirNoCarrinho(item, 'produto')
+    setReferencia(null)
+    setMostrarEncomenda(false)
   }
 
   function mudarBanner(direcao) {
@@ -268,19 +277,19 @@ function App() {
 
     <section className="banner-encomenda" id="encomenda" aria-label="Bolos personalizados">
       <picture><source media="(max-width: 760px)" srcSet={bannerBoloPersonalizadoMobile}/><img src={bannerBoloPersonalizado} alt="Bolos personalizados: seu momento merece um bolo especial. Bolos feitos para transformar cada comemoração em uma lembrança deliciosa." width="1920" height="560" loading="lazy" /></picture>
-      <button className="botao-banner-encomenda" type="button" aria-label="Personalizar meu bolo" aria-haspopup="dialog" onClick={() => { setEnviado(false); setMostrarEncomenda(true) }} />
+      <button className="botao-banner-encomenda" type="button" aria-label="Personalizar meu bolo" aria-haspopup="dialog" onClick={() => { setReferencia(null); setGaleriaReferenciaAberta(false); setMostrarEncomenda(true) }} />
     </section>
     <CarrosselBolos />
-    {mostrarEncomenda && <ModalEncomenda aoFechar={() => setMostrarEncomenda(false)} cameraAberta={cameraAberta}>
+    {mostrarEncomenda && <ModalEncomenda aoFechar={() => { setGaleriaReferenciaAberta(false); setMostrarEncomenda(false) }}>
       <form className="formulario" onSubmit={enviarPedido}>
-        <div className="linha-form"><label className="campo-encomenda">Produto<select required defaultValue=""><option value="" disabled>Selecione o produto</option><option>Bolo personalizado</option><option>Bolo tradicional</option><option>Kit festa</option><option>Doces</option></select></label><label className="campo-encomenda">Tamanho<select required defaultValue=""><option value="" disabled>Escolha o tamanho</option><option>Pequeno — 10 fatias</option><option>Médio — 20 fatias</option><option>Grande — 35 fatias</option></select></label></div>
-        <div className="linha-form tres"><label className="campo-encomenda">Sabor<select required defaultValue=""><option value="" disabled>Escolha</option><option>Chocolate</option><option>Baunilha</option><option>Cenoura</option><option>Red velvet</option></select></label><label className="campo-encomenda">Recheio<select required defaultValue=""><option value="" disabled>Escolha</option><option>Brigadeiro</option><option>Leite ninho</option><option>Morango</option><option>Doce de leite</option></select></label><label className="campo-encomenda">Cobertura<select required defaultValue=""><option value="" disabled>Escolha</option><option>Ganache</option><option>Chantininho</option><option>Buttercream</option><option>Sem cobertura</option></select></label></div>
-        <div className="linha-form"><label className="campo-encomenda">Decoração<input required placeholder="Ex.: flores, tema, nome..." /></label><label className="campo-encomenda">Data da entrega<input required type="date" /></label></div>
-        <div className="linha-form quantidade"><label className="campo-encomenda">Quantidade<input name="quantidade" required type="number" min="1" step="1" defaultValue="1" /></label><label className="campo-encomenda">Observação<textarea placeholder="Ex.: Quero o bolo com decoração rosa e branca e o nome Maria." rows="2" /></label></div>
-        <div className="referencia"><div className="referencia-texto"><b>Foto de referência <small>(opcional)</small></b><span>Envie uma inspiração para nos ajudar a criar seu pedido.</span></div><div className="acoes-imagem"><button className="camera-botao" type="button" onClick={abrirCamera}> Abrir câmera</button><label className="upload"><input type="file" accept="image/*" onChange={selecionarReferencia} /> Enviar imagem</label></div>{erroCamera && <p className="erro-camera">{erroCamera}</p>}{referencia && <div className="preview"><img src={referencia.url} alt="Referência enviada" /><small>{referencia.nome}</small><button type="button" onClick={() => setReferencia(null)}>×</button></div>}</div>
-        <button className="botao enviar" type="submit">Enviar encomenda</button>
-        {enviado && <p className="sucesso">Prontinho! Recebemos os detalhes da sua encomenda. Em breve, entraremos em contato.</p>}
+        <input type="hidden" name="produto" value="Bolo personalizado" />
+        <div className="linha-form"><label className="campo-encomenda">Tamanho<select name="tamanho" required defaultValue=""><option value="" disabled>Escolha o tamanho</option><option value="P">P</option><option value="M">M</option><option value="G">G</option></select></label><label className="campo-encomenda">Sabor<select name="sabor" required defaultValue=""><option value="" disabled>Escolha o sabor</option><option>Prestígio</option><option>Bombom de morango</option><option>Doce de leite com gotas</option><option>Maracujá trufado</option><option>Choconinho</option><option>Dois amores</option><option>Dois amores com bombom</option><option>Leite Ninho</option><option>Leite Ninho com morango</option><option>Leite Ninho com abacaxi</option><option>Leite Ninho com Nutella</option><option>Doce de leite</option><option>Doce de leite com morango</option><option>Doce de leite com nozes</option><option>Doce de leite com ameixa</option><option>Torta de abacaxi</option></select></label></div>
+        <div className="linha-form"><label className="campo-encomenda">Decoração<input name="decoracao" required placeholder="Ex.: flores, tema, nome..." /></label><label className="campo-encomenda">Data da entrega<input name="data_preferida" required type="date" /></label></div>
+        <div className="linha-form quantidade"><label className="campo-encomenda">Quantidade<input name="quantidade" required type="number" min="1" step="1" defaultValue="1" /></label><label className="campo-encomenda">Observação<textarea name="observacao" placeholder="Ex.: Quero o bolo com decoração rosa e branca e o nome Maria." rows="2" /></label></div>
+        <div className="referencia"><div className="referencia-texto"><b>Foto de referência <small>(opcional)</small></b><span>Envie uma inspiração ou selecione um bolo da nossa galeria.</span></div><div className="acoes-imagem"><button className="galeria-botao" type="button" onClick={abrirGaleriaReferencia}>Ver galeria de bolos</button><label className="upload"><input type="file" accept="image/*" onChange={selecionarReferencia} /> Enviar imagem</label></div>{referencia && <div className="preview"><img src={referencia.url} alt="Referência enviada" /><small>{referencia.nome}</small><button type="button" onClick={() => setReferencia(null)}>×</button></div>}</div>
+        <button className="botao enviar" type="submit">Adicionar ao carrinho</button>
       </form>
+      {galeriaReferenciaAberta && <div className="galeria-referencia-fundo" onMouseDown={() => setGaleriaReferenciaAberta(false)}><section className="galeria-referencia" role="dialog" aria-modal="true" aria-label="Escolher foto de referência" onMouseDown={(event) => event.stopPropagation()}><header><div><p className="sobretitulo">INSPIRAÇÕES</p><h3>Escolha uma referência</h3></div><button type="button" onClick={() => setGaleriaReferenciaAberta(false)} aria-label="Fechar galeria">×</button></header>{carregandoFotosReferencia && <p>Carregando galeria...</p>}{erroFotosReferencia && <p className="galeria-referencia-erro">{erroFotosReferencia}</p>}{!carregandoFotosReferencia && !erroFotosReferencia && <div className="galeria-referencia-grade">{fotosReferencia.map((foto) => <button key={foto.id} type="button" onClick={() => selecionarFotoGaleria(foto)}><img src={foto.imagem} alt="Selecionar esta referência de bolo" /></button>)}</div>}{!carregandoFotosReferencia && !erroFotosReferencia && fotosReferencia.length === 0 && <p>A galeria ainda não possui fotos disponíveis.</p>}</section></div>}
     </ModalEncomenda>}
 
     <section className="sobre" id="sobre"><div className="sobre-conteudo"><p className="sobretitulo">um toque de carinho</p><h2>Doces feitos para celebrar você.</h2><p>Na Bolos da Lu, cada receita é preparada em pequenas fornadas, com ingredientes selecionados e cuidado em cada detalhe. Criamos bolos, docinhos, copos e kits personalizados para festas, presentes e momentos especiais. Faça sua encomenda e conte para a gente como você imagina essa delícia.</p><div className="sobre-detalhes"><strong>100%</strong><span>feito com carinho<br />em cada receita</span></div></div><div className="sobre-imagem"><i className="forma-amarela"/><i className="forma-rosa"/><img src={fotoLu} alt="Lu, confeiteira da Bolos da Lu, com um bolo"/><span>feito à mão ♥</span></div></section>
@@ -291,6 +300,7 @@ function App() {
     {mostrarMeusPedidos && usuario && <MeusPedidos usuario={usuario} aoFechar={() => setMostrarMeusPedidos(false)} />}
     {mostrarAuth && <Auth iniciarCadastro={authCadastro} onClose={() => setMostrarAuth(false)} onAutenticado={async () => { await carregarPerfil(); setMostrarAuth(false); setAvisoConta('Você entrou na sua conta com sucesso! ♥') }} />}
     {avisoCadastroCarrinho && <div className="aviso-mistura aviso-cadastro-carrinho"><div><span>♥</span><h2>Entre ou crie sua conta</h2><p>Para adicionar produtos ao carrinho e acompanhar seu pedido, você precisa estar cadastrado.</p><div><button onClick={() => setAvisoCadastroCarrinho(false)}>Agora não</button><button onClick={() => { setAvisoCadastroCarrinho(false); setAuthCadastro(false); setMostrarAuth(true) }}>Entrar</button><button onClick={() => { setAvisoCadastroCarrinho(false); setAuthCadastro(true); setMostrarAuth(true) }}>Cadastrar</button></div></div></div>}
+    {avisoEncomendaComPronta && <div className="aviso-mistura"><div><span>🎂</span><h2>Finalize os doces primeiro</h2><p>Bolos personalizados são feitos por encomenda e não podem ser adicionados enquanto houver doces à pronta entrega no carrinho.</p><div><button onClick={() => setAvisoEncomendaComPronta(false)}>Continuar editando</button><button onClick={() => { setAvisoEncomendaComPronta(false); setCarrinhoAberto(true) }}>Ver carrinho</button></div></div></div>}
     {pedidoMisto && <div className="aviso-mistura"><div><span>🛒</span><h2>Escolha um tipo de pedido</h2><p>O carrinho não pode misturar delivery imediato e encomendas. Escolha quais itens deseja manter.</p><div><button onClick={() => { setCarrinho((itens) => itens.filter((item) => item.tipo === 'produto')); setPedidoMisto(false); setCarrinhoAberto(true) }}>Manter encomenda</button><button onClick={() => { setCarrinho((itens) => itens.filter((item) => item.tipo === 'pronta_entrega')); setPedidoMisto(false); setCarrinhoAberto(true) }}>Manter delivery</button></div></div></div>}
     {categoriaAberta && <div className="modal-categoria" onMouseDown={() => setCategoriaAberta(null)}><section onMouseDown={(e) => e.stopPropagation()}><button className="fechar-categoria" onClick={() => setCategoriaAberta(null)}>×</button><p className="sobretitulo">cardápio bolos da lu</p><h2>{categoriaAberta}</h2><p className="descricao-categoria">Escolha sua delícia e adicione ao carrinho.</p><div className="produtos-modal-categoria">{produtos.filter((produto) => produto.categoria === categoriaAberta).map((produto) => <article key={produto.id}><div>{produto.imagem ? <img src={produto.imagem} alt={produto.nome} /> : <span>🍰</span>}</div><h3>{produto.nome}</h3><p>{produto.descricao}</p><strong>R$ {Number(produto.preco).toFixed(2)}</strong><button onClick={() => adicionarAoCarrinho(produto, 'produto')}>Adicionar ao carrinho +</button></article>)}</div>{produtos.filter((produto) => produto.categoria === categoriaAberta).length === 0 && <p className="modal-vazio">Ainda não há produtos cadastrados nesta categoria.</p>}</section></div>}
     {doceAConfirmar && <div className="aviso-mistura"><div><span>{doceAConfirmar.tipo === 'pronta_entrega' ? '⚡' : '🎂'}</span><h2>Pedido separado</h2><p>{doceAConfirmar.tipo === 'pronta_entrega' ? 'Produtos de pronta entrega são enviados como delivery. Para adicioná-los, os itens de encomenda serão removidos do carrinho.' : 'Produtos por encomenda têm data de produção. Para adicioná-los, os itens de delivery serão removidos do carrinho.'}</p><div><button onClick={() => setDoceAConfirmar(null)}>Manter pedido atual</button><button onClick={() => { incluirNoCarrinho(doceAConfirmar.item, doceAConfirmar.tipo, true); setDoceAConfirmar(null) }}>{doceAConfirmar.tipo === 'pronta_entrega' ? 'Continuar com delivery' : 'Continuar com encomenda'}</button></div></div></div>}
@@ -301,7 +311,6 @@ function App() {
     {detalheDocePronta && <div className="fundo-detalhe-pronta" onMouseDown={() => setDetalheDocePronta(null)}><aside className="detalhe-pronta" style={{ top: detalheDocePronta.top, left: detalheDocePronta.left }} onMouseDown={(evento) => evento.stopPropagation()}><button className="fechar-detalhe-pronta" onClick={() => setDetalheDocePronta(null)}>×</button>{detalheDocePronta.doce.imagem && <img src={detalheDocePronta.doce.imagem} alt={detalheDocePronta.doce.nome}/>}<p className="sobretitulo">PRONTA ENTREGA</p><h2>{detalheDocePronta.doce.nome}</h2><p>{detalheDocePronta.doce.descricao || 'Uma delícia preparada com carinho para adoçar o seu dia.'}</p><span className="estoque-detalhe-pronta">● {detalheDocePronta.doce.quantidade_disponivel} disponíveis</span></aside></div>}
     {detalheProduto && <div className="fundo-detalhe-pronta" onMouseDown={() => setDetalheProduto(null)}><aside className="detalhe-pronta detalhe-produto" style={{ top: detalheProduto.top, left: detalheProduto.left }} onMouseDown={(evento) => evento.stopPropagation()}><button className="fechar-detalhe-pronta" onClick={() => setDetalheProduto(null)}>×</button>{detalheProduto.produto.imagem && <img src={detalheProduto.produto.imagem} alt={detalheProduto.produto.nome}/>}<p className="sobretitulo">{detalheProduto.produto.categoria}</p><h2>{detalheProduto.produto.nome}</h2><p>{detalheProduto.produto.descricao || 'Uma delícia feita com ingredientes selecionados e muito carinho.'}</p></aside></div>}
     {confirmarSaida && <div className="aviso-conta-fundo"><section className="confirmar-saida" role="dialog" aria-modal="true" aria-label="Confirmar saída"><span>♥</span><p className="sobretitulo">ATÉ LOGO</p><h2>Deseja sair da conta?</h2><p>Você poderá entrar novamente quando quiser para acompanhar seus pedidos.</p><div><button onClick={() => setConfirmarSaida(false)}>Cancelar</button><button className="confirmar" onClick={confirmarLogout}>Sim, sair</button></div></section></div>}
-    {cameraAberta && <div className="camera-modal" role="dialog" aria-modal="true" aria-label="Câmera para foto de referência"><div className="camera-caixa"><div className="camera-cabecalho"><div><b>Foto de referência</b><small>Posicione a inspiração dentro do quadro.</small></div><button type="button" onClick={fecharCamera} aria-label="Fechar câmera">×</button></div><div className="camera-video"><video ref={videoRef} autoPlay playsInline muted /></div><div className="camera-acoes"><button type="button" className="camera-cancelar" onClick={fecharCamera}>Cancelar</button><button type="button" className="botao" onClick={confirmarFoto}>Confirmar foto <b>→</b></button></div></div></div>}
   </main>
 }
 export default App

@@ -7,7 +7,8 @@
 }
 
 main {
-    overflow: hidden
+    overflow-x: hidden;
+    overflow-y: visible
 }
 
 .topo {
@@ -294,6 +295,8 @@ h1 i {
     border-radius: 999px;
     background: var(--rosa)
 }
+
+.indicador-rolagem { display: none }
 
 .hero.hero-banners{display:block;min-height:0;padding:0;background:#fffaf5}.hero-banners .carrossel-banner{width:100%;min-width:0;height:100vh;min-height:460px;max-height:900px;margin:0;border-radius:0;transform:none;box-shadow:none;background:#f9d7d6}.hero-banners .carrossel-slide img{object-fit:cover;transform:none}.hero-banners .carrossel-banner:hover .carrossel-slide img{transform:scale(1.015)}.hero-banners .carrossel-controle{width:46px;height:46px;font-size:36px}.hero-banners .carrossel-controle.anterior{left:32px}.hero-banners .carrossel-controle.proximo{right:32px}.hero-banners .carrossel-dots{bottom:23px}.hero-banners .carrossel-dot{background:#fff8}.hero-banners .carrossel-dot.ativo{background:var(--rosa)}
 
@@ -755,7 +758,7 @@ h2 {
         text-align: center
     }
 
-    .hero.hero-banners { padding: 0; text-align: initial }
+    .hero.hero-banners { position: relative; padding: 0; overflow: visible; text-align: initial }
 
     .hero-banners .carrossel-banner {
         width: 100vw;
@@ -768,6 +771,35 @@ h2 {
     .hero-banners .carrossel-controle.anterior { left: 12px }
 
     .hero-banners .carrossel-controle.proximo { right: 12px }
+
+    .indicador-rolagem {
+        position: absolute;
+        z-index: 3;
+        bottom: -53px;
+        left: 50%;
+        display: grid;
+        justify-items: center;
+        gap: 1px;
+        color: #4b2a20;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: .3px;
+        text-align: center;
+        text-shadow: 0 1px 4px #fff;
+        transform: translateX(-50%);
+        animation: indicar-rolagem 1.5s ease-in-out infinite
+    }
+
+    .indicador-rolagem b {
+        display: grid;
+        place-items: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: #fffaf5dc;
+        font-size: 18px;
+        line-height: 1
+    }
 
     .hero-texto {
         padding: 0;
@@ -875,6 +907,15 @@ h2 {
     .forma-amarela { width: 310px; height: 285px }
     .forma-rosa { width: 290px; height: 265px }
     .sobre-imagem img { max-height: 350px }
+}
+
+@keyframes indicar-rolagem {
+    0%, 100% { transform: translate(-50%, 0) }
+    50% { transform: translate(-50%, 7px) }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .indicador-rolagem { animation: none }
 }
 
 @media (max-width: 480px) {

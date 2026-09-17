@@ -185,12 +185,13 @@
         padding: 65px 21px
     }
 
-    .pronta-entrega.pronta-entrega-banner { aspect-ratio: 1672 / 941; min-height: 0; padding: 0; background-size: cover }
+    .pronta-entrega.pronta-entrega-banner { aspect-ratio: auto; min-height: 0; padding: 0; background: #fffaf5 !important; background-image: none !important }
     .conteudo-pronta { width: calc(100% - 42px); padding: 14% 0 }
-    .pronta-entrega.pronta-entrega-banner { aspect-ratio: auto; min-height: 720px; background-position: center }
-    .pronta-entrega-banner .grade-pronta { display: flex; overflow-x: auto; padding: 0 2px 12px; scroll-snap-type: x mandatory }
-    .pronta-entrega-banner .grade-pronta article { flex: 0 0 205px; scroll-snap-align: start }
-    .pronta-entrega-banner .grade-pronta img, .pronta-entrega-banner .doce-sem-imagem { height: 140px }
+    .pronta-entrega-banner .grade-pronta { position: relative; z-index: 1; display: flex; gap: 12px; width: 100%; max-width: 100%; overflow-x: auto; overflow-y: hidden; padding: 0 calc(100% - min(47vw, 180px) + 2px) 14px 2px; scroll-padding-inline: 2px; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; touch-action: pan-x; scrollbar-width: thin }
+    .pronta-entrega-banner .grade-pronta article { min-width: 0; flex: 0 0 min(47vw, 180px); scroll-snap-align: start }
+    .pronta-entrega-banner .grade-pronta img, .pronta-entrega-banner .doce-sem-imagem { height: 120px }
+    .pronta-entrega-banner .grade-pronta article>div:last-child { padding: 13px }
+    .pronta-entrega-banner .grade-pronta h3 { min-height: 34px; font-size: 16px }
     .detalhe-pronta { top: auto!important; bottom: 18px; left: 18px!important; width: calc(100vw - 76px) }
     .modal-todos-pronta { padding: 12px }
     .modal-todos-pronta>section { max-height: calc(100vh - 24px); padding: 31px 19px 24px }
@@ -214,11 +215,11 @@
 
 @media(max-width:480px) {
     .conteudo-pronta { width: calc(100% - 32px); padding: 18% 0 14% }
-    .pronta-entrega.pronta-entrega-banner { min-height: 670px }
+    .pronta-entrega.pronta-entrega-banner { min-height: 0 }
     .cabecalho-pronta { margin-bottom: 24px }
     .cabecalho-pronta h2 { font-size: clamp(38px, 12vw, 52px); letter-spacing: -2px }
     .cabecalho-pronta h2 i { white-space: normal }
-    .pronta-entrega-banner .grade-pronta article { flex-basis: min(64vw, 205px) }
+    .pronta-entrega-banner .grade-pronta article { flex-basis: min(47vw, 180px) }
     .modal-todos-pronta>section { padding: 28px 14px 20px }
     .grade-todos-pronta { grid-template-columns: 1fr; gap: 14px }
     .todos-pronta-card { display: grid; grid-template-columns: 110px minmax(0, 1fr) }

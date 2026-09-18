@@ -1,3 +1,19 @@
+.filtros-categorias-admin { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 }
+.filtros-categorias-admin button { display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 9px 14px; border: 1px solid #e7d3ca; border-radius: 999px; background: #fffdfb; color: #654333; font: 500 13px 'DM Sans', sans-serif; cursor: pointer }
+.filtros-categorias-admin button[aria-pressed="true"] { background: #4b2a20; border-color: #4b2a20; color: #fffaf5 }
+.filtros-categorias-admin button:focus-visible { outline: 2px solid #bd5967; outline-offset: 3px }
+.filtros-categorias-admin button span { font-size: 11px; opacity: .8 }
+.grupo-produtos-admin { margin-top: 28px }
+.admin .grupo-produtos-admin h2 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 12px; margin: 0 0 14px; font: 600 22px 'DM Sans', sans-serif }
+.grupo-produtos-admin h2 span { font-size: 12px; font-weight: 400; color: #89695f }
+.subgrupo-produtos-admin { margin-top: 20px }
+.subgrupo-produtos-admin h3 { margin: 0 0 10px; font: 600 15px 'DM Sans', sans-serif; color: #80564a }
+.subgrupo-produtos-admin h3 span { font-weight: 400 }
+.grupo-produtos-admin .lista-admin { margin-top: 0 }
+.categoria-admin-vazia { padding: 16px 0; color: #89695f; font-size: 13px }
+.catalogo-admin-categorias .dados-produto { min-width: 0; max-width: 100% }
+.catalogo-admin-categorias .dados-produto small { max-width: 100% }
+
 .produtos-admin article {
     align-items: center
 }
@@ -132,6 +148,9 @@
 .campo-total {
     grid-column: 1/-1
 }
+.cadastro-tamanhos-bolo { min-width: 0; padding: 14px; border: 1px solid #e7d3ca; border-radius: 12px }
+.cadastro-tamanhos-bolo legend { font: 600 13px 'DM Sans', sans-serif; padding: 0 5px }
+.cadastro-tamanhos-bolo>div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 10px 0 }
 
 .imagem-upload-produto input[type=file] {
     padding: 9px;

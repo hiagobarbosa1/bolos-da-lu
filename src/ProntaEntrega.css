@@ -198,7 +198,8 @@
     .acoes-pronta { display: block; width: 100%; margin: 0 }
     .ver-todos-pronta { position: relative; left: 50%; margin: 27px 0 0; transform: translateX(-50%) }
     .ver-todos-pronta:hover { transform: translate(-50%, -3px) }
-    .detalhe-pronta { top: auto!important; bottom: 18px; left: 18px!important; width: calc(100vw - 76px) }
+    .fundo-detalhe-pronta { display: grid; place-items: center; padding: max(18px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left)); overscroll-behavior: none }
+    .fundo-detalhe-pronta .detalhe-pronta { position: relative; inset: auto!important; width: min(350px, 100%); margin: 0; max-height: calc(100dvh - 36px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); overscroll-behavior: contain; -webkit-overflow-scrolling: touch }
     .modal-todos-pronta { padding: 12px }
     .modal-todos-pronta>section { max-height: calc(100vh - 24px); padding: 31px 19px 24px }
     .grade-todos-pronta { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px }

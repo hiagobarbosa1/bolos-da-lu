@@ -1,3 +1,4 @@
+import { prepararBolo, chaveItemCarrinho } from './services/formatosBolos'
 import { useEffect, useState } from 'react'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
@@ -94,6 +95,26 @@ function App() {
   const [detalheDocePronta, setDetalheDocePronta] = useState(null)
   const [mostrarTodosPronta, setMostrarTodosPronta] = useState(false)
   const [detalheProduto, setDetalheProduto] = useState(null)
+  const detalheAberto = Boolean(detalheDocePronta || detalheProduto)
+  useEffect(() => {
+    if (!detalheAberto) return
+    const corpo = document.body
+    const posicao = { x: window.scrollX, y: window.scrollY }
+    const propriedades = ['position', 'top', 'left', 'width', 'overflow', 'paddingRight']
+    const anteriores = Object.fromEntries(propriedades.map((chave) => [chave, corpo.style[chave]]))
+    const larguraBarra = window.innerWidth - document.documentElement.clientWidth
+    const espacamento = parseFloat(getComputedStyle(corpo).paddingRight) || 0
+    Object.assign(corpo.style, { position: 'fixed', top: `-${posicao.y}px`, left: `-${posicao.x}px`, width: '100%', overflow: 'hidden', paddingRight: `${espacamento + larguraBarra}px` })
+    const fecharComEscape = (evento) => {
+      if (evento.key === 'Escape') { setDetalheDocePronta(null); setDetalheProduto(null) }
+    }
+    window.addEventListener('keydown', fecharComEscape)
+    return () => {
+      window.removeEventListener('keydown', fecharComEscape)
+      Object.assign(corpo.style, anteriores)
+      window.scrollTo({ left: posicao.x, top: posicao.y, behavior: 'instant' })
+    }
+  }, [detalheAberto])
   const [avisoCadastroCarrinho, setAvisoCadastroCarrinho] = useState(false)
   const [carrinho, setCarrinho] = useState(() => JSON.parse(localStorage.getItem('bolos-da-lu-carrinho') || '[]'))
   const [carrinhoAberto, setCarrinhoAberto] = useState(false)
@@ -149,7 +170,10 @@ function App() {
   useEffect(() => { listarDocesProntaEntrega().then(setDocesProntaEntrega).catch(() => setDocesProntaEntrega([])) }, [])
   useEffect(() => { localStorage.setItem('bolos-da-lu-carrinho', JSON.stringify(carrinho)) }, [carrinho])
   useEffect(() => {
-    const acompanharRolagem = () => setMenuFlutuanteVisivel(window.scrollY > 140)
+    const acompanharRolagem = () => {
+      if (document.body.style.position === 'fixed') return
+      setMenuFlutuanteVisivel(window.scrollY > 140)
+    }
     acompanharRolagem()
     window.addEventListener('scroll', acompanharRolagem, { passive: true })
     return () => window.removeEventListener('scroll', acompanharRolagem)
@@ -167,11 +191,11 @@ function App() {
     return () => window.clearInterval(intervalo)
   }, [])
 
-  function incluirNoCarrinho(item, tipo, substituirItens = false) { setCarrinho((itens) => { const base = substituirItens ? itens.filter((atual) => atual.tipo === tipo) : itens; const existente = base.find((atual) => atual.id === item.id && atual.tipo === tipo); const limite = tipo === 'pronta_entrega' ? Number(item.quantidade_disponivel) : Infinity; const quantidade = Math.max(1, Number(item.quantidade) || 1); return existente ? base.map((atual) => atual === existente ? { ...atual, ...item, quantidade: item.vendaDocinhos ? quantidade : Math.min(atual.quantidade + quantidade, limite) } : atual) : limite > 0 ? [...base, { ...item, tipo, quantidade }] : base }); setCarrinhoAberto(true) }
-  function adicionarAoCarrinho(item, tipo) { if (tipo === 'produto' && (item.vendaDocinhos || tipoDocinho(item)) && !quantidadesDocinhos.includes(Number(item.quantidade))) { setProdutoQuantidadePendente(item.id); setCategoriaAberta(item.categoria); return } setProdutoQuantidadePendente(null); if (tipo === 'produto') item = prepararDocinho(item); if (!usuario) { setAvisoCadastroCarrinho(true); return } if (carrinho.some((atual) => atual.tipo !== tipo)) { setDoceAConfirmar({ item, tipo }); return } incluirNoCarrinho(item, tipo) }
+  function incluirNoCarrinho(item, tipo, substituirItens = false) { setCarrinho((itens) => { const base = substituirItens ? itens.filter((atual) => atual.tipo === tipo) : itens; const existente = base.find((atual) => chaveItemCarrinho(atual) === chaveItemCarrinho({ ...item, tipo })); const limite = tipo === 'pronta_entrega' ? Number(item.quantidade_disponivel) : Infinity; const quantidade = Math.max(1, Number(item.quantidade) || 1); return existente ? base.map((atual) => atual === existente ? { ...atual, ...item, quantidade: item.vendaDocinhos ? quantidade : Math.min(atual.quantidade + quantidade, limite) } : atual) : limite > 0 ? [...base, { ...item, tipo, quantidade }] : base }); setCarrinhoAberto(true) }
+  function adicionarAoCarrinho(item, tipo) { if (tipo === 'produto' && (item.vendaDocinhos || tipoDocinho(item)) && !quantidadesDocinhos.includes(Number(item.quantidade))) { setProdutoQuantidadePendente(item.id); setCategoriaAberta(item.categoria); return } setProdutoQuantidadePendente(null); if (tipo === 'produto') item = prepararBolo(prepararDocinho(item)); if (!usuario) { setAvisoCadastroCarrinho(true); return } if (carrinho.some((atual) => atual.tipo !== tipo)) { setDoceAConfirmar({ item, tipo }); return } incluirNoCarrinho(item, tipo) }
   function abrirCarrinho() { if (carrinho.some((item) => item.tipo === 'produto') && carrinho.some((item) => item.tipo === 'pronta_entrega')) { setPedidoMisto(true); return } setCarrinhoAberto(true) }
-  function alterarQuantidade(item, mudanca) { setCarrinho((itens) => itens.flatMap((atual) => { if (atual.id !== item.id || atual.tipo !== item.tipo) return [atual]; const quantidade = atual.quantidade + mudanca; const atingiuEstoque = atual.tipo === 'pronta_entrega' && quantidade > Number(atual.quantidade_disponivel); return quantidade > 0 ? [{ ...atual, quantidade: atingiuEstoque ? atual.quantidade : quantidade }] : [] })) }
-  function removerDoCarrinho(item) { setCarrinho((itens) => itens.filter((atual) => atual.id !== item.id || atual.tipo !== item.tipo)) }
+  function alterarQuantidade(item, mudanca) { setCarrinho((itens) => itens.flatMap((atual) => { if (chaveItemCarrinho(atual) !== chaveItemCarrinho(item)) return [atual]; const quantidade = atual.quantidade + mudanca; const atingiuEstoque = atual.tipo === 'pronta_entrega' && quantidade > Number(atual.quantidade_disponivel); return quantidade > 0 ? [{ ...atual, quantidade: atingiuEstoque ? atual.quantidade : quantidade }] : [] })) }
+  function removerDoCarrinho(item) { setCarrinho((itens) => itens.filter((atual) => chaveItemCarrinho(atual) !== chaveItemCarrinho(item))) }
 
   function selecionarReferencia(event) {
     const arquivo = event.target.files?.[0]

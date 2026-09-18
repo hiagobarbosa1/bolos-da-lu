@@ -21,6 +21,9 @@ create table if not exists public.produtos (
 );
 
 -- Doces disponíveis para retirada/entrega imediata. O admin pode ativá-los ou ocultá-los a qualquer momento.
+alter table public.produtos add column if not exists imagem_redondo text;
+alter table public.produtos add column if not exists imagem_retangular text;
+
 create table if not exists public.doces_pronta_entrega (
   id bigint generated always as identity primary key,
   nome text not null,
@@ -135,3 +138,15 @@ create policy "usuário cria referências próprias" on public.referencias for i
 
 create policy "usuário envia referência" on storage.objects for insert to authenticated with check (bucket_id = 'referencias' and (storage.foldername(name))[1] = auth.uid()::text);
 create policy "usuário lê referência própria" on storage.objects for select to authenticated using (bucket_id = 'referencias' and (storage.foldername(name))[1] = auth.uid()::text);
+
+-- Execute no SQL Editor do Supabase antes de salvar os tamanhos dos bolos.
+alter table public.produtos add column if not exists preco_p numeric(10,2) check (preco_p >= 0);
+alter table public.produtos add column if not exists preco_m numeric(10,2) check (preco_m >= 0);
+alter table public.produtos add column if not exists preco_g numeric(10,2) check (preco_g >= 0);
+alter table public.produtos add column if not exists fatias_p text;
+alter table public.produtos add column if not exists fatias_m text;
+alter table public.produtos add column if not exists fatias_g text;
+
+-- Preserva o preco antigo como P; M e G precisam ser preenchidos no cadastro.
+update public.produtos set preco_p = preco where categoria = 'Bolos' and preco_p is null;
+

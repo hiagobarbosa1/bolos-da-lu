@@ -176,10 +176,24 @@
 }
 .produtos-modal-categoria article>.link-informacoes-produto:hover { background: transparent; color: #bd5967 }
 
-.aviso-cento { margin: 0 0 24px; color: #805e54; font-size: 13px; line-height: 1.6 }
+.adicionar-texto-mobile { display: none }
+.formato-bolo { min-width: 0; margin: 12px 14px; padding: 0; border: 0 }
+.formato-bolo legend { margin-bottom: 6px; font: 600 12px 'DM Sans', sans-serif }
+.formato-bolo>div { display: flex; gap: 6px }
+.formato-bolo button { flex: 1; min-width: 0; min-height: 36px; padding: 6px; border: 1px solid #e7d4c9; border-radius: 8px; background: #fffdfb; color: #654333; font: 500 12px 'DM Sans', sans-serif; cursor: pointer }
+.formato-bolo button[aria-pressed="true"] { border-color: #bd5967; background: #f5ddd8; color: #754536 }
+.formato-bolo button:focus-visible { outline: 2px solid #bd5967; outline-offset: 2px }
+.informacoes-produto .formato-bolo { margin: 16px 0 }
+.formato-bolo button:disabled { opacity: .45; cursor: not-allowed }
+.fatias-bolo { list-style: none; padding: 0; margin: 12px 0 0; font-size: 12px }
+.fatias-bolo li { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; align-items: baseline; gap: 8px; padding: 8px 0; border-bottom: 1px solid #eeddd2 }
+.fatias-bolo span { color: #805e54 }
+.fatias-bolo strong { color: #bd5967; font-size: 12px }
+.produtos-modal-categoria article:has(.tamanho-bolo)>.foto-produto-categoria { grid-row: 1 / span 6 }
+.subtotal-quantidade-docinhos { display: block; margin-top: 6px; color: #bd5967; font-size: 12px; font-weight: 600 }
 .quantidade-docinhos { display: block; margin: 14px; font-size: 12px; font-weight: 700 }
-.produtos-modal-categoria .quantidade-docinhos { margin: 6px 14px 10px }
-#root .produtos-modal-categoria .quantidade-docinhos select { width: 85%; margin-top: 4px; height: 36px; min-height: 36px; padding-block: 6px }
+.produtos-modal-categoria .quantidade-docinhos { margin: 16px 14px 10px }
+#root .produtos-modal-categoria .quantidade-docinhos select { margin-top: 4px; height: 36px; min-height: 36px; padding-block: 6px }
 .erro-quantidade-docinhos { display: block; margin-top: 8px; color: #a4434b; font-size: 12px; line-height: 1.4; font-weight: 400 }
 .quantidade-docinhos select[aria-invalid="true"] { border-color: #a4434b }
 .quantidade-docinhos select { display: block; width: 100%; min-width: 0; min-height: 44px; margin-top: 6px; padding: 8px; border: 1px solid #e6d0c7; border-radius: 8px; background: #fff; color: #4b2a20; font-size: 16px }
@@ -201,14 +215,30 @@
     }
 
     .modal-categoria>section {
-        padding: 28px 20px
+        padding: 28px 14px;
+        max-height: calc(100dvh - 24px)
     }
 
     .produtos-modal-categoria {
         grid-template-columns: 1fr
     }
 
-    .produtos-modal-categoria article>div {
-        height: clamp(240px, 65vw, 300px)
-    }
+    .produtos-modal-categoria article { display: grid; grid-template-columns: minmax(85px, 32%) minmax(0, 1fr); gap: 0 12px; padding-right: 12px; align-content: start }
+    .produtos-modal-categoria article>.foto-produto-categoria { grid-column: 1; grid-row: 1 / span 5; height: auto; min-height: 180px; align-self: stretch }
+    .produtos-modal-categoria .formato-bolo { margin: 8px 0 10px }
+    .produtos-modal-categoria .formato-bolo>div { flex-wrap: wrap }
+    .produtos-modal-categoria .formato-bolo button { flex-basis: 65px; font-size: 11px }
+    .produtos-modal-categoria .foto-produto-categoria img { position: absolute; inset: 0 }
+    .produtos-modal-categoria article>:not(.foto-produto-categoria) { grid-column: 2; min-width: 0 }
+    .produtos-modal-categoria article>h3 { margin: 12px 0 2px; font-size: 16px; line-height: 1.25; letter-spacing: 0 }
+    .produtos-modal-categoria article>strong { margin: 4px 0 }
+    .produtos-modal-categoria article>.link-informacoes-produto { margin: 0; padding: 4px 0; font-size: 11px; line-height: 1.35; min-height: 28px }
+    .produtos-modal-categoria .quantidade-docinhos { margin: 8px 0 10px; font-size: 11px }
+    #root .produtos-modal-categoria .quantidade-docinhos select { width: 100%; height: 36px; min-height: 36px; padding-inline: 10px 30px; background-position: right 10px center }
+    .produtos-modal-categoria article>.adicionar-produto-categoria { width: 100%; margin: 0 0 12px; padding: 9px 8px; min-height: 40px; border-radius: 999px; background: #4b2a20; color: #fffaf5 }
+    .adicionar-texto-desktop { display: none }
+    .adicionar-texto-mobile { display: inline }
+    .cabecalho-docinhos { gap: 6px; margin-bottom: 14px }
+    .cabecalho-docinhos h3 { font-size: 22px }
+    .cabecalho-docinhos strong { font-size: 16px }
 }

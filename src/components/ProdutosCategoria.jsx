@@ -1,20 +1,24 @@
+import SeletorTamanhoBolo from './SeletorTamanhoBolo'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { quantidadesDocinhos, tipoDocinho, tiposDocinhos } from '../services/tiposDocinhos'
+import { selecionarBolo } from '../services/formatosBolos'
+import SeletorFormatoBolo from './SeletorFormatoBolo'
 
 const moeda = (valor) => Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
 
-function SeletorQuantidade({ produto, quantidade, aoQuantidade, erro }) {
+function SeletorQuantidade({ produto, quantidade, aoQuantidade, erro, compacto = false }) {
   return <label className="quantidade-docinhos">Quantidade
     <select value={quantidade || ''} aria-invalid={Boolean(erro)} onChange={(event) => aoQuantidade(Number(event.target.value))}>
-      <option value="" disabled>Selecione a quantidade</option>
-      {quantidadesDocinhos.map((valor) => <option key={valor} value={valor}>{valor} unidades — {moeda(Number(produto.preco) * valor / 100)}</option>)}
+      <option value="" disabled>{compacto ? 'Selecione' : 'Selecione a quantidade'}</option>
+      {quantidadesDocinhos.map((valor) => <option key={valor} value={valor}>{compacto ? `${valor} unidades` : `${valor} unidades — ${moeda(Number(produto.preco) * valor / 100)}`}</option>)}
     </select>
     {erro && <span className="erro-quantidade-docinhos" role="alert">Selecione a quantidade antes de adicionar ao carrinho.</span>}
+    {compacto && quantidade > 0 && <span className="subtotal-quantidade-docinhos">Total: {moeda(Number(produto.preco) * quantidade / 100)}</span>}
   </label>
 }
 
-function InformacoesProduto({ produto, origem, quantidade, aoQuantidade, erro, aoFechar, aoAdicionar }) {
+function InformacoesProduto({ produto, origem, quantidade, aoQuantidade, erro, aoFechar, aoAdicionar, aoFormato, aoTamanho }) {
   const dialogo = useRef(null)
   const tipo = tipoDocinho(produto)
 
@@ -47,6 +51,7 @@ function InformacoesProduto({ produto, origem, quantidade, aoQuantidade, erro, a
       <h3 id="titulo-informacoes-produto">{produto.nome}</h3>
       {produto.descricao && <p className="descricao-informacoes-produto">{produto.descricao}</p>}
       <strong className="preco-informacoes-produto">{moeda(produto.preco)}{tipo && ' / cento'}</strong>
+      {produto.categoria === 'Bolos' && <><SeletorFormatoBolo valor={produto.formato} aoAlterar={aoFormato} /><SeletorTamanhoBolo produto={produto} aoAlterar={aoTamanho} detalhado /></>}
       {tipo && <SeletorQuantidade produto={produto} quantidade={quantidade} aoQuantidade={aoQuantidade} erro={erro} />}
       {(!tipo || quantidade) && <div className="total-informacoes-produto"><span>Total</span><strong>{moeda(tipo ? Number(produto.preco) * quantidade / 100 : produto.preco)}</strong></div>}
       <button type="button" className="adicionar-informacoes-produto" onClick={(event) => { if (aoAdicionar(produto, event)) aoFechar() }}>Adicionar ao carrinho +</button>
@@ -56,6 +61,8 @@ function InformacoesProduto({ produto, origem, quantidade, aoQuantidade, erro, a
 
 export default function ProdutosCategoria({ categoria, produtos, aoAdicionar, produtoQuantidadePendente }) {
   const [quantidades, setQuantidades] = useState({})
+  const [formatos, setFormatos] = useState({})
+  const [tamanhos, setTamanhos] = useState({})
   const [erros, setErros] = useState(() => produtoQuantidadePendente ? { [produtoQuantidadePendente]: true } : {})
   const [selecionado, setSelecionado] = useState(null)
   const doces = ['Docinhos', 'Doces'].includes(categoria)
@@ -79,23 +86,30 @@ export default function ProdutosCategoria({ categoria, produtos, aoAdicionar, pr
   }
 
   function cards(lista) {
-    return <div className="produtos-modal-categoria">{lista.map((produto) => <article key={produto.id}>
+    return <div className="produtos-modal-categoria">{lista.map((original) => {
+      const formato = formatos[original.id] || 'Redondo'
+      const produto = original.categoria === 'Bolos' ? selecionarBolo(original, formato, tamanhos[original.id] || 'P') : original
+      return <article key={produto.id}>
       <div className="foto-produto-categoria">{produto.imagem ? <img src={produto.imagem} alt={produto.nome} /> : <span>🧁</span>}</div>
       <h3>{produto.nome}</h3>
-      <strong>{moeda(produto.preco)}{tipoDocinho(produto) && ' / cento'}</strong>
+      {!tipoDocinho(produto) && <strong>{moeda(produto.preco)}</strong>}
       <button className="link-informacoes-produto" type="button" aria-haspopup="dialog" aria-label={`Ver informações do produto: ${produto.nome}`} onClick={(event) => setSelecionado({ produto, origem: event.currentTarget.closest('article') })}>Ver informações do produto</button>
-      {tipoDocinho(produto) && <SeletorQuantidade produto={produto} quantidade={quantidades[produto.id]} aoQuantidade={(quantidade) => escolherQuantidade(produto, quantidade)} erro={erros[produto.id]} />}
-      <button type="button" onClick={(event) => adicionar(produto, event)}>Adicionar ao carrinho +</button>
-    </article>)}</div>
+      {produto.categoria === 'Bolos' && <SeletorFormatoBolo valor={formato} aoAlterar={(valor) => setFormatos((atual) => ({ ...atual, [produto.id]: valor }))} />}
+      {produto.categoria === 'Bolos' && <SeletorTamanhoBolo produto={produto} aoAlterar={(valor) => setTamanhos((atual) => ({ ...atual, [produto.id]: valor }))} />}
+      {tipoDocinho(produto) && <SeletorQuantidade compacto produto={produto} quantidade={quantidades[produto.id]} aoQuantidade={(quantidade) => escolherQuantidade(produto, quantidade)} erro={erros[produto.id]} />}
+      <button className="adicionar-produto-categoria" type="button" onClick={(event) => adicionar(produto, event)}><span className="adicionar-texto-desktop">Adicionar ao carrinho +</span><span className="adicionar-texto-mobile">Adicionar +</span></button>
+    </article>})}</div>
   }
 
-  const painel = selecionado && <InformacoesProduto produto={selecionado.produto} origem={selecionado.origem} quantidade={quantidades[selecionado.produto.id]} aoQuantidade={(quantidade) => escolherQuantidade(selecionado.produto, quantidade)} erro={erros[selecionado.produto.id]} aoFechar={() => setSelecionado(null)} aoAdicionar={adicionar} />
+  const originalSelecionado = selecionado && itens.find((produto) => produto.id === selecionado.produto.id)
+  const formatoSelecionado = selecionado && (formatos[selecionado.produto.id] || 'Redondo')
+  const produtoSelecionado = originalSelecionado?.categoria === 'Bolos' ? selecionarBolo(originalSelecionado, formatoSelecionado, tamanhos[originalSelecionado.id] || 'P') : selecionado?.produto
+  const painel = selecionado && <InformacoesProduto produto={produtoSelecionado} origem={selecionado.origem} quantidade={quantidades[selecionado.produto.id]} aoQuantidade={(quantidade) => escolherQuantidade(selecionado.produto, quantidade)} erro={erros[selecionado.produto.id]} aoFechar={() => setSelecionado(null)} aoAdicionar={adicionar} aoTamanho={(valor) => setTamanhos((atual) => ({ ...atual, [selecionado.produto.id]: valor }))} aoFormato={(valor) => setFormatos((atual) => ({ ...atual, [selecionado.produto.id]: valor }))} />
 
   if (!doces) return <>{cards(itens)}{!itens.length && <p className="modal-vazio">Ainda não há produtos cadastrados nesta categoria.</p>}{painel}</>
 
   const outros = itens.filter((produto) => !tipoDocinho(produto))
   return <>
-    <p className="aviso-cento">Escolha 25, 50, 75 ou 100 unidades de cada doce. O valor é calculado conforme a quantidade.</p>
     {tiposDocinhos.map((tipo) => {
       const lista = itens.filter((produto) => tipoDocinho(produto) === tipo)
       return <section className="grupo-docinhos" key={tipo.nome}>

@@ -1,3 +1,4 @@
+import { listarTodasPaginas } from './listarTodasPaginas'
 import { supabase } from '../lib/supabaseClient'
 
 export async function cadastrarUsuario({ nome, email, senha, telefone }) {
@@ -7,9 +8,7 @@ export async function cadastrarUsuario({ nome, email, senha, telefone }) {
 }
 
 export async function listarClientes() {
-  const { data, error } = await supabase.from('usuarios').select('id, nome, email, telefone, criado_em').eq('papel', 'cliente').order('criado_em', { ascending: false })
-  if (error) throw error
-  return data
+  return listarTodasPaginas(() => supabase.from('usuarios').select('id, nome, email, telefone, criado_em').eq('papel', 'cliente').order('criado_em', { ascending: false }).order('id'))
 }
 
 export async function entrar({ email, senha }) {

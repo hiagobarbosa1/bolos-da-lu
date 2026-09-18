@@ -1,3 +1,4 @@
+import { listarTodasPaginas } from './listarTodasPaginas'
 import { validarAgendamento, diaNaDoceria, previsaoEntrega, resumoRetirada } from './horariosRetirada'
 import { formasPagamento } from './formasPagamento'
 import { supabase } from '../lib/supabaseClient'
@@ -13,9 +14,7 @@ export function prazoEntregaPedido(criadoEm) {
 }
 
 export async function listarPedidos() {
-  const { data, error } = await supabase.from('pedidos').select('*, usuarios(nome, telefone), itens_pedido(*, produtos(nome))').order('criado_em', { ascending: false })
-  if (error) throw error
-  return data
+  return listarTodasPaginas(() => supabase.from('pedidos').select('*, usuarios(nome, telefone), itens_pedido(*, produtos(nome))').order('criado_em', { ascending: false }).order('id', { ascending: false }))
 }
 
 export async function listarMeusPedidos() {

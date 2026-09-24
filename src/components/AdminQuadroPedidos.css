@@ -30,6 +30,8 @@
 .pedido-itens-destaque small { display: block }
 .pedido-pagamento { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; padding: 8px; border-radius: 7px; background: #f7eee7; font-size: 11px }
 .pedido-pagamento.pix-pendente { background: #fff0cc; color: #88621f }
+.imprimir-pedido { width: 100%; margin: 0; padding: 9px; border: 1px solid #e6c9bf; border-radius: 7px; background: #fffaf5; color: #70463a; font: 700 11px 'DM Sans', sans-serif; cursor: pointer }
+.imprimir-pedido:hover { background: #f7e4df }
 .pedido-detalhes { padding-top: 8px; border-top: 1px solid #efdfd5; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere }
 .pedido-detalhes summary { cursor: pointer; color: #80564a; min-height: 28px }
 .pedido-detalhes p { margin: 7px 0 }

@@ -31,6 +31,11 @@ export function acompanharPedidosEmTempoReal(usuarioId, aoAtualizar, origem = 'c
   return () => supabase.removeChannel(canal)
 }
 
+export function acompanharNovosPedidosAdmin(aoReceber) {
+  const canal = supabase.channel('pedidos-admin-novos').on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'pedidos' }, aoReceber).subscribe()
+  return () => supabase.removeChannel(canal)
+}
+
 export async function criarPedido({ pedido, item, referencia }) {
   const { data: sessao, error: erroSessao } = await supabase.auth.getUser()
   if (erroSessao) throw erroSessao

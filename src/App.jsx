@@ -19,7 +19,6 @@ import { listarDocesProntaEntrega } from './services/docesProntaEntregaService'
 import { listarGaleriaBolos } from './services/galeriaBolosService'
 import CarrinhoCompra from './components/CarrinhoCompra'
 import './HomeProdutos.css'
-import './DestaquesProdutos.css'
 import './Categorias.css'
 import './ProntaEntrega.css'
 import './Carrinho.css'
@@ -31,6 +30,7 @@ import './AvisoConta.css'
 import MeusPedidos from './components/MeusPedidos'
 import ConfirmacaoWhatsApp from './components/ConfirmacaoWhatsApp'
 import AvisoPagamentoPendente from './components/AvisoPagamentoPendente'
+import { linkWhatsApp } from './services/whatsappService'
 import imagemBolos from './assets/bolos.png'
 import imagemDocinhos from './assets/docinhos.png'
 import imagemCopos from './assets/copo.png'
@@ -136,6 +136,22 @@ function App() {
   const [erroFotosReferencia, setErroFotosReferencia] = useState('')
   const [mostrarEncomenda, setMostrarEncomenda] = useState(false)
   const [bannerAtual, setBannerAtual] = useState(0)
+  const conversaWhatsApp = linkWhatsApp('Olá, Bolos da Lu! Gostaria de tirar uma dúvida.')
+
+  useEffect(() => {
+    if (!categoriaAberta) return
+    const corpo = document.body
+    const posicao = { x: window.scrollX, y: window.scrollY }
+    const propriedades = ['position', 'top', 'left', 'width', 'overflow', 'paddingRight']
+    const anteriores = Object.fromEntries(propriedades.map((chave) => [chave, corpo.style[chave]]))
+    const larguraBarra = window.innerWidth - document.documentElement.clientWidth
+    const espacamento = parseFloat(getComputedStyle(corpo).paddingRight) || 0
+    Object.assign(corpo.style, { position: 'fixed', top: `-${posicao.y}px`, left: `-${posicao.x}px`, width: '100%', overflow: 'hidden', paddingRight: `${espacamento + larguraBarra}px` })
+    return () => {
+      Object.assign(corpo.style, anteriores)
+      window.scrollTo({ left: posicao.x, top: posicao.y, behavior: 'instant' })
+    }
+  }, [categoriaAberta])
 
   useEffect(() => {
     const atualizarPagina = () => setPaginaAdmin(window.location.hash === '#admin')
@@ -265,12 +281,6 @@ function App() {
 
   if (paginaAdmin && usuario?.papel === 'admin') return <Admin />
 
-  const produtosEmDestaque = [...produtos]
-    .filter((produto) => categoriaSelecionada === 'Todos' || produto.categoria === categoriaSelecionada)
-    .sort((primeiro, segundo) => Number(Boolean(segundo.imagem)) - Number(Boolean(primeiro.imagem)))
-  const produtoPrincipal = produtosEmDestaque[0]
-  const produtosSecundarios = produtosEmDestaque.slice(1, 5)
-
   return <main>
     <header className={`topo ${menuFlutuanteVisivel ? 'menu-flutuante-visivel' : ''}`}>
       <a className="marca" href="#inicio"><img src={logo} alt="Bolos da Lu"/></a>
@@ -279,6 +289,7 @@ function App() {
       <button className="botao-menu" type="button" onClick={() => setMenuMobileAberto((aberto) => !aberto)} aria-label="Abrir menu de navegação" aria-expanded={menuMobileAberto}><i /><i /><i /></button>
     </header>
     <button className="botao-carrinho" onClick={abrirCarrinho} aria-label="Abrir carrinho"><span className="icone-carrinho">🛒</span><b>{carrinho.reduce((total, item) => total + item.quantidade, 0)}</b></button>
+    {conversaWhatsApp && <a className="botao-whatsapp" href={conversaWhatsApp} target="_blank" rel="noreferrer" aria-label="Conversar com a Bolos da Lu pelo WhatsApp" title="Falar pelo WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2A9.8 9.8 0 0 0 4.1 17.55L3 22l4.55-1.08A9.98 9.98 0 1 0 12.04 2Zm5.82 13.84c-.24.67-1.18 1.23-1.92 1.39-.5.1-1.14.18-3.32-.72-2.78-1.15-4.57-3.97-4.7-4.16-.13-.18-1.12-1.49-1.12-2.84 0-1.35.7-2 1-2.28.24-.24.63-.35 1-.35h.36c.12 0 .28-.05.44.34.17.4.58 1.4.63 1.5.06.1.1.23.02.4-.07.16-.1.26-.23.39-.12.14-.26.3-.37.4-.12.12-.25.25-.11.5.14.25.63 1.03 1.35 1.67.93.82 1.7 1.08 1.95 1.2.24.12.39.1.53-.06.14-.17.6-.7.76-.94.16-.25.33-.2.55-.12.23.08 1.43.67 1.68.8.25.12.42.18.48.28.06.1.06.57-.18 1.24Z" /></svg><span>WhatsApp</span></a>}
 
     <section className="hero hero-banners" id="inicio">
       <div className="carrossel-banner" aria-label="Carrossel de banners da loja"><div className="carrossel-track" style={{ transform: `translateX(-${bannerAtual * 100}%)` }}>{banners.map((banner) => <div className="carrossel-slide" key={banner.src}><picture><source media="(max-width: 760px)" srcSet={banner.mobileSrc}/><img src={banner.src} alt={banner.alt}/></picture></div>)}</div><button className="carrossel-controle anterior" type="button" onClick={() => mudarBanner(-1)} aria-label="Banner anterior">‹</button><button className="carrossel-controle proximo" type="button" onClick={() => mudarBanner(1)} aria-label="Próximo banner">›</button><div className="carrossel-dots" aria-label="Indicadores do carrossel">{banners.map((banner, index) => <button key={banner.src} type="button" className={`carrossel-dot ${index === bannerAtual ? 'ativo' : ''}`} onClick={() => setBannerAtual(index)} aria-label={`Ir para o banner ${index + 1}`}/>)}</div></div><a className="indicador-rolagem" href="#pronta-entrega" aria-label="Ver doces à pronta entrega"><span>Role para ver</span><b>↓</b></a>
@@ -288,19 +299,6 @@ function App() {
 
 
     <section className="secao cardapio-novo" id="cardapio"><div className="centralizado"><p className="sobretitulo">nosso cardápio</p><h2>Qual delícia combina<br />com o seu momento?</h2></div><div className="categorias categorias-imagem">{categoriasCardapio.map(({ nome, texto, imagem }) => { return <button className={`categoria categoria-foto ${categoriaSelecionada === nome ? 'categoria-ativa' : ''}`} onClick={() => { setProdutoQuantidadePendente(null); setCategoriaAberta(nome) }} key={nome} aria-label={`Ver produtos da categoria ${nome}`}><img src={imagem} alt="" /><div><h3>{nome}</h3><small>{texto}</small></div><b>Ver produtos →</b></button> })}</div></section>
-
-    <section className="secao destaques destaques-novo" id="destaques">
-      <div className="destaques-cabecalho">
-        <div className="destaques-intro" data-aos="fade-right"><p className="sobretitulo">mais vendidos</p><h2>Os queridinhos da loja <span>♡</span></h2><p>Os doces que nossos clientes mais amam, perfeitos para qualquer momento.</p></div>
-      </div>
-      {produtoPrincipal ? <div className="grade-destaques">
-        <article className="destaque-principal" data-aos="fade-up" onClick={(evento) => abrirDetalhesProduto(evento, produtoPrincipal)}>
-          <div className="destaque-principal-info"><span className="selo-destaque"><b>#1</b> mais pedido <i>♡</i></span><small>{produtoPrincipal.categoria}</small><h3>{produtoPrincipal.nome}</h3><p>{produtoPrincipal.descricao || 'Feito com ingredientes selecionados e muito carinho.'}</p><strong>R$ {Number(produtoPrincipal.preco).toFixed(2)}</strong><button className="adicionar-destaque" onClick={(evento) => { evento.stopPropagation(); adicionarAoCarrinho(produtoPrincipal, 'produto') }}>🛍 Adicionar</button></div>
-          <div className="destaque-principal-imagem">{produtoPrincipal.imagem ? <img src={produtoPrincipal.imagem} alt={produtoPrincipal.nome} /> : <div className="imagem-ausente">🍰</div>}<button className="favorito-destaque" onClick={(evento) => evento.stopPropagation()} aria-label={`Favoritar ${produtoPrincipal.nome}`}>♡</button></div>
-        </article>
-        <div className="destaques-secundarios">{produtosSecundarios.map((produto) => <article className="destaque-mini" key={produto.id} data-aos="fade-up" onClick={(evento) => abrirDetalhesProduto(evento, produto)}><div className="destaque-mini-imagem">{produto.imagem ? <img src={produto.imagem} alt={produto.nome} /> : <div className="imagem-ausente">🍰</div>}<button className="favorito-destaque" onClick={(evento) => evento.stopPropagation()} aria-label={`Favoritar ${produto.nome}`}>♡</button></div><div className="destaque-mini-info"><h3>{produto.nome}</h3><strong>R$ {Number(produto.preco).toFixed(2)}</strong><button onClick={(evento) => { evento.stopPropagation(); adicionarAoCarrinho(produto, 'produto') }}>🛍 Adicionar</button></div></article>)}</div>
-      </div> : <p className="sem-produtos">Ainda não há produtos cadastrados nesta categoria.</p>}
-    </section>
 
     <section className="banner-encomenda" id="encomenda" aria-label="Bolos personalizados">
       <picture><source media="(max-width: 760px)" srcSet={bannerBoloPersonalizadoMobile}/><img src={bannerBoloPersonalizado} alt="Bolos personalizados: seu momento merece um bolo especial. Bolos feitos para transformar cada comemoração em uma lembrança deliciosa." width="1920" height="560" loading="lazy" /></picture>
@@ -319,7 +317,7 @@ function App() {
       {galeriaReferenciaAberta && <div className="galeria-referencia-fundo" onMouseDown={() => setGaleriaReferenciaAberta(false)}><section className="galeria-referencia" role="dialog" aria-modal="true" aria-label="Escolher foto de referência" onMouseDown={(event) => event.stopPropagation()}><header><div><p className="sobretitulo">INSPIRAÇÕES</p><h3>Escolha uma referência</h3></div><button type="button" onClick={() => setGaleriaReferenciaAberta(false)} aria-label="Fechar galeria">×</button></header>{carregandoFotosReferencia && <p>Carregando galeria...</p>}{erroFotosReferencia && <p className="galeria-referencia-erro">{erroFotosReferencia}</p>}{!carregandoFotosReferencia && !erroFotosReferencia && <div className="galeria-referencia-grade">{fotosReferencia.map((foto) => <button key={foto.id} type="button" onClick={() => selecionarFotoGaleria(foto)}><img src={foto.imagem} alt="Selecionar esta referência de bolo" /></button>)}</div>}{!carregandoFotosReferencia && !erroFotosReferencia && fotosReferencia.length === 0 && <p>A galeria ainda não possui fotos disponíveis.</p>}</section></div>}
     </ModalEncomenda>}
 
-    <section className="sobre" id="sobre"><div className="sobre-conteudo"><p className="sobretitulo">um toque de carinho</p><h2>Doces feitos para celebrar você.</h2><p>Na Bolos da Lu, cada receita é preparada em pequenas fornadas, com ingredientes selecionados e cuidado em cada detalhe. Criamos bolos, docinhos, copos e kits personalizados para festas, presentes e momentos especiais. Faça sua encomenda e conte para a gente como você imagina essa delícia.</p><div className="sobre-detalhes"><strong>100%</strong><span>feito com carinho<br />em cada receita</span></div></div><div className="sobre-imagem"><i className="forma-amarela"/><i className="forma-rosa"/><img src={fotoLu} alt="Lu, confeiteira da Bolos da Lu, com um bolo"/><span>feito à mão ♥</span></div></section>
+    <section className="sobre" id="sobre"><div className="sobre-conteudo"><p className="sobretitulo">um toque de carinho</p><h2>Doces feitos para<br /><i>celebrar</i> você.</h2><p>Na Bolos da Lu, cada receita é preparada em pequenas fornadas, com ingredientes selecionados e cuidado em cada detalhe. Criamos bolos, docinhos, copos e kits personalizados para festas, presentes e momentos especiais. Faça sua encomenda e conte para a gente como você imagina essa delícia.</p><div className="sobre-detalhes"><b aria-hidden="true">♡</b><strong>100%</strong><span>feito com carinho<br />em cada receita</span></div></div><div className="sobre-imagem"><i className="forma-amarela"/><i className="forma-rosa"/><img src={fotoLu} alt="Lu, confeiteira da Bolos da Lu, com um bolo"/></div></section>
     <LojaFisica />
     <Avaliacoes usuario={usuario} aoEntrar={() => { setAuthCadastro(false); setMostrarAuth(true) }} />
     <footer className="rodape-site">© 2026 Bolos da Lu <span>•</span> Feito com muito amor ♥ {usuario?.papel === 'admin' && <><span>•</span><a href="#admin">Área administrativa</a></>}</footer>

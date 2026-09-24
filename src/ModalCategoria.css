@@ -13,6 +13,7 @@
     width: min(100%, 960px);
     max-height: calc(100vh - 44px);
     overflow: auto;
+    overscroll-behavior: contain;
     padding: 38px;
     border-radius: 25px;
     background: #fffaf5;
@@ -181,10 +182,11 @@
 .formato-bolo legend { margin-bottom: 6px; font: 600 12px 'DM Sans', sans-serif }
 .formato-bolo>div { display: flex; gap: 6px }
 .formato-bolo button { flex: 1; min-width: 0; min-height: 36px; padding: 6px; border: 1px solid #e7d4c9; border-radius: 8px; background: #fffdfb; color: #654333; font: 500 12px 'DM Sans', sans-serif; cursor: pointer }
-.formato-bolo button[aria-pressed="true"] { border-color: #bd5967; background: #f5ddd8; color: #754536 }
+.formato-bolo button[aria-pressed="true"] { border-color: #e97483; background: #e97483; color: #fff }
 .formato-bolo button:focus-visible { outline: 2px solid #bd5967; outline-offset: 2px }
 .informacoes-produto .formato-bolo { margin: 16px 0 }
 .formato-bolo button:disabled { opacity: .45; cursor: not-allowed }
+.adicionar-produto-categoria:disabled,.adicionar-informacoes-produto:disabled { border-color: #dac7bf; background: #eee5e0; color: #9a8176; cursor: not-allowed }
 .fatias-bolo { list-style: none; padding: 0; margin: 12px 0 0; font-size: 12px }
 .fatias-bolo li { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; align-items: baseline; gap: 8px; padding: 8px 0; border-bottom: 1px solid #eeddd2 }
 .fatias-bolo span { color: #805e54 }

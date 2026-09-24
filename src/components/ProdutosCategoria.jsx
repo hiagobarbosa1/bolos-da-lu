@@ -54,7 +54,7 @@ function InformacoesProduto({ produto, origem, quantidade, aoQuantidade, erro, a
       {produto.categoria === 'Bolos' && <><SeletorFormatoBolo valor={produto.formato} aoAlterar={aoFormato} /><SeletorTamanhoBolo produto={produto} aoAlterar={aoTamanho} detalhado /></>}
       {tipo && <SeletorQuantidade produto={produto} quantidade={quantidade} aoQuantidade={aoQuantidade} erro={erro} />}
       {(!tipo || quantidade) && <div className="total-informacoes-produto"><span>Total</span><strong>{moeda(tipo ? Number(produto.preco) * quantidade / 100 : produto.preco)}</strong></div>}
-      <button type="button" className="adicionar-informacoes-produto" onClick={(event) => { if (aoAdicionar(produto, event)) aoFechar() }}>Adicionar ao carrinho +</button>
+      <button type="button" className="adicionar-informacoes-produto" disabled={produto.categoria === 'Bolos' && !produto.tamanho} onClick={(event) => { if (aoAdicionar(produto, event)) aoFechar() }}>{produto.categoria === 'Bolos' && !produto.tamanho ? 'Selecione o tamanho' : 'Adicionar ao carrinho +'}</button>
     </div>
   </dialog>, document.body)
 }
@@ -73,9 +73,14 @@ export default function ProdutosCategoria({ categoria, produtos, aoAdicionar, pr
     setErros((atual) => ({ ...atual, [produto.id]: false }))
   }
 
+  function escolherTamanho(produto, tamanho) {
+    setTamanhos((atual) => ({ ...atual, [produto.id]: tamanho }))
+  }
+
   function adicionar(produto, event) {
     const tipo = tipoDocinho(produto)
     const quantidade = quantidades[produto.id]
+    if (produto.categoria === 'Bolos' && !produto.tamanho) return false
     if (tipo && !quantidadesDocinhos.includes(quantidade)) {
       setErros((atual) => ({ ...atual, [produto.id]: true }))
       event.currentTarget.parentElement.querySelector('select')?.focus()
@@ -88,23 +93,25 @@ export default function ProdutosCategoria({ categoria, produtos, aoAdicionar, pr
   function cards(lista) {
     return <div className="produtos-modal-categoria">{lista.map((original) => {
       const formato = formatos[original.id] || 'Redondo'
-      const produto = original.categoria === 'Bolos' ? selecionarBolo(original, formato, tamanhos[original.id] || 'P') : original
+      const tamanho = tamanhos[original.id]
+      const produto = original.categoria === 'Bolos' ? { ...selecionarBolo(original, formato, tamanho || 'P'), tamanho } : original
       return <article key={produto.id}>
       <div className="foto-produto-categoria">{produto.imagem ? <img src={produto.imagem} alt={produto.nome} /> : <span>🧁</span>}</div>
       <h3>{produto.nome}</h3>
       {!tipoDocinho(produto) && <strong>{moeda(produto.preco)}</strong>}
       <button className="link-informacoes-produto" type="button" aria-haspopup="dialog" aria-label={`Ver informações do produto: ${produto.nome}`} onClick={(event) => setSelecionado({ produto, origem: event.currentTarget.closest('article') })}>Ver informações do produto</button>
       {produto.categoria === 'Bolos' && <SeletorFormatoBolo valor={formato} aoAlterar={(valor) => setFormatos((atual) => ({ ...atual, [produto.id]: valor }))} />}
-      {produto.categoria === 'Bolos' && <SeletorTamanhoBolo produto={produto} aoAlterar={(valor) => setTamanhos((atual) => ({ ...atual, [produto.id]: valor }))} />}
+      {produto.categoria === 'Bolos' && <SeletorTamanhoBolo produto={produto} aoAlterar={(valor) => escolherTamanho(produto, valor)} />}
       {tipoDocinho(produto) && <SeletorQuantidade compacto produto={produto} quantidade={quantidades[produto.id]} aoQuantidade={(quantidade) => escolherQuantidade(produto, quantidade)} erro={erros[produto.id]} />}
-      <button className="adicionar-produto-categoria" type="button" onClick={(event) => adicionar(produto, event)}><span className="adicionar-texto-desktop">Adicionar ao carrinho +</span><span className="adicionar-texto-mobile">Adicionar +</span></button>
+      <button className="adicionar-produto-categoria" type="button" disabled={produto.categoria === 'Bolos' && !produto.tamanho} onClick={(event) => adicionar(produto, event)}><span className="adicionar-texto-desktop">{produto.categoria === 'Bolos' && !produto.tamanho ? 'Selecione o tamanho' : 'Adicionar ao carrinho +'}</span><span className="adicionar-texto-mobile">{produto.categoria === 'Bolos' && !produto.tamanho ? 'Selecione o tamanho' : 'Adicionar +'}</span></button>
     </article>})}</div>
   }
 
   const originalSelecionado = selecionado && itens.find((produto) => produto.id === selecionado.produto.id)
   const formatoSelecionado = selecionado && (formatos[selecionado.produto.id] || 'Redondo')
-  const produtoSelecionado = originalSelecionado?.categoria === 'Bolos' ? selecionarBolo(originalSelecionado, formatoSelecionado, tamanhos[originalSelecionado.id] || 'P') : selecionado?.produto
-  const painel = selecionado && <InformacoesProduto produto={produtoSelecionado} origem={selecionado.origem} quantidade={quantidades[selecionado.produto.id]} aoQuantidade={(quantidade) => escolherQuantidade(selecionado.produto, quantidade)} erro={erros[selecionado.produto.id]} aoFechar={() => setSelecionado(null)} aoAdicionar={adicionar} aoTamanho={(valor) => setTamanhos((atual) => ({ ...atual, [selecionado.produto.id]: valor }))} aoFormato={(valor) => setFormatos((atual) => ({ ...atual, [selecionado.produto.id]: valor }))} />
+  const tamanhoSelecionado = selecionado && tamanhos[selecionado.produto.id]
+  const produtoSelecionado = originalSelecionado?.categoria === 'Bolos' ? { ...selecionarBolo(originalSelecionado, formatoSelecionado, tamanhoSelecionado || 'P'), tamanho: tamanhoSelecionado } : selecionado?.produto
+  const painel = selecionado && <InformacoesProduto produto={produtoSelecionado} origem={selecionado.origem} quantidade={quantidades[selecionado.produto.id]} aoQuantidade={(quantidade) => escolherQuantidade(selecionado.produto, quantidade)} erro={erros[selecionado.produto.id]} aoFechar={() => setSelecionado(null)} aoAdicionar={adicionar} aoTamanho={(valor) => escolherTamanho(selecionado.produto, valor)} aoFormato={(valor) => setFormatos((atual) => ({ ...atual, [selecionado.produto.id]: valor }))} />
 
   if (!doces) return <>{cards(itens)}{!itens.length && <p className="modal-vazio">Ainda não há produtos cadastrados nesta categoria.</p>}{painel}</>
 

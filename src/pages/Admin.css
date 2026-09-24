@@ -96,6 +96,14 @@
     margin-bottom: 42px
 }
 
+.aviso-novo-pedido { position: fixed; z-index: 110; right: 28px; bottom: 28px; display: flex; align-items: flex-start; gap: 13px; width: min(365px, calc(100vw - 40px)); padding: 17px 42px 17px 17px; border: 1px solid #f2a3b0; border-radius: 17px; background: #fffaf5; box-shadow: 0 18px 45px #4b2a2040; color: #4b2a20; font-family: 'DM Sans', sans-serif; text-align: left; cursor: pointer; animation: aviso-novo-pedido-entra .28s ease-out both }
+.aviso-novo-pedido>span { display: grid; flex: 0 0 38px; width: 38px; height: 38px; place-items: center; border-radius: 50%; background: #e97483; font-size: 18px }
+.aviso-novo-pedido small { display: block; color: #c55368; font-size: 10px; font-weight: 800; letter-spacing: 1.1px }
+.aviso-novo-pedido b { display: block; margin-top: 4px; font-size: 17px }
+.aviso-novo-pedido p { margin: 4px 0 0; color: #84645a; font-size: 11px }
+.aviso-novo-pedido i { position: absolute; top: 10px; right: 13px; color: #84564d; font-size: 23px; font-style: normal; font-weight: 400; line-height: 1 }
+@keyframes aviso-novo-pedido-entra { from { opacity: 0; transform: translateY(18px) scale(.96) } to { opacity: 1; transform: translateY(0) scale(1) } }
+
 .metricas article {
     padding: 21px;
     border-radius: 15px;
@@ -157,6 +165,8 @@
     font-size: 11px;
     cursor: pointer
 }
+
+.acoes-lista-pedidos { display: grid; justify-items: end; align-content: center; gap: 8px }
 
 .quadro {
     display: grid;

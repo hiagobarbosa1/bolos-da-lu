@@ -3,7 +3,7 @@ import PrecosTamanhosBolo from '../components/PrecosTamanhosBolo'
 import AdminProdutosCategorias from '../components/AdminProdutosCategorias'
 import ImagensBolo from '../components/ImagensBolo'
 import { useEffect, useState } from 'react'
-import { confirmarRecebimentoPix, atualizarStatusPedido, listarPedidos, prazoEntregaPedido } from '../services/pedidosService'
+import { acompanharNovosPedidosAdmin, confirmarRecebimentoPix, atualizarStatusPedido, listarPedidos, prazoEntregaPedido } from '../services/pedidosService'
 import { enviarImagemProduto, listarProdutos, removerProduto, salvarProduto } from '../services/produtosService'
 import { listarClientes } from '../services/usuariosService'
 import { listarDocesProntaEntrega, removerDoceProntaEntrega, salvarDoceProntaEntrega } from '../services/docesProntaEntregaService'
@@ -14,14 +14,38 @@ import AdminClientes from '../components/AdminClientes'
 import './Admin.css'
 import './AdminProdutos.css'
 import { tiposDocinhos } from '../services/tiposDocinhos'
+import { imprimirNotinha } from '../services/impressaoPedido'
 
 const produtoVazio = { nome: '', categoria: 'Bolos', preco: '', descricao: '', imagem: '', disponivel: true }
+
+function tocarAlertaNovoPedido() {
+  try {
+    const AudioContexto = window.AudioContext || window.webkitAudioContext
+    if (!AudioContexto) return
+    const contexto = new AudioContexto()
+    const tocar = (frequencia, inicio) => {
+      const oscilador = contexto.createOscillator()
+      const ganho = contexto.createGain()
+      oscilador.frequency.value = frequencia
+      ganho.gain.setValueAtTime(0.0001, inicio)
+      ganho.gain.exponentialRampToValueAtTime(0.07, inicio + 0.02)
+      ganho.gain.exponentialRampToValueAtTime(0.0001, inicio + 0.22)
+      oscilador.connect(ganho).connect(contexto.destination)
+      oscilador.start(inicio)
+      oscilador.stop(inicio + 0.24)
+    }
+    const iniciar = () => { const agora = contexto.currentTime; tocar(740, agora); tocar(988, agora + 0.17) }
+    contexto.state === 'suspended' ? contexto.resume().then(iniciar).catch(() => contexto.close()) : iniciar()
+    window.setTimeout(() => contexto.close(), 800)
+  } catch { /* O aviso visual continua disponível quando o navegador bloqueia o áudio. */ }
+}
 
 export default function Admin() {
   const [confirmandoPix, setConfirmandoPix] = useState(null)
   const [aba, setAba] = useState('Visão geral'); const [pedidos, setPedidos] = useState([]); const [produtos, setProdutos] = useState([]); const [clientes, setClientes] = useState([]); const [doces, setDoces] = useState([]); const [produtoEditado, setProdutoEditado] = useState(null); const [erro, setErro] = useState(''); const [agora, setAgora] = useState(Date.now()); const [pedidoArrastado, setPedidoArrastado] = useState(null); const [colunaDestino, setColunaDestino] = useState(null); const [salvandoImagem, setSalvandoImagem] = useState(false); const [confirmacaoExclusao, setConfirmacaoExclusao] = useState(null); const [excluindo, setExcluindo] = useState(false)
   const [estadoPedidos, setEstadoPedidos] = useState('carregando')
   const [estadoClientes, setEstadoClientes] = useState('carregando')
+  const [avisoNovoPedido, setAvisoNovoPedido] = useState(null)
   async function carregarConsultas() {
     const [resultadoPedidos, resultadoClientes] = await Promise.allSettled([listarPedidos(), listarClientes()])
     if (resultadoPedidos.status === 'fulfilled') { setPedidos(resultadoPedidos.value); setEstadoPedidos('pronto') }
@@ -40,6 +64,19 @@ export default function Admin() {
       if (resultadoDoces.status === 'fulfilled') setDoces(resultadoDoces.value)
     })
   }, [])
+  useEffect(() => {
+    const pararTempoReal = acompanharNovosPedidosAdmin((mudanca) => {
+      setAvisoNovoPedido(mudanca.new)
+      tocarAlertaNovoPedido()
+      carregarConsultas()
+    })
+    return pararTempoReal
+  }, [])
+  useEffect(() => {
+    if (!avisoNovoPedido) return
+    const temporizador = window.setTimeout(() => setAvisoNovoPedido(null), 9000)
+    return () => window.clearTimeout(temporizador)
+  }, [avisoNovoPedido])
   useEffect(() => { const intervalo = window.setInterval(() => setAgora(Date.now()), 1000); return () => window.clearInterval(intervalo) }, [])
   useEffect(() => { const soltarPedido = () => { if (pedidoArrastado && colunaDestino) trocarStatus(pedidoArrastado, colunaDestino); setPedidoArrastado(null); setColunaDestino(null) }; window.addEventListener('pointerup', soltarPedido); return () => window.removeEventListener('pointerup', soltarPedido) }, [pedidoArrastado, colunaDestino])
   const total = (status) => pedidos.filter((p) => p.status === status).length; const faturamento = pedidos.reduce((s, p) => s + Number(p.valor_total || 0), 0)
@@ -83,16 +120,16 @@ export default function Admin() {
   async function alternarDisponibilidade(produto) { try { const salvo = await salvarProduto({ ...produto, disponivel: !produto.disponivel }); setProdutos((itens) => itens.map((p) => p.id === salvo.id ? salvo : p)) } catch (e) { setErro(e.message) } }
   async function salvarDoce(event) { event.preventDefault(); const dados = Object.fromEntries(new FormData(event.currentTarget)); const arquivo = dados.imagem_arquivo; delete dados.imagem_arquivo; const { tipo, categoria, ...doceBase } = produtoEditado; setErro(''); setSalvandoImagem(true); try { const imagem = arquivo?.size ? await enviarImagemProduto(arquivo) : doceBase.imagem; const doce = { ...doceBase, ...dados, imagem, preco: Number(dados.preco), quantidade_disponivel: Number(dados.quantidade_disponivel), disponivel: dados.disponivel === 'on' }; const salvo = await salvarDoceProntaEntrega(doce); setDoces((itens) => doce.id ? itens.map((d) => d.id === salvo.id ? salvo : d) : [...itens, salvo]); setProdutoEditado(null) } catch (e) { setErro(e.message) } finally { setSalvandoImagem(false) } }
   return <div className="admin"><aside><a href="#inicio">♥ Bolos <i>da Lu</i></a><small>PAINEL ADMINISTRATIVO</small>{['Visão geral', 'Pedidos', 'Produtos', 'Pronta entrega', 'Galeria de bolos', 'Avalia\u00e7\u00f5es', 'Clientes', 'Relatórios'].map((nome) => <button className={aba === nome ? 'ativo' : ''} onClick={() => setAba(nome)} key={nome}>{nome}</button>)}</aside><section><header><div><small>Olá, Lu! ✦</small><h1>{aba}</h1></div><a href="#inicio">Ver loja ↗</a></header>{erro && <p className="erro">{erro}</p>}
-    {aba === 'Visão geral' && <><div className="metricas"><Card valor={total('novo')} texto="NOVOS" /><Card valor={total('producao')} texto="PRODUÇÃO" /><Card valor={total('pronto')} texto="PRONTOS" /><Card valor={`R$ ${faturamento.toFixed(2)}`} texto="FATURAMENTO" /></div><h2>Pedidos recentes</h2><Lista pedidos={pedidos.slice(0, 5)} /></>}
-    {aba === 'Pedidos' && <AdminQuadroPedidos pedidos={pedidos} estado={estadoPedidos} aoAtualizar={atualizarConsultas} agora={agora} pedidoArrastado={pedidoArrastado} colunaDestino={colunaDestino} aoArrastar={setPedidoArrastado} aoDestino={setColunaDestino} aoStatus={trocarStatus} aoConfirmarPix={confirmarPix} confirmandoPix={confirmandoPix} />}
+    {aba === 'Visão geral' && <><div className="metricas"><Card valor={total('novo')} texto="NOVOS" /><Card valor={total('producao')} texto="PRODUÇÃO" /><Card valor={total('pronto')} texto="PRONTOS" /><Card valor={`R$ ${faturamento.toFixed(2)}`} texto="FATURAMENTO" /></div><h2>Pedidos recentes</h2><Lista pedidos={pedidos.slice(0, 5)} aoImprimir={imprimirNotinha} /></>}
+    {aba === 'Pedidos' && <AdminQuadroPedidos pedidos={pedidos} estado={estadoPedidos} aoAtualizar={atualizarConsultas} agora={agora} pedidoArrastado={pedidoArrastado} colunaDestino={colunaDestino} aoArrastar={setPedidoArrastado} aoDestino={setColunaDestino} aoStatus={trocarStatus} aoConfirmarPix={confirmarPix} confirmandoPix={confirmandoPix} aoImprimir={imprimirNotinha} />}
     {aba === 'Produtos' && <><button className="adicionar" onClick={() => setProdutoEditado(produtoVazio)}>+ Cadastrar produto</button><AdminProdutosCategorias produtos={produtos} aoEditar={setProdutoEditado} aoExcluir={(produto) => setConfirmacaoExclusao({ item: produto, tipo: 'produto' })} aoAlternar={alternarDisponibilidade} /></>}
     {aba === 'Pronta entrega' && <><button className="adicionar" onClick={() => setProdutoEditado({ ...produtoVazio, quantidade_disponivel: 1, tipo: 'doce' })}>+ Adicionar doce</button><div className="lista-admin produtos-admin">{doces.map((d) => <article key={d.id}>{d.imagem ? <img src={d.imagem} alt={d.nome} /> : <div className="sem-imagem">🧁</div>}<div className="dados-produto"><b>{d.nome}</b><small>R$ {Number(d.preco).toFixed(2)} · {d.quantidade_disponivel} em estoque</small><small>{d.descricao || 'Sem descrição'}</small></div><div className="acoes-produto"><button onClick={() => setProdutoEditado({ ...d, tipo: 'doce' })}>Editar</button><button onClick={() => setConfirmacaoExclusao({ item: d, tipo: 'doce' })}>Excluir</button></div></article>)}</div></>}
     {aba === 'Galeria de bolos' && <AdminGaleriaBolos />}
     {aba === 'Avalia\u00e7\u00f5es' && <AdminAvaliacoes />}
     {aba === 'Clientes' && <AdminClientes clientes={clientes} pedidos={pedidos} estadoClientes={estadoClientes} estadoPedidos={estadoPedidos} aoAtualizar={atualizarConsultas} />}
     {aba === 'Relatórios' && <AdminRelatorios pedidos={pedidos} estado={estadoPedidos} aoAtualizar={atualizarConsultas} />}
-  </section>{produtoEditado && <ModalProduto produto={produtoEditado} aoFechar={() => setProdutoEditado(null)} aoSalvar={produtoEditado.tipo === 'doce' ? salvarDoce : salvar} salvando={salvandoImagem} erro={erro} />}{confirmacaoExclusao && <div className="admin-confirmacao-fundo" role="presentation" onMouseDown={() => { if (!excluindo) setConfirmacaoExclusao(null) }}><section className="admin-confirmacao" role="dialog" aria-modal="true" onMouseDown={(event) => event.stopPropagation()}><span className="admin-confirmacao-icone" aria-hidden="true">!</span><h2>Excluir {confirmacaoExclusao.tipo === 'doce' ? 'doce' : 'produto'}?</h2><p><strong>{confirmacaoExclusao.item.nome}</strong> será removido do catálogo.</p><div><button type="button" disabled={excluindo} onClick={() => setConfirmacaoExclusao(null)}>Cancelar</button><button type="button" className="confirmar" disabled={excluindo} onClick={() => excluir(confirmacaoExclusao.item, confirmacaoExclusao.tipo)}>{excluindo ? 'Excluindo...' : 'Excluir'}</button></div></section></div>}</div>
+  </section>{avisoNovoPedido && <button className="aviso-novo-pedido" type="button" role="alert" onClick={() => { setAba('Pedidos'); setAvisoNovoPedido(null) }}><span aria-hidden="true">🔔</span><div><small>NOVO PEDIDO RECEBIDO</small><b>Pedido #{avisoNovoPedido.id}</b><p>Toque para abrir os pedidos.</p></div><i aria-label="Fechar aviso" onClick={(event) => { event.stopPropagation(); setAvisoNovoPedido(null) }}>×</i></button>}{produtoEditado && <ModalProduto produto={produtoEditado} aoFechar={() => setProdutoEditado(null)} aoSalvar={produtoEditado.tipo === 'doce' ? salvarDoce : salvar} salvando={salvandoImagem} erro={erro} />}{confirmacaoExclusao && <div className="admin-confirmacao-fundo" role="presentation" onMouseDown={() => { if (!excluindo) setConfirmacaoExclusao(null) }}><section className="admin-confirmacao" role="dialog" aria-modal="true" onMouseDown={(event) => event.stopPropagation()}><span className="admin-confirmacao-icone" aria-hidden="true">!</span><h2>Excluir {confirmacaoExclusao.tipo === 'doce' ? 'doce' : 'produto'}?</h2><p><strong>{confirmacaoExclusao.item.nome}</strong> será removido do catálogo.</p><div><button type="button" disabled={excluindo} onClick={() => setConfirmacaoExclusao(null)}>Cancelar</button><button type="button" className="confirmar" disabled={excluindo} onClick={() => excluir(confirmacaoExclusao.item, confirmacaoExclusao.tipo)}>{excluindo ? 'Excluindo...' : 'Excluir'}</button></div></section></div>}</div>
 }
 function ModalProduto({ produto, aoFechar, aoSalvar, salvando, erro }) { const doce = produto.tipo === 'doce'; const [categoria, setCategoria] = useState(produto.categoria); const [preco, setPreco] = useState(produto.preco); const porCento = !doce && ['Docinhos', 'Doces'].includes(categoria); const [previa, setPrevia] = useState(produto.imagem || ''); return <div className="produto-modal"><form className="produto-form" onSubmit={aoSalvar}><button className="fechar-produto" type="button" onClick={aoFechar}>×</button><p className="sobretitulo">{doce ? 'pronta entrega' : 'catálogo'}</p><h2>{produto.id ? 'Editar produto' : doce ? 'Adicionar doce' : 'Cadastrar produto'}</h2>{erro && <p className="erro-upload-produto">{erro.includes('Bucket not found') ? 'O armazenamento de imagens ainda não foi configurado. Execute o arquivo SQL de migração no Supabase.' : erro}</p>}<div className="campos-produto"><label>Nome do produto<input name="nome" defaultValue={produto.nome} required /></label>{!doce && <label>Tipo / categoria<select name="categoria" value={categoria} onChange={(event) => { setCategoria(event.target.value); if (event.target.value === "Docinhos") setPreco("") }}><option>Bolos</option><option>Docinhos</option><option>Kits</option><option>Copos e doces</option></select></label>}{!doce && categoria === "Bolos" ? <PrecosTamanhosBolo produto={produto} /> : <label>{porCento ? "Linha de doces" : "Preço (R$)"}{porCento ? <select name="preco" value={tiposDocinhos.some((tipo) => tipo.preco === Number(preco)) ? preco : ""} onChange={(event) => setPreco(event.target.value)} required><option value="" disabled>Selecione a linha</option>{tiposDocinhos.map((tipo) => <option key={tipo.nome} value={tipo.preco}>{tipo.nome}</option>)}</select> : <input name="preco" type="number" min="0" step="0.01" value={preco} onChange={(event) => setPreco(event.target.value)} required />}</label>}{doce && <label>Quantidade disponível<input name="quantidade_disponivel" type="number" min="0" defaultValue={produto.quantidade_disponivel} required /></label>}{!doce && categoria === "Bolos" ? <ImagensBolo produto={produto} /> : <label className={!doce ? '' : 'campo-total imagem-upload-produto'}>Imagem do produto<input name="imagem_arquivo" type="file" accept="image/jpeg,image/png,image/webp" onChange={(evento) => { const arquivo = evento.target.files?.[0]; if (arquivo) setPrevia(URL.createObjectURL(arquivo)) }} /><span>Escolha uma foto do computador (JPG ou JPEG, PNG ou WEBP, até 5 MB).</span>{previa && <img src={previa} alt="Prévia da imagem do produto" />}</label>}<label className="campo-total">Descrição<textarea name="descricao" defaultValue={produto.descricao || ''} rows="4" required /></label><label className="disponivel"><input name="disponivel" type="checkbox" defaultChecked={produto.disponivel} /> Disponível para venda</label></div><div className="botoes-form"><button type="button" onClick={aoFechar} disabled={salvando}>Cancelar</button><button type="submit" disabled={salvando}>{salvando ? 'Enviando imagem...' : 'Salvar produto →'}</button></div></form></div> }
 function Card({ valor, texto }) { return <article><b>{valor}</b><span>{texto}</span></article> }
-function Lista({ pedidos }) { return <div className="lista-admin">{pedidos.map((p) => { const prazo = prazoEntregaPedido(p.criado_em); return <article key={p.id}><div><b>#{p.id} · {p.usuarios?.nome || 'Cliente'}</b><small>{p.status} · pedido feito: {prazo.realizado}</small><small>Pagamento: {p.forma_pagamento || 'Não informado'}</small><small>Estimativa: {prazo.estimativa}</small></div><b>R$ {Number(p.valor_total).toFixed(2)}</b></article> })}</div> }
+function Lista({ pedidos, aoImprimir }) { return <div className="lista-admin">{pedidos.map((p) => { const prazo = prazoEntregaPedido(p.criado_em); return <article key={p.id}><div><b>#{p.id} · {p.usuarios?.nome || 'Cliente'}</b><small>{p.status} · pedido feito: {prazo.realizado}</small><small>Pagamento: {p.forma_pagamento || 'Não informado'}</small><small>Estimativa: {prazo.estimativa}</small></div><div className="acoes-lista-pedidos"><b>R$ {Number(p.valor_total).toFixed(2)}</b><button type="button" onClick={() => aoImprimir(p)}>Imprimir notinha</button></div></article> })}</div> }

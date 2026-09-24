@@ -218,6 +218,7 @@
     .grade-pronta article {
         grid-template-columns: 120px 1fr
     }
+
 }
 
 @media(max-width:480px) {

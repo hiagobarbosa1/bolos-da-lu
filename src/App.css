@@ -617,56 +617,86 @@ h2 {
 }
 
 .sobre {
-    max-width: 1160px;
+    max-width: 1280px;
     margin: auto;
-    padding: 105px 32px;
+    padding: 86px 32px 96px;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
+    grid-template-columns: minmax(0, .96fr) minmax(500px, 1.04fr);
     align-items: center;
-    gap: 90px
+    gap: 28px
 }
 
 .sobre-conteudo {
-    max-width: 560px
+    position: relative;
+    z-index: 2;
+    max-width: 610px
 }
 
 .sobre h2 {
-    margin: 4px 0 0;
-    text-align: left
+    margin: 19px 0 0;
+    color: #512a1e;
+    font-size: clamp(46px, 4.2vw, 72px);
+    line-height: .91;
+    letter-spacing: -3.6px;
+    text-align: left;
+}
+
+.sobre h2 i {
+    margin: 0;
+    color: #df6979;
+    font-family: 'Playfair Display', serif;
+    font-size: inherit;
+    font-style: normal;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    line-height: inherit;
+    transform: none;
 }
 
 .sobre-conteudo > p:not(.sobretitulo) {
-    max-width: 560px;
-    margin: 30px 0 0;
-    color: #76584d;
-    line-height: 1.7;
-    text-align: left
+    max-width: 590px;
+    margin: 27px 0 0;
+    color: #79594e;
+    font-size: 15px;
+    line-height: 1.62;
+    text-align: left;
 }
 
 .sobre-detalhes {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-top: 28px;
-    color: #76584d
+    gap: 14px;
+    margin-top: 40px;
+    color: #76584d;
+}
+
+.sobre-detalhes > b {
+    color: #df6979;
+    font-family: Arial, sans-serif;
+    font-size: 78px;
+    font-weight: 400;
+    line-height: .6;
 }
 
 .sobre-detalhes strong {
     color: var(--rosa);
     font-family: 'Playfair Display', serif;
-    font-size: 30px
+    font-size: clamp(43px, 4vw, 61px);
+    letter-spacing: -2px;
+    line-height: 1
 }
 
 .sobre-detalhes span {
-    border-left: 1px solid #e8cfc3;
-    padding-left: 12px;
-    font-size: 12px;
-    line-height: 1.4
+    border-left: 1px solid #dfb9aa;
+    padding-left: 17px;
+    color: #73564a;
+    font-size: 14px;
+    line-height: 1.45
 }
 
 .sobre-imagem {
     position: relative;
-    min-height: 440px;
+    min-height: 535px;
     display: grid;
     place-items: center;
     isolation: isolate
@@ -679,29 +709,15 @@ h2 {
     pointer-events: none
 }
 
-.forma-amarela { width: 410px; height: 370px; border-radius: 48% 52% 58% 42% / 44% 43% 57% 56%; background: #f9dfa4; transform: rotate(-9deg) translate(10px, -6px) }
-.forma-rosa { width: 380px; height: 345px; border-radius: 55% 45% 42% 58% / 55% 44% 56% 45%; background: #f6b8bd; transform: rotate(13deg) translate(26px, 18px); z-index: -1 }
+.forma-amarela { width: 510px; height: 445px; border-radius: 48% 52% 58% 42% / 44% 43% 57% 56%; background: #f9dfa4; transform: rotate(-9deg) translate(-22px, -14px) }
+.forma-rosa { width: 510px; height: 410px; border-radius: 55% 45% 42% 58% / 55% 44% 56% 45%; background: #f6b8bd; transform: rotate(16deg) translate(25px, 58px); z-index: -1 }
 .sobre-imagem img {
     position: absolute;
     z-index: 1;
-    width: min(100%, 440px);
-    max-height: 440px;
+    width: min(100%, 535px);
+    max-height: 535px;
     object-fit: contain;
-    filter: drop-shadow(0 18px 20px rgba(104, 55, 37, .18))
-}
-
-.sobre-imagem span {
-    position: absolute;
-    z-index: 2;
-    right: -8px;
-    bottom: 22px;
-    padding: 10px 16px;
-    border-radius: 20px;
-    background: #fffaf5;
-    color: var(--rosa);
-    font-size: 12px;
-    font-weight: 700;
-    transform: rotate(4deg)
+    filter: drop-shadow(0 19px 22px rgba(104, 55, 37, .14))
 }
 
 .rodape-site {
@@ -900,13 +916,13 @@ h2 {
     }
 
     .sobre-imagem {
-        min-height: 350px;
+        min-height: 420px;
         margin: 0 12px
     }
 
-    .forma-amarela { width: 310px; height: 285px }
-    .forma-rosa { width: 290px; height: 265px }
-    .sobre-imagem img { max-height: 350px }
+    .forma-amarela { width: 390px; height: 340px }
+    .forma-rosa { width: 380px; height: 315px }
+    .sobre-imagem img { max-height: 420px }
 }
 
 @keyframes indicar-rolagem {
@@ -931,11 +947,15 @@ h2 {
     h2 { letter-spacing: -1px }
     .acoes { flex-wrap: wrap; gap: 14px }
     .sobre { padding: 56px 18px; gap: 30px }
-    .sobre-imagem { min-height: 290px; margin: 0 }
-    .forma-amarela { width: min(82vw, 290px); height: min(76vw, 265px) }
-    .forma-rosa { width: min(78vw, 270px); height: min(72vw, 250px) }
-    .sobre-imagem img { max-height: 290px }
-    .sobre-imagem span { right: 0; bottom: 10px; font-size: 10px }
+    .sobre h2 { font-size: clamp(45px, 14vw, 62px); letter-spacing: -2.6px }
+    .sobre-conteudo > p:not(.sobretitulo) { font-size: 14px }
+    .sobre-detalhes { margin-top: 32px; gap: 10px }
+    .sobre-detalhes > b { font-size: 62px }
+    .sobre-detalhes span { padding-left: 12px; font-size: 12px }
+    .sobre-imagem { min-height: 330px; margin: 0 }
+    .forma-amarela { width: min(88vw, 360px); height: min(77vw, 320px) }
+    .forma-rosa { width: min(86vw, 350px); height: min(73vw, 295px) }
+    .sobre-imagem img { max-height: 330px }
     .rodape-site { padding: 20px 16px 96px }
 }
 

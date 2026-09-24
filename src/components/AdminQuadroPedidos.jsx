@@ -6,7 +6,7 @@ import './AdminQuadroPedidos.css'
 const etapas = [['novo', 'Novos'], ['producao', 'Em produção'], ['pronto', 'Prontos'], ['entregue', 'Finalizados']]
 const aberto = (pedido) => !['entregue', 'cancelado'].includes(pedido.status)
 
-export default function AdminQuadroPedidos({ pedidos, estado, aoAtualizar, agora, pedidoArrastado, colunaDestino, aoArrastar, aoDestino, aoStatus, aoConfirmarPix, confirmandoPix }) {
+export default function AdminQuadroPedidos({ pedidos, estado, aoAtualizar, agora, pedidoArrastado, colunaDestino, aoArrastar, aoDestino, aoStatus, aoConfirmarPix, confirmandoPix, aoImprimir }) {
   const [tipo, setTipo] = useState('encomenda')
   const tipos = [['encomenda', 'Encomendas'], ['pronta_entrega', 'Pronta entrega'], ...(pedidos.some((pedido) => tipoPedido(pedido) === 'outros') ? [['outros', 'A conferir']] : [])]
   const lista = pedidos.filter((pedido) => tipoPedido(pedido) === tipo)
@@ -33,6 +33,7 @@ export default function AdminQuadroPedidos({ pedidos, estado, aoAtualizar, agora
               <ul className="pedido-itens-destaque">{pedido.itens_pedido?.map((item, indice) => <li key={item.id || indice}><b>{item.quantidade}×</b><span>{item.nome_produto || item.produtos?.nome || 'Produto não informado'}{item.tamanho && <small>Tamanho {item.tamanho}</small>}</span></li>)}</ul>
               {!pedido.itens_pedido?.length && <p>Itens não disponíveis</p>}
               <div className={`pedido-pagamento ${pixPendente ? 'pix-pendente' : ''}`}><span>{pedido.forma_pagamento || 'Pagamento não informado'}</span>{pedido.forma_pagamento === 'Pix' && <b>{pixPendente ? 'A confirmar' : 'Recebido'}</b>}</div>
+              <button type="button" className="imprimir-pedido" onClick={() => aoImprimir(pedido)}>Imprimir notinha</button>
               {pixPendente && pedido.status !== 'cancelado' && <button type="button" className="confirmar-pix-admin" disabled={confirmandoPix !== null} onClick={() => aoConfirmarPix(pedido.id)}>{confirmandoPix === pedido.id ? 'Confirmando…' : 'Confirmar recebimento do Pix'}</button>}
               <details className="pedido-detalhes"><summary>Ver detalhes</summary><p><b>Realizado:</b> {dataAdmin(pedido.criado_em)}</p><p><b>Telefone:</b> {pedido.usuarios?.telefone || 'Não informado'}</p>{pedido.endereco && <p><b>Entrega / retirada:</b> {pedido.endereco}</p>}{pedido.observacao && <p>{pedido.observacao}</p>}{pedido.itens_pedido?.map((item, indice) => <div key={item.id || indice}><b>{item.nome_produto || item.produtos?.nome || 'Produto'}</b>{[['Sabor', item.sabor], ['Recheio', item.recheio], ['Cobertura', item.cobertura], ['Decoração', item.decoracao], ['Observações', item.observacao]].filter(([, valor]) => valor).map(([rotulo, valor]) => <p key={rotulo}>{rotulo}: {valor}</p>)}</div>)}</details>
               <label className="pedido-status">Status<select value={pedido.status} onChange={(event) => aoStatus(pedido.id, event.target.value)}>{etapas.map(([valor, rotulo]) => <option key={valor} value={valor}>{rotulo}</option>)}{pedido.status === 'cancelado' && <option value="cancelado">Cancelado</option>}</select></label>

@@ -293,6 +293,6 @@
     .produtos-modal-categoria .card-bolo>.formato-bolo button { flex-basis: 0; min-height: 34px; padding: 5px 2px; border: 0; border-radius: 9px; font-size: clamp(10px, 2.8vw, 15px) }
     .produtos-modal-categoria .card-bolo>.tamanho-bolo,
     .produtos-modal-categoria .card-bolo>.adicionar-produto-categoria { display: none }
-    .produtos-modal-categoria .card-bolo>.selecionar-tamanho-mobile { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 44px; margin: 0; padding: 10px 5px; border: 0; border-radius: 999px; background: #4b2a20; color: #fffaf5; font: 700 clamp(11px, 3vw, 16px)/1.2 'DM Sans', sans-serif }
-    .selecionar-tamanho-mobile svg { flex-shrink: 0 }
+    .produtos-modal-categoria .card-bolo>.selecionar-tamanho-mobile { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; min-height: 34px; margin: 0; padding: 6px 5px; border: 0; border-radius: 999px; background: #4b2a20; color: #fffaf5; font: 700 clamp(10px, 2.6vw, 13px)/1.2 'DM Sans', sans-serif }
+    .selecionar-tamanho-mobile svg { width: 15px; height: 17px; flex-shrink: 0 }
 }

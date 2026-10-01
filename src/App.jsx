@@ -129,6 +129,7 @@ function App() {
   const [confirmarSaida, setConfirmarSaida] = useState(false)
   const [menuFlutuanteVisivel, setMenuFlutuanteVisivel] = useState(false)
   const [menuMobileAberto, setMenuMobileAberto] = useState(false)
+  const [sobreMobileVisivel, setSobreMobileVisivel] = useState(false)
   const [referencia, setReferencia] = useState(null)
   const [galeriaReferenciaAberta, setGaleriaReferenciaAberta] = useState(false)
   const [fotosReferencia, setFotosReferencia] = useState([])
@@ -281,10 +282,24 @@ function App() {
 
   if (paginaAdmin && usuario?.papel === 'admin') return <Admin />
 
-  return <main>
+  function abrirSobre(event) {
+    setMenuMobileAberto(false)
+    if (!window.matchMedia('(max-width: 760px)').matches) return
+    event.preventDefault()
+    setSobreMobileVisivel(true)
+    window.requestAnimationFrame(() => {
+      AOS.refresh()
+      document.getElementById('sobre')?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+        block: 'start',
+      })
+    })
+  }
+
+  return <main data-sobre-mobile={sobreMobileVisivel}>
     <header className={`topo ${menuFlutuanteVisivel ? 'menu-flutuante-visivel' : ''}`}>
       <a className="marca" href="#inicio"><img src={logo} alt="Bolos da Lu"/></a>
-      <nav className={menuMobileAberto ? 'nav-aberta' : ''}><a href="#cardapio" onClick={() => setMenuMobileAberto(false)}>Cardápio</a><a href="#sobre" onClick={() => setMenuMobileAberto(false)}>Sobre nós</a><a href="#encomenda" onClick={() => setMenuMobileAberto(false)}>Encomendas</a>{usuario && <button className="link-meus-pedidos-mobile" type="button" onClick={() => { setMenuMobileAberto(false); setMostrarMeusPedidos(true) }}>Meus pedidos</button>}</nav>
+      <nav className={menuMobileAberto ? 'nav-aberta' : ''}><a href="#cardapio" onClick={() => setMenuMobileAberto(false)}>Cardápio</a><a href="#sobre" onClick={abrirSobre}>Sobre nós</a><a href="#encomenda" onClick={() => setMenuMobileAberto(false)}>Encomendas</a>{usuario && <button className="link-meus-pedidos-mobile" type="button" onClick={() => { setMenuMobileAberto(false); setMostrarMeusPedidos(true) }}>Meus pedidos</button>}</nav>
       <div className="acoes-topo">{usuario ? <div className="conta"><button className="meus-pedidos-topo" onClick={() => setMostrarMeusPedidos(true)}>Meus pedidos</button><span>Olá, {usuario.nome.split(' ')[0]}</span><button onClick={() => setConfirmarSaida(true)}>Sair</button></div> : <button className="botao pequeno" onClick={() => { setAuthCadastro(false); setMostrarAuth(true) }}>Entrar <b>→</b></button>}</div>
       <button className="botao-menu" type="button" onClick={() => setMenuMobileAberto((aberto) => !aberto)} aria-label="Abrir menu de navegação" aria-expanded={menuMobileAberto}><i /><i /><i /></button>
     </header>
@@ -302,7 +317,7 @@ function App() {
 
     <section className="banner-encomenda" id="encomenda" aria-label="Bolos personalizados">
       <picture><source media="(max-width: 760px)" srcSet={bannerBoloPersonalizadoMobile}/><img src={bannerBoloPersonalizado} alt="Bolos personalizados: seu momento merece um bolo especial. Bolos feitos para transformar cada comemoração em uma lembrança deliciosa." width="1920" height="560" loading="lazy" /></picture>
-      <button className="botao-banner-encomenda" type="button" aria-label="Personalizar meu bolo" aria-haspopup="dialog" onClick={() => { setReferencia(null); setGaleriaReferenciaAberta(false); setMostrarEncomenda(true) }} />
+      <button className="botao-banner-encomenda" type="button" aria-label="Personalizar meu bolo" aria-haspopup="dialog" onClick={() => { setReferencia(null); setGaleriaReferenciaAberta(false); setMostrarEncomenda(true) }}><span className="texto-personalizar-mobile" aria-hidden="true">Personalizar meu bolo <span>→</span></span></button>
     </section>
     <CarrosselBolos />
     {mostrarEncomenda && <ModalEncomenda aoFechar={() => { setGaleriaReferenciaAberta(false); setMostrarEncomenda(false) }}>

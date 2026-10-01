@@ -896,7 +896,12 @@ h2 {
         transform: scale(.8) rotate(-5deg)
     }
 
+    main:not([data-sobre-mobile="true"]) > .sobre {
+        display: none;
+    }
+
     .sobre {
+        scroll-margin-top: 100px;
         grid-template-columns: 1fr;
         gap: 48px;
         padding: 75px 25px

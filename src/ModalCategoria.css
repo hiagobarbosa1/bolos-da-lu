@@ -178,6 +178,7 @@
 .produtos-modal-categoria article>.link-informacoes-produto:hover { background: transparent; color: #bd5967 }
 
 .adicionar-texto-mobile { display: none }
+.detalhes-bolo-mobile, .produtos-modal-categoria article>.selecionar-tamanho-mobile { display: none }
 .formato-bolo { min-width: 0; margin: 12px 14px; padding: 0; border: 0 }
 .formato-bolo legend { margin-bottom: 6px; font: 600 12px 'DM Sans', sans-serif }
 .formato-bolo>div { display: flex; gap: 6px }
@@ -191,7 +192,10 @@
 .fatias-bolo li { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; align-items: baseline; gap: 8px; padding: 8px 0; border-bottom: 1px solid #eeddd2 }
 .fatias-bolo span { color: #805e54 }
 .fatias-bolo strong { color: #bd5967; font-size: 12px }
-.produtos-modal-categoria article:has(.tamanho-bolo)>.foto-produto-categoria { grid-row: 1 / span 6 }
+.produtos-modal-categoria:has(>.card-bolo) { grid-template-columns: repeat(2, minmax(0, 1fr)) }
+.produtos-modal-categoria .card-bolo>.foto-produto-categoria { height: auto; aspect-ratio: 1; background: #fffaf5 }
+.produtos-modal-categoria .card-bolo>.foto-produto-categoria img { object-fit: contain }
+.informacoes-bolo>img { height: auto; aspect-ratio: 1; object-fit: contain; background: #fffaf5 }
 .subtotal-quantidade-docinhos { display: block; margin-top: 6px; color: #bd5967; font-size: 12px; font-weight: 600 }
 .quantidade-docinhos { display: block; margin: 14px; font-size: 12px; font-weight: 700 }
 .produtos-modal-categoria .quantidade-docinhos { margin: 16px 14px 10px }
@@ -243,4 +247,41 @@
     .cabecalho-docinhos { gap: 6px; margin-bottom: 14px }
     .cabecalho-docinhos h3 { font-size: 22px }
     .cabecalho-docinhos strong { font-size: 16px }
+
+    .produtos-modal-categoria:has(>.card-bolo) { grid-template-columns: minmax(0, 1fr) }
+    .produtos-modal-categoria article.card-bolo {
+        grid-template-columns: minmax(0, 42%) minmax(0, 1fr);
+        grid-template-rows: auto auto 1fr auto auto;
+        gap: 0 12px;
+        padding: 8px;
+        border-radius: 20px;
+        background: #fffdf9;
+        box-shadow: 0 8px 24px #5731250a;
+    }
+    .produtos-modal-categoria .card-bolo>.foto-produto-categoria {
+        grid-row: 1 / -1;
+        align-self: stretch;
+        width: 100%;
+        min-height: 190px;
+        height: auto;
+        aspect-ratio: auto;
+        margin: 0;
+        overflow: hidden;
+        border-radius: 14px;
+        background: #ffdf87;
+    }
+    .produtos-modal-categoria .card-bolo>h3 { margin: 5px 0 4px; font: 700 clamp(18px, 4.8vw, 28px)/1.1 'Playfair Display', serif; color: #4b2a20 }
+    .produtos-modal-categoria .card-bolo>strong { margin: 3px 0 5px; font-size: clamp(16px, 4.2vw, 23px); color: #ce5872 }
+    .produtos-modal-categoria .card-bolo>.link-informacoes-produto { align-self: start; min-height: 36px; font-size: 13px; color: #89685e; text-decoration: none }
+    .card-bolo .detalhes-texto-completo { display: none }
+    .card-bolo .detalhes-bolo-mobile { display: inline; text-decoration: underline; text-decoration-color: #d58e9c; text-underline-offset: 5px }
+    .detalhes-bolo-mobile>span { display: inline-block; margin-left: 7px; font-size: 23px; line-height: 1; text-decoration: none }
+    .produtos-modal-categoria .card-bolo>.formato-bolo { margin: 8px 0 }
+    .card-bolo>.formato-bolo legend { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap }
+    .produtos-modal-categoria .card-bolo>.formato-bolo>div { flex-wrap: nowrap; gap: 0; border: 1px solid #e7d4c9; border-radius: 10px; overflow: hidden }
+    .produtos-modal-categoria .card-bolo>.formato-bolo button { flex-basis: 0; min-height: 40px; padding: 6px 2px; border: 0; border-radius: 9px; font-size: clamp(10px, 2.8vw, 15px) }
+    .produtos-modal-categoria .card-bolo>.tamanho-bolo,
+    .produtos-modal-categoria .card-bolo>.adicionar-produto-categoria { display: none }
+    .produtos-modal-categoria .card-bolo>.selecionar-tamanho-mobile { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 44px; margin: 0; padding: 10px 5px; border: 0; border-radius: 999px; background: #4b2a20; color: #fffaf5; font: 700 clamp(11px, 3vw, 16px)/1.2 'DM Sans', sans-serif }
+    .selecionar-tamanho-mobile svg { flex-shrink: 0 }
 }

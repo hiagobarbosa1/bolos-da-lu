@@ -44,7 +44,7 @@ function InformacoesProduto({ produto, origem, quantidade, aoQuantidade, erro, a
   }, [origem])
 
   return createPortal(<dialog ref={dialogo} className="informacoes-produto" aria-labelledby="titulo-informacoes-produto" onCancel={aoFechar} onClick={(event) => { if (event.target === event.currentTarget) aoFechar() }}>
-    <div className="conteudo-informacoes-produto">
+    <div className={`conteudo-informacoes-produto${produto.categoria === 'Bolos' ? ' informacoes-bolo' : ''}`}>
       <button className="fechar-informacoes-produto" type="button" aria-label="Fechar informações do produto" onClick={aoFechar} autoFocus>×</button>
       {produto.imagem ? <img src={produto.imagem} alt={produto.nome} /> : <div className="imagem-informacoes-ausente" aria-hidden="true">🧁</div>}
       <p className="linha-informacoes-produto">{tipo?.nome || produto.categoria}</p>
@@ -95,13 +95,14 @@ export default function ProdutosCategoria({ categoria, produtos, aoAdicionar, pr
       const formato = formatos[original.id] || 'Redondo'
       const tamanho = tamanhos[original.id]
       const produto = original.categoria === 'Bolos' ? { ...selecionarBolo(original, formato, tamanho || 'P'), tamanho } : original
-      return <article key={produto.id}>
+      return <article key={produto.id} className={produto.categoria === 'Bolos' ? 'card-bolo' : undefined}>
       <div className="foto-produto-categoria">{produto.imagem ? <img src={produto.imagem} alt={produto.nome} /> : <span>🧁</span>}</div>
       <h3>{produto.nome}</h3>
       {!tipoDocinho(produto) && <strong>{moeda(produto.preco)}</strong>}
-      <button className="link-informacoes-produto" type="button" aria-haspopup="dialog" aria-label={`Ver informações do produto: ${produto.nome}`} onClick={(event) => setSelecionado({ produto, origem: event.currentTarget.closest('article') })}>Ver informações do produto</button>
+      <button className="link-informacoes-produto" type="button" aria-haspopup="dialog" aria-label={`Ver informações do produto: ${produto.nome}`} onClick={(event) => setSelecionado({ produto, origem: event.currentTarget.closest('article') })}><span className="detalhes-texto-completo">Ver informações do produto</span>{produto.categoria === 'Bolos' && <span className="detalhes-bolo-mobile">Ver detalhes <span aria-hidden="true">›</span></span>}</button>
       {produto.categoria === 'Bolos' && <SeletorFormatoBolo valor={formato} aoAlterar={(valor) => setFormatos((atual) => ({ ...atual, [produto.id]: valor }))} />}
       {produto.categoria === 'Bolos' && <SeletorTamanhoBolo produto={produto} aoAlterar={(valor) => escolherTamanho(produto, valor)} />}
+      {produto.categoria === 'Bolos' && <button className="selecionar-tamanho-mobile" type="button" aria-haspopup="dialog" aria-label={`Selecionar tamanho: ${produto.nome}`} onClick={(event) => setSelecionado({ produto, origem: event.currentTarget.closest('article') })}>Selecionar tamanho<svg aria-hidden="true" width="18" height="20" viewBox="0 0 24 26" fill="none" stroke="currentColor" strokeWidth="1.7"><rect x="4" y="8" width="16" height="16" rx="3"/><path d="M8 12V6a4 4 0 0 1 8 0v6"/></svg></button>}
       {tipoDocinho(produto) && <SeletorQuantidade compacto produto={produto} quantidade={quantidades[produto.id]} aoQuantidade={(quantidade) => escolherQuantidade(produto, quantidade)} erro={erros[produto.id]} />}
       <button className="adicionar-produto-categoria" type="button" disabled={produto.categoria === 'Bolos' && !produto.tamanho} onClick={(event) => adicionar(produto, event)}><span className="adicionar-texto-desktop">{produto.categoria === 'Bolos' && !produto.tamanho ? 'Selecione o tamanho' : 'Adicionar ao carrinho +'}</span><span className="adicionar-texto-mobile">{produto.categoria === 'Bolos' && !produto.tamanho ? 'Selecione o tamanho' : 'Adicionar +'}</span></button>
     </article>})}</div>

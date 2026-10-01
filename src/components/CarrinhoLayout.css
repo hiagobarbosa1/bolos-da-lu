@@ -33,6 +33,11 @@
 @media(max-width:500px){.carrinho.carrinho-checkout .agendamento-campos input,.carrinho.carrinho-checkout .agendamento-campos select,.carrinho.carrinho-checkout .campos-pagamento select{font-size:16px}.carrinho.carrinho-checkout .agendamento-retirada{padding:14px}.carrinho.carrinho-checkout .icone-agendamento{top:14px;left:14px}.carrinho.carrinho-checkout .agendamento-titulo,.carrinho.carrinho-checkout .agendamento-retirada>p{margin-left:44px}}
 
 .carrinho.carrinho-checkout .previsao-entrega-hora{margin:14px 0 0 46px;font-size:22px;line-height:1.35;color:#75432e}
+.carrinho.carrinho-checkout .icone-modalidade,
+.carrinho.carrinho-checkout .orientacao-horario-hoje {
+    display: none;
+}
+
 @media (max-width: 520px) {
     .carrinho.carrinho-checkout .agendamento-campos {
         grid-template-columns: minmax(0, 1fr);

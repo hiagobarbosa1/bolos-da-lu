@@ -66,6 +66,9 @@
 .avaliacoes{background:#fffaf5}
 .avaliacao-card,.depoimento-card{background:#fce8eb;border-color:#f2cdd2}
 
+.avaliacao-produto { display: block; margin: 16px 0; color: #654333; font-weight: 600 }
+.avaliacao-produto select { display: block; box-sizing: border-box; width: 100%; min-width: 0; min-height: 44px; margin-top: 8px; padding: 10px; border: 1px solid #e7d4c9; border-radius: 10px; background: #fff; color: #654333; font: inherit }
+
 /* Layout inspirado na referência da seção de comentários. */
 .avaliacoes{padding:74px 28px 82px;background:#fffaf5}
 .avaliacoes-conteudo{max-width:1150px}

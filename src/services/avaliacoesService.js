@@ -18,12 +18,23 @@ export async function listarAvaliacoes(pagina = 0) {
   })) }
 }
 
-export async function publicarAvaliacao({ nota, comentario, arquivo }) {
+export async function listarProdutosParaAvaliar() {
+  const { data, error } = await supabase.rpc('listar_produtos_para_avaliar')
+  if (error) throw new Error('Não foi possível consultar seus produtos recebidos. Tente novamente.')
+  return data || []
+}
+
+export async function publicarAvaliacao({ itemPedidoId, nota, comentario, arquivo }) {
+  if (!itemPedidoId) throw new Error('Selecione um produto que você já recebeu.')
   validarFotoAvaliacao(arquivo)
   if (!Number.isInteger(nota) || nota < 1 || nota > 5) throw new Error('Selecione de 1 a 5 estrelas.')
   if (comentario.trim().length < 3 || comentario.trim().length > 1000) throw new Error('Escreva entre 3 e 1000 caracteres.')
   const { data: { user }, error: erroAuth } = await supabase.auth.getUser()
   if (erroAuth || !user) throw new Error('Entre na sua conta para publicar sua avaliação.')
+  const produtos = await listarProdutosParaAvaliar()
+  if (!produtos.some((item) => String(item.item_pedido_id) === String(itemPedidoId))) {
+    throw new Error('Você só pode avaliar produtos de pedidos entregues que ainda não avaliou.')
+  }
   let caminho = null
   if (arquivo) {
     caminho = `${user.id}/${crypto.randomUUID()}.${tipos[arquivo.type]}`
@@ -33,12 +44,12 @@ export async function publicarAvaliacao({ nota, comentario, arquivo }) {
       throw new Error(error.message || 'Não foi possível enviar a foto. Tente novamente.')
     }
   }
-  const { error } = await supabase.rpc('publicar_avaliacao', { p_nota: nota, p_comentario: comentario.trim(), p_imagem_path: caminho })
+  const { error } = await supabase.rpc('publicar_avaliacao', { p_item_pedido_id: itemPedidoId, p_nota: nota, p_comentario: comentario.trim(), p_imagem_path: caminho })
   if (error) {
     if (caminho) await supabase.storage.from('avaliacoes').remove([caminho]).catch(() => {})
     const mensagem = error.message?.toLowerCase() || ''
     if (mensagem.includes('could not find the function') || mensagem.includes('schema cache')) {
-      throw new Error('A tabela de avaliações ainda não foi configurada. Execute a migration_avaliacoes.sql no Supabase.')
+      throw new Error('As avaliações de produtos recebidos ainda não foram configuradas. Execute a migration_avaliacoes_pedidos_entregues.sql no Supabase.')
     }
     throw new Error(error.message || 'Não foi possível publicar sua avaliação. Tente novamente em instantes.')
   }

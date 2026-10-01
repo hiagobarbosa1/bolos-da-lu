@@ -1,5 +1,122 @@
-.ver-detalhes-pedido{margin:0 0 14px;padding:8px 0;border:0;border-bottom:1px solid #d96a78;background:transparent;color:#b84f60;font:800 11px 'DM Sans',sans-serif;cursor:pointer}.detalhes-pedido{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:0 0 14px;padding:14px;border-radius:12px;background:#f8eee8}.detalhes-pedido div{display:grid;gap:4px}.detalhes-pedido b{color:#9e5360;font:800 9px 'DM Sans',sans-serif;letter-spacing:.7px;text-transform:uppercase}.detalhes-pedido span{color:#65463b;font:12px/1.4 'DM Sans',sans-serif}.linha-status{background:#fff7ef!important;border:1px solid #f1dfd5}.linha-status div{color:#9a6e62!important}.linha-status i{background:#f2d6cd!important;color:#87574c!important}.linha-status div:not(:last-child)::after{background:#e7c7bf!important}.linha-status .concluida{color:#496f2f!important}.linha-status .concluida i,.linha-status .concluida:not(:last-child)::after{background:#76a24c!important;color:#fff!important}.prazo-entrega{display:grid;grid-template-columns:1fr 1.35fr;gap:10px;margin:0 0 14px}.prazo-entrega span{display:grid;gap:3px;padding:10px 12px;border-radius:10px;background:#fff0d9;color:#70483b;font:11px/1.35 'DM Sans',sans-serif}.prazo-entrega span:last-child{background:#dfeecf;color:#3e642d}.prazo-entrega b{font:800 9px 'DM Sans',sans-serif;letter-spacing:.7px;text-transform:uppercase}.prazo-entrega small{font-size:9px;color:#5e873d}@media(max-width:600px){.prazo-entrega{grid-template-columns:1fr}.detalhes-pedido{grid-template-columns:1fr}}
-.modal-pedidos{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:26px;background:linear-gradient(135deg,#4b2a20b8,#7a493ab5);backdrop-filter:blur(6px)}
-.painel-pedidos{position:relative;width:min(900px,100%);max-height:min(88vh,900px);overflow:auto;padding:0 34px 36px;border:1px solid #fff8f2;background:#fffaf5;color:#4b2a20;box-shadow:0 28px 90px #2d130b77;border-radius:28px}
-.painel-pedidos::before{content:'';display:block;height:8px;margin:0 -34px 29px;border-radius:28px 28px 0 0;background:linear-gradient(90deg,#e97483,#f6b9b3 50%,#f9dfa4)}
-.painel-pedidos h2{margin:5px 0 7px;font:700 clamp(40px,5vw,58px) 'Playfair Display',serif;letter-spacing:-1.5px}.descricao-pedidos{max-width:560px;margin:0 0 28px;color:#89695f;font:14px/1.6 'DM Sans',sans-serif}.fechar-pedidos{position:absolute;top:21px;right:24px;display:grid;place-items:center;width:38px;height:38px;border:1px solid #ecd4ca;border-radius:50%;background:#fffaf5;color:#70483b;font-size:25px;cursor:pointer;transition:.2s}.fechar-pedidos:hover{transform:rotate(90deg);background:#f8d9de}.lista-meus-pedidos{display:grid;gap:18px}.lista-meus-pedidos article{position:relative;overflow:hidden;padding:24px;border:1px solid #ead8d0;border-radius:19px;background:linear-gradient(135deg,#fff 0%,#fffaf7 100%);box-shadow:0 8px 22px #623a2d0a}.lista-meus-pedidos article::before{content:'';position:absolute;top:0;left:0;width:5px;height:100%;background:#e97483}.lista-meus-pedidos header{display:flex;align-items:start;justify-content:space-between;gap:15px}.lista-meus-pedidos header small{display:inline-flex;align-items:center;gap:5px;color:#d85f70;font:800 10px 'DM Sans',sans-serif;letter-spacing:1.2px}.lista-meus-pedidos header small::before{content:'●';font-size:8px}.lista-meus-pedidos h3{margin:6px 0 0;font:700 26px 'Playfair Display',serif}.lista-meus-pedidos strong{padding:9px 12px;border-radius:10px;background:#fff0eb;color:#b74f60;font:800 16px 'DM Sans',sans-serif}.itens-pedido{display:inline-block;margin:15px 0 4px;padding:8px 11px;border-radius:8px;background:#f8eee9;color:#725247;font:600 12px 'DM Sans',sans-serif}.linha-status{display:grid;grid-template-columns:repeat(4,1fr);margin:22px 0 18px;padding:16px 8px;border-radius:13px;background:#fffaf5}.linha-status div{position:relative;display:grid;justify-items:center;gap:7px;color:#b69d94;text-align:center;font:10px/1.3 'DM Sans',sans-serif}.linha-status div:not(:last-child)::after{content:'';position:absolute;top:12px;left:calc(50% + 15px);width:calc(100% - 29px);height:2px;background:#eadbd5}.linha-status i{position:relative;z-index:1;display:grid;place-items:center;width:27px;height:27px;border:2px solid #fffaf5;border-radius:50%;background:#eadbd5;color:#89695f;font:700 11px 'DM Sans',sans-serif;font-style:normal;box-shadow:0 2px 5px #5c352215}.linha-status .concluida{color:#638351;font-weight:700}.linha-status .concluida i,.linha-status .concluida:not(:last-child)::after{background:#a9c68d;color:#fff}.lista-meus-pedidos footer{display:grid;grid-template-columns:1fr 1.5fr;gap:10px;border-top:1px dashed #eadbd5;padding-top:14px;color:#84665c;font:11px/1.45 'DM Sans',sans-serif}.lista-meus-pedidos footer span:first-child::before{content:'◷ ';color:#e97483}.lista-meus-pedidos footer span:last-child::before{content:'⌖ ';color:#e97483}.pedido-cancelado{background:#fff7f6!important}.pedido-cancelado::before{background:#c96d70!important}.aviso-cancelado,.erro-pedidos{padding:12px 14px;border-radius:10px;background:#f8dede;color:#a0444d;font:12px/1.5 'DM Sans',sans-serif}.pedidos-vazio{padding:38px 20px;border:1px dashed #e9cfc4;border-radius:16px;background:#f8eee8;color:#79574b;text-align:center;font:14px/1.6 'DM Sans',sans-serif}@media(max-width:600px){.modal-pedidos{padding:10px}.painel-pedidos{max-height:94vh;padding:0 18px 26px;border-radius:21px}.painel-pedidos::before{margin:0 -18px 25px;border-radius:21px 21px 0 0}.lista-meus-pedidos article{padding:19px}.lista-meus-pedidos h3{font-size:21px}.lista-meus-pedidos strong{padding:7px 8px;font-size:13px}.linha-status{margin:18px 0 14px;padding:13px 2px}.linha-status span{font-size:8px}.linha-status div:not(:last-child)::after{left:calc(50% + 12px);width:calc(100% - 22px)}.lista-meus-pedidos footer{grid-template-columns:1fr;gap:5px}.fechar-pedidos{top:16px;right:16px}}
+.modal-pedidos { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 24px; border: 0; background: transparent; color: #4b2419 }
+.modal-pedidos[open] { display: grid; place-items: center }
+.modal-pedidos::backdrop { background: #38201799; backdrop-filter: blur(5px) }
+.painel-pedidos { position: relative; width: min(100%, 850px); max-height: calc(100dvh - 48px); overflow: auto; overscroll-behavior: contain; padding: 38px; border-radius: 28px; background: #f8f2ec; box-shadow: 0 24px 80px #24120e40; font-family: 'DM Sans', sans-serif }
+.painel-pedidos h2 { margin: 5px 0 10px; font: 700 clamp(34px, 5vw, 48px)/1.1 'Playfair Display', serif }
+.painel-pedidos>.sobretitulo { padding-right: 42px; font-size: 11px }
+.descricao-pedidos { max-width: 560px; margin: 0 0 25px; color: #927369; font-size: 16px; line-height: 1.5 }
+.fechar-pedidos { position: absolute; top: 24px; right: 24px; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid #e8dad1; border-radius: 50%; background: #fffbf7; color: #4b2419; font-size: 27px; cursor: pointer }
+.lista-meus-pedidos { display: grid; gap: 22px }
+.pedido-card { padding: 28px; min-width: 0; border: 1px solid #e5dad3; border-radius: 24px; background: #fffcf8; box-shadow: 0 4px 18px #5a35200a }
+.pedido-card-topo { display: flex; align-items: center; justify-content: space-between; gap: 12px }
+.pedido-card-topo>span { color: #d65471; font-size: 13px; font-weight: 700; letter-spacing: 2.5px; overflow-wrap: anywhere }
+.pedido-card-topo>strong { flex-shrink: 0; padding: 10px 14px; border-radius: 13px; background: #fce9e9; color: #d9365a; font-size: 20px; white-space: nowrap }
+.pedido-card h3 { margin: 0 0 8px; font: 700 clamp(28px, 4vw, 42px)/1.12 'Playfair Display', serif; letter-spacing: -.7px }
+.pedido-status-descricao { margin: 0 0 18px; color: #927369; font-size: 16px; line-height: 1.45 }
+.pedido-etapas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); list-style: none; padding: 0; margin: 22px 0 24px }
+.pedido-etapas li { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; color: #95776b; font-size: 13px; line-height: 1.25 }
+.pedido-etapas li::before { content: ''; position: absolute; top: 22px; left: -50%; width: 100%; height: 2px; background: #e2d3c7 }
+.pedido-etapas li:first-child::before { display: none }
+.pedido-etapas .etapa-atingida::before { background: #dc5d76 }
+.pedido-etapa-numero { position: relative; z-index: 1; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #f3e9df; box-shadow: 0 0 0 5px #fffcf8; font-size: 18px }
+.pedido-etapas li>span:last-child { max-width: 100px; padding: 0 4px }
+.pedido-etapas .etapa-atingida { color: #582419; font-weight: 600 }
+.etapa-atingida .pedido-etapa-numero { background: #dd5c77; color: white }
+.pedido-resumo-itens { display: flex; align-items: center; gap: 20px; padding: 14px; border-radius: 18px; background: #f5eee7 }
+.pedido-foto { display: grid; place-items: center; flex: 0 0 100px; width: 100px; height: 100px; overflow: hidden; border-radius: 12px; background: #eee0d0; color: #956a51 }
+.pedido-foto img { width: 100%; height: 100%; object-fit: cover }
+.pedido-foto>svg { width: 36px; height: 36px }
+.pedido-resumo-itens>div:last-child { flex: 1; min-width: 0; padding-left: 18px; border-left: 1px solid #e2d3c7 }
+.pedido-card h4 { margin: 0 0 10px; color: #87634f; font-size: 11px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase }
+.pedido-resumo-itens ul { list-style: none; margin: 0; padding: 0; font-size: 17px; line-height: 1.5; overflow-wrap: anywhere }
+.pedido-informacoes { display: grid; gap: 18px; margin: 20px 0; padding-top: 20px; border-top: 1px solid #ebe0d7 }
+.pedido-informacao { display: flex; align-items: center; gap: 15px; min-width: 0 }
+.pedido-icone { display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; border-radius: 50%; background: #f5ece2 }
+.pedido-informacao>div { display: grid; gap: 4px; min-width: 0; overflow-wrap: anywhere }
+.pedido-informacao>div>span { color: #947266; font-size: 14px }
+.pedido-informacao strong { font-size: 17px; font-weight: 600; line-height: 1.4 }
+.pedido-whatsapp { display: flex; align-items: center; justify-content: center; gap: 13px; min-height: 54px; width: 100%; padding: 12px 20px; border-radius: 999px; background: #4d2a1d; color: #fffaf5; text-decoration: none; font-size: 16px; font-weight: 600 }
+.pedido-whatsapp>svg { flex-shrink: 0; width: 28px; height: 28px }
+.pedido-whatsapp>span:last-child { margin-left: auto; font-size: 26px; font-weight: 400 }
+.pedido-whatsapp:hover { background: #6a3b29 }
+.pedido-expandir { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 44px; margin: 12px auto 0; padding: 10px 4px; border: 0; background: transparent; color: #4b2419; font: 500 15px 'DM Sans', sans-serif; text-decoration: underline; text-underline-offset: 6px; cursor: pointer }
+.pedido-expandir>svg { flex-shrink: 0 }
+.pedido-detalhes:not([hidden]) { display: grid; gap: 20px; margin-top: 18px; padding-top: 20px; border-top: 1px solid #ebe0d7 }
+.pedido-especificacoes>div { padding: 12px 0; border-bottom: 1px solid #efe5dc; overflow-wrap: anywhere }
+.pedido-especificacoes strong { font-size: 14px; font-weight: 600 }
+.pedido-especificacoes dl { margin: 8px 0 0; font-size: 13px }
+.pedido-especificacoes dl:empty { display: none }
+.pedido-especificacoes dl>div { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; margin-top: 5px }
+.pedido-especificacoes dt { color: #947266 }
+.pedido-especificacoes dd { margin: 0; white-space: pre-line }
+.pedido-observacao p { margin: 0; font-size: 14px; line-height: 1.5; white-space: pre-line; overflow-wrap: anywhere }
+.pedido-nota { margin: 0; font-size: 12px; line-height: 1.5; color: #947266 }
+.pedido-total { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 18px; border-top: 1px solid #ebe0d7; font-size: 15px }
+.pedido-total strong { color: #c74762; font-size: 20px }
+.pedido-card-cancelado { border-color: #edc6c6 }
+.pedido-card-cancelado h3 { color: #a34b4b }
+.pedidos-vazio { padding: 30px 20px; text-align: center; border-radius: 18px; background: #fffaf5; color: #87634f; line-height: 1.6 }
+.pedidos-vazio h3 { font-family: 'Playfair Display', serif }
+.pedidos-vazio button,.erro-pedidos button { min-height: 44px; padding: 10px 18px; border: 0; border-radius: 24px; background: #4d2a1d; color: #fff; cursor: pointer }
+.erro-pedidos { margin-bottom: 18px; padding: 16px; border-radius: 14px; background: #ffe8e8; color: #934343 }
+.painel-pedidos button:focus-visible,.painel-pedidos a:focus-visible { outline: 3px solid #d65471; outline-offset: 4px }
+@media(min-width:601px) {
+  .painel-pedidos { width: min(100%, 620px); padding: 22px; border-radius: 22px }
+  .painel-pedidos h2 { font-size: 30px }
+  .descricao-pedidos { margin-bottom: 14px; font-size: 13px }
+  .lista-meus-pedidos { gap: 12px }
+  .pedido-card { padding: 16px; border-radius: 16px }
+  .pedido-card-topo>span { font-size: 11px; letter-spacing: 2px }
+  .pedido-card-topo>strong { padding: 6px 10px; font-size: 15px }
+  .pedido-card h3 { margin-bottom: 5px; font-size: 25px }
+  .pedido-status-descricao { margin-bottom: 10px; font-size: 13px }
+  .pedido-etapas { margin: 12px 0 14px }
+  .pedido-etapas li { gap: 6px; font-size: 11px }
+  .pedido-etapas li::before { top: 15px }
+  .pedido-etapa-numero { width: 30px; height: 30px; font-size: 14px }
+  .pedido-resumo-itens { gap: 10px; padding: 8px; border-radius: 12px }
+  .pedido-foto { flex-basis: 48px; width: 48px; height: 48px }
+  .pedido-foto>svg { width: 28px; height: 28px }
+  .pedido-resumo-itens>div:last-child { padding-left: 14px }
+  .pedido-card h4 { margin-bottom: 6px; font-size: 10px }
+  .pedido-resumo-itens ul { font-size: 14px }
+  .pedido-informacoes { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 12px 0; padding-top: 12px }
+  .pedido-informacoes>.pedido-nota { grid-column: 1 / -1 }
+  .pedido-informacao { gap: 8px }
+  .pedido-icone { width: 32px; height: 32px }
+  .pedido-icone>svg { width: 20px; height: 20px }
+  .pedido-informacao>div>span { font-size: 11px }
+  .pedido-informacao strong { font-size: 13px }
+  .pedido-whatsapp { min-height: 44px; padding: 8px 14px; font-size: 13px }
+  .pedido-whatsapp>svg { width: 22px; height: 22px }
+  .pedido-whatsapp>span:last-child { font-size: 22px }
+  .pedido-expandir { margin-top: 2px; padding: 6px 4px; font-size: 12px }
+  .pedido-detalhes:not([hidden]) { gap: 16px; margin-top: 12px; padding-top: 16px }
+}
+@media(max-width:600px) {
+  .modal-pedidos { padding: 10px }
+  .painel-pedidos { max-height: calc(100dvh - 20px); padding: 26px 14px 20px; border-radius: 22px }
+  .painel-pedidos h2 { font-size: 34px }
+  .fechar-pedidos { top: 14px; right: 14px }
+  .descricao-pedidos { font-size: 14px; margin-bottom: 20px }
+  .pedido-card { padding: 18px 14px; border-radius: 20px }
+  .pedido-card-topo>span { font-size: 10px; letter-spacing: 1.8px }
+  .pedido-card-topo>strong { font-size: 16px; padding: 8px 10px }
+  .pedido-card h3 { margin-top: 6px; font-size: clamp(26px, 7.3vw, 36px) }
+  .pedido-status-descricao { font-size: 14px }
+  .pedido-etapas { margin: 20px 0 }
+  .pedido-etapas li { font-size: 11px }
+  .pedido-etapas li::before { top: 18px }
+  .pedido-etapa-numero { width: 36px; height: 36px; font-size: 16px; box-shadow: 0 0 0 4px #fffcf8 }
+  .pedido-resumo-itens { gap: 12px; padding: 10px }
+  .pedido-foto { flex-basis: 72px; width: 72px; height: 80px }
+  .pedido-resumo-itens>div:last-child { padding-left: 12px }
+  .pedido-card h4 { font-size: 10px; letter-spacing: 1px }
+  .pedido-resumo-itens ul { font-size: 14px }
+  .pedido-informacao { gap: 10px }
+  .pedido-informacao>div>span { font-size: 13px }
+  .pedido-informacao strong { font-size: 15px }
+  .pedido-whatsapp { gap: 8px; padding: 12px 14px; font-size: 13px }
+  .pedido-whatsapp>svg { width: 24px; height: 24px }
+  .pedido-expandir { font-size: 13px }
+}

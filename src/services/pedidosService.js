@@ -21,7 +21,7 @@ export async function listarMeusPedidos() {
   const { data: sessao, error: erroSessao } = await supabase.auth.getUser()
   if (erroSessao) throw erroSessao
   if (!sessao.user) throw new Error('Entre na sua conta para acompanhar seus pedidos.')
-  const { data, error } = await supabase.from('pedidos').select('*, itens_pedido(*, produtos(nome))').eq('usuario_id', sessao.user.id).order('criado_em', { ascending: false })
+  const { data, error } = await supabase.from('pedidos').select('*, itens_pedido(*, produtos(nome, imagem, imagem_redondo, imagem_retangular))').eq('usuario_id', sessao.user.id).order('criado_em', { ascending: false })
   if (error) throw error
   return data
 }

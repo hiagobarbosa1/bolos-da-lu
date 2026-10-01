@@ -246,18 +246,20 @@
 
     .produtos-modal-categoria:has(>.card-bolo) { grid-template-columns: minmax(0, 1fr) }
     .produtos-modal-categoria .card-bolo>.foto-produto-categoria img { object-fit: contain }
-    .informacoes-produto:has(.informacoes-bolo) { border: 0 }
-    .informacoes-bolo:has(>img) { padding-top: 0 }
-    .informacoes-bolo>img {
+    .informacoes-produto:has(.conteudo-informacoes-produto>img) { border: 0 }
+    .conteudo-informacoes-produto:has(>img) { padding-top: 0 }
+    .conteudo-informacoes-produto>img {
         width: calc(100% + 40px);
         max-width: none;
-        height: clamp(200px, 65vw, 280px);
-        aspect-ratio: auto;
+        height: auto;
+        aspect-ratio: 1;
         margin: 0 -20px;
         border-radius: 0;
         object-fit: cover;
         object-position: center;
     }
+    .conteudo-informacoes-produto:not(.informacoes-bolo)>img { aspect-ratio: 4 / 3 }
+    .informacoes-bolo>img { background: #ffdf87 }
     .produtos-modal-categoria article.card-bolo {
         grid-template-columns: minmax(0, 41%) minmax(0, 1fr);
         grid-template-rows: auto auto 1fr auto auto;

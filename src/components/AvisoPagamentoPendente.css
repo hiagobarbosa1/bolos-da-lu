@@ -2,4 +2,21 @@
 
 .aviso-pix-pendente select{box-sizing:border-box;max-width:100%;width:100%;margin-top:8px;padding:7px;border:1px solid #edd9bf;border-radius:6px;background:#fff;color:#79583f;font-size:12px}
 
+/* Reserva espaço para os botões flutuantes de WhatsApp e carrinho. */
+.aviso-pix-pendente {
+  left: 28px;
+  bottom: 110px;
+  max-height: calc(100dvh - 130px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+@media(max-width:500px) {
+  .aviso-pix-pendente {
+    left: 18px;
+    bottom: calc(98px + env(safe-area-inset-bottom, 0px));
+    width: min(340px, calc(100vw - 36px));
+    max-height: calc(100dvh - 116px - env(safe-area-inset-bottom, 0px));
+  }
+}
+
 .aviso-pix-confirmado{border-color:#f2e4da;background:linear-gradient(135deg,#fffaf5,#fff0eb);box-shadow:0 10px 30px #4b2a201a}.aviso-pix-confirmado .aviso-pix-icone{background:#f8d9de;color:#bd5967}.aviso-pix-confirmado b{color:#4b2a20}.aviso-pix-confirmado p,.aviso-pix-confirmado small{color:#86665b}.aviso-pix-confirmado button{color:#bd5967}

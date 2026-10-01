@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { listarAvaliacoes, publicarAvaliacao, validarFotoAvaliacao } from '../services/avaliacoesService'
+import { listarAvaliacoes, listarProdutosParaAvaliar, publicarAvaliacao, validarFotoAvaliacao } from '../services/avaliacoesService'
 import './Avaliacoes.css'
 
 function Formulario({ usuario, aoPublicado }) {
@@ -10,6 +10,19 @@ function Formulario({ usuario, aoPublicado }) {
   const [erro, setErro] = useState('')
   const [enviando, setEnviando] = useState(false)
   const trava = useRef(false)
+  const [produtos, setProdutos] = useState([])
+  const [itemPedidoId, setItemPedidoId] = useState('')
+  const [consultando, setConsultando] = useState(true)
+  const [erroConsulta, setErroConsulta] = useState('')
+  const [tentativa, setTentativa] = useState(0)
+  useEffect(() => {
+    let ativo = true
+    listarProdutosParaAvaliar().then((itens) => {
+      if (ativo) setProdutos(itens)
+    }).catch((error) => { if (ativo) setErroConsulta(error.message) })
+      .finally(() => { if (ativo) setConsultando(false) })
+    return () => { ativo = false }
+  }, [tentativa])
   useEffect(() => () => { if (previa) URL.revokeObjectURL(previa) }, [previa])
   function escolherFoto(event) {
     const foto = event.target.files?.[0]
@@ -24,14 +37,23 @@ function Formulario({ usuario, aoPublicado }) {
     event.preventDefault()
     if (trava.current) return
     trava.current = true; setEnviando(true); setErro('')
-    try { await publicarAvaliacao({ nota, comentario, arquivo }); aoPublicado() }
+    try { await publicarAvaliacao({ itemPedidoId, nota, comentario, arquivo }); aoPublicado() }
     catch (error) { setErro(error.message) }
     finally { trava.current = false; setEnviando(false) }
   }
+  if (consultando) return <p role="status">Consultando seus produtos recebidos…</p>
+  if (erroConsulta) return <div className="avaliacao-erro" role="alert">{erroConsulta} <button type="button" onClick={() => { setErroConsulta(''); setConsultando(true); setTentativa((valor) => valor + 1) }}>Tentar novamente</button></div>
+  if (!produtos.length) return <p className="avaliacao-login">Você poderá avaliar os produtos quando a loja marcar seu pedido como entregue. Se já avaliou todos os produtos recebidos, aguarde seu próximo pedido.</p>
   return <form className="avaliacao-formulario" onSubmit={enviar}>
     <p>Conte sua experiência, <strong>{usuario.nome}</strong>.</p>
+    <label className="avaliacao-produto">Qual produto você recebeu?
+      <select required value={itemPedidoId} disabled={enviando} onChange={(event) => setItemPedidoId(event.target.value)}>
+        <option value="" disabled>Selecione o produto</option>
+        {produtos.map((item) => <option key={item.item_pedido_id} value={item.item_pedido_id}>{item.nome_produto} · Pedido #{item.pedido_id}</option>)}
+      </select>
+    </label>
     <fieldset disabled={enviando} className="avaliacao-estrelas-campo">
-      <legend>Quantas estrelas seu pedido merece?</legend>
+      <legend>Quantas estrelas esse produto merece?</legend>
       <div className="avaliacao-escolha-estrelas">{[1, 2, 3, 4, 5].map((valor) => <label key={valor}>
         <input type="radio" name="nota" value={valor} checked={nota === valor} onChange={() => setNota(valor)} required aria-label={`${valor} ${valor === 1 ? 'estrela' : 'estrelas'}`} />
         <span aria-hidden="true" className={valor <= nota ? 'preenchida' : ''}>★</span>

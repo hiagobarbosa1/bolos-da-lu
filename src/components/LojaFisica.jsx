@@ -1,6 +1,6 @@
-import fachada from '../assets/fachada.jpeg'
-import balcao from '../assets/balcao.jpeg'
-import salao from '../assets/salao.jpeg'
+import fachada from '../assets/fachada.webp'
+import balcao from '../assets/balcao.webp'
+import salao from '../assets/salao.webp'
 import './LojaFisica.css'
 
 const ambientes = [
@@ -10,7 +10,7 @@ const ambientes = [
 ]
 
 export default function LojaFisica() {
-  return <section className="loja-fisica" aria-labelledby="loja-fisica-titulo">
+  return <section className="loja-fisica" id="loja-fisica" aria-labelledby="loja-fisica-titulo">
     <div className="loja-fisica-cabecalho">
       <p className="sobretitulo">NOSSO ESPAÇO</p>
       <h2 id="loja-fisica-titulo">Conheça a nossa loja</h2>

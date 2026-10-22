@@ -14,6 +14,7 @@ export default function AvisoPagamentoPendente({ usuarioId, pedidoRecenteId, ocu
     } catch { return [] }
   })
   const [abertoId, setAbertoId] = useState(null)
+  const [avisoExpandido, setAvisoExpandido] = useState(false)
   useEffect(() => {
     let ativo = true
     let versao = 0
@@ -51,9 +52,10 @@ export default function AvisoPagamentoPendente({ usuarioId, pedidoRecenteId, ocu
   </aside>
   if (!pedidos.length) return null
   return <>
-    <aside className="aviso-pix-pendente" aria-label="Pagamento pendente">
+    <aside className="aviso-pix-pendente" aria-label="Pagamento pendente" data-expandido={avisoExpandido}>
       <span className="aviso-pix-icone" aria-hidden="true">◷</span>
-      <div><b>Seu pedido aguarda o Pix</b><p>Finalize o pagamento para que a doceria possa confirmar seu pedido.</p>
+      <button type="button" className="aviso-pix-cabecalho" aria-expanded={avisoExpandido} aria-controls="conteudo-aviso-pix" onClick={() => setAvisoExpandido((expandido) => !expandido)}><span className="aviso-pix-icone" aria-hidden="true">◷</span><span><b>Seu pedido aguarda o Pix</b><small>{pedidos.length > 1 ? `${pedidos.length} pedidos com pagamento pendente` : `Pedido #${pedidos[0].id} · Aguardando confirmação`}</small></span><span className="aviso-pix-seta" aria-hidden="true">⌄</span></button>
+      <div className="aviso-pix-conteudo" id="conteudo-aviso-pix"><b>Seu pedido aguarda o Pix</b><p>Finalize o pagamento para que a doceria possa confirmar seu pedido.</p>
         <small>{pedidos.length > 1 ? `${pedidos.length} pedidos com pagamento pendente` : `Pedido #${pedidos[0].id} · Aguardando confirmação do Pix`}</small>
         {pedidos.length > 1 && <select aria-label="Ver Pix de outro pedido" value="" onChange={(event) => setAbertoId(pedidos.find((item) => String(item.id) === event.target.value)?.id ?? null)}><option value="" disabled>Escolha um pedido</option>{pedidos.map((item) => <option key={item.id} value={item.id}>Pedido #{item.id} · {Number(item.valor_total).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</option>)}</select>}
         <button type="button" onClick={() => setAbertoId(pedidos[0].id)}>Ver dados do Pix <span aria-hidden="true">→</span></button>

@@ -2,6 +2,27 @@
 .pedidos-tipos { display: flex; flex-wrap: wrap; gap: 8px }
 .pedidos-tipos button, .pedidos-atualizar { padding: 12px 18px; min-height: 44px; border: 1px solid #e4cdbf; border-radius: 12px; background: #fffdfb; color: #654333; font: 600 14px 'DM Sans', sans-serif; cursor: pointer }
 .pedidos-tipos button span { display: block; margin-top: 5px; font-size: 11px; font-weight: 400 }
+.pedidos-pendentes-destaque { display: grid; grid-template-columns: minmax(190px, .7fr) minmax(0, 1.8fr); align-items: center; gap: 16px; margin: 0 0 16px; padding: 16px; border: 1px solid #efdcd2; border-left: 4px solid #d56b78; border-radius: 16px; background: linear-gradient(110deg, #fff3ec, #fffaf5 72%); color: #4b2a20; box-shadow: 0 8px 22px #58352a0c }
+.pendencias-cabecalho { display: flex; align-items: center; gap: 11px }
+.pendencias-icone { display: grid; flex: 0 0 38px; width: 38px; height: 38px; place-items: center; border-radius: 50%; background: #f8e0df; color: #c65e70; font-size: 22px }
+.pendencias-cabecalho b { display: block; font: 700 14px 'Playfair Display', serif }
+.pendencias-cabecalho small { display: block; margin-top: 4px; color: #896b60; font-size: 10px; line-height: 1.35 }
+.pendencias-lista { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px }
+.pendencia-tipo { display: flex; min-width: 0; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #efdcd2; border-radius: 12px; background: #fff; color: #4b2a20; text-align: left; cursor: pointer; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease }
+.pendencia-tipo:hover { transform: translateY(-2px); border-color: #d88a91; box-shadow: 0 6px 14px #58352a14 }
+.pendencia-simbolo { display: grid; flex: 0 0 30px; width: 30px; height: 30px; place-items: center; border-radius: 9px; background: #f9e9e3; color: #a85161; font-size: 17px }
+.pendencia-pronta .pendencia-simbolo { background: #f8edcf; color: #a16c2b }
+.pendencia-texto { display: block; min-width: 0; flex: 1 }
+.pendencia-texto b, .pendencia-texto small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.pendencia-texto b { font-size: 12px; font-weight: 700 }
+.pendencia-texto small { margin-top: 3px; color: #896b60; font-size: 10px }
+.pendencia-tipo>strong { display: grid; flex: 0 0 30px; width: 30px; height: 30px; place-items: center; border-radius: 50%; background: #c65e70; color: #fff; font: 800 13px 'DM Sans', sans-serif }
+.pendencia-pronta>strong { background: #a16c2b }
+.pedidos-tipos button.tem-pedidos-abertos { border-color: #d9a36a; background: #fff4e2 }
+.pedidos-tipos button.tem-pedidos-abertos[aria-pressed="true"] { border-color: #4b2a20; background: #4b2a20; color: #fffaf5 }
+.pedidos-tipos button .contador-pedidos-abertos { display: flex; align-items: center; gap: 5px; font-weight: 700 }
+.contador-pedidos-abertos b { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 99px; background: #b85d32; color: #fff; font-size: 11px }
+.pedidos-tipos button[aria-pressed="true"] .contador-pedidos-abertos b { background: #fffaf5; color: #4b2a20 }
 .pedidos-tipos button[aria-pressed="true"] { background: #4b2a20; border-color: #4b2a20; color: #fffaf5 }
 .pedidos-resumo { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px }
 .pedidos-resumo>span { padding: 10px 14px; border-radius: 10px; background: #f6e7dd; font-size: 12px }
@@ -45,4 +66,6 @@
     .admin-quadro-pedidos .quadro-pedidos { grid-template-columns: 1fr; overflow: visible }
     .pedidos-tipos { flex: 1 }
     .pedidos-tipos button { flex: 1; padding: 10px 12px }
+    .pedidos-pendentes-destaque { grid-template-columns: 1fr; gap: 12px; padding: 13px }
+    .pendencias-lista { grid-template-columns: 1fr }
 }

@@ -17,6 +17,7 @@ export default function AdminGaleriaBolos() {
   const [arquivo, setArquivo] = useState(null)
   const [previa, setPrevia] = useState('')
   const [versaoForm, setVersaoForm] = useState(0)
+  const [confirmacaoRemocao, setConfirmacaoRemocao] = useState(null)
   useEffect(() => {
     let ativo = true
     listarGaleriaBolos(true).then((lista) => { if (ativo) setFotos(lista) }).catch((e) => { if (ativo) setErro(mensagemErro(e)) }).finally(() => { if (ativo) setCarregando(false) })
@@ -35,14 +36,13 @@ export default function AdminGaleriaBolos() {
     } catch (e) { setErro(mensagemErro(e)) } finally { setSalvando(false) }
   }
   async function remover(foto) {
-    if (!window.confirm(`Remover a foto #${foto.id} do carrossel?`)) return
     setSalvando(true); setErro(''); setAviso('')
     try {
       const mensagem = await removerFotoGaleria(foto)
       setFotos((lista) => lista.filter((item) => item.id !== foto.id))
       if (editada?.id === foto.id) limpar()
       setAviso(mensagem || 'Foto removida.')
-    } catch (e) { setErro(mensagemErro(e)) } finally { setSalvando(false) }
+    } catch (e) { setErro(mensagemErro(e)) } finally { setSalvando(false); setConfirmacaoRemocao(null) }
   }
   return <div className="admin-galeria">
     <p>Fotos exibidas abaixo do banner de bolos personalizados. A ordem menor aparece primeiro; use pelo menos três fotos para destacar o efeito de pirâmide.</p>
@@ -59,6 +59,7 @@ export default function AdminGaleriaBolos() {
       </fieldset>
     </form>
     {carregando ? <p>Carregando fotos...</p> : !fotos.length && <p>A galeria ainda não tem fotos. Adicione a primeira acima.</p>}
-    <div className="galeria-admin-fotos">{fotos.map((foto) => <article key={foto.id}><img src={foto.imagem} alt={`Foto de bolo #${foto.id}`} /><div><b>Foto #{foto.id}</b><small>Ordem {foto.ordem} · {foto.ativo ? 'Visível' : 'Oculta'}</small><div className="galeria-acoes"><button disabled={salvando} onClick={() => { setEditada(foto); setArquivo(null); setPrevia('') }}>Editar</button><button disabled={salvando} onClick={() => remover(foto)}>Remover</button></div></div></article>)}</div>
+    <div className="galeria-admin-fotos">{fotos.map((foto) => <article key={foto.id}><img src={foto.imagem} alt={`Foto de bolo #${foto.id}`} /><div><b>Foto #{foto.id}</b><small>Ordem {foto.ordem} · {foto.ativo ? 'Visível' : 'Oculta'}</small><div className="galeria-acoes"><button disabled={salvando} onClick={() => { setEditada(foto); setArquivo(null); setPrevia('') }}>Editar</button><button disabled={salvando} onClick={() => setConfirmacaoRemocao(foto)}>Remover</button></div></div></article>)}</div>
+    {confirmacaoRemocao && <div className="admin-confirmacao-fundo" role="presentation" onMouseDown={() => { if (!salvando) setConfirmacaoRemocao(null) }}><section className="admin-confirmacao" role="dialog" aria-modal="true" aria-labelledby="titulo-confirmar-remocao-foto" onMouseDown={(event) => event.stopPropagation()}><span className="admin-confirmacao-icone" aria-hidden="true">!</span><h2 id="titulo-confirmar-remocao-foto">Remover foto do carrossel?</h2><p>A foto <strong>#{confirmacaoRemocao.id}</strong> será removida da galeria.</p><div><button type="button" disabled={salvando} onClick={() => setConfirmacaoRemocao(null)}>Cancelar</button><button type="button" className="confirmar" disabled={salvando} onClick={() => remover(confirmacaoRemocao)}>{salvando ? 'Removendo...' : 'Remover foto'}</button></div></section></div>}
   </div>
 }

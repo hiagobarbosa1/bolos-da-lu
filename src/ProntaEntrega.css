@@ -33,7 +33,7 @@
 .pronta-entrega-banner .grade-pronta article { cursor: pointer }
 .fundo-detalhe-pronta { position: fixed; z-index: 68; inset: 0; background: #4b2a2026; backdrop-filter: blur(2px) }
 .detalhe-pronta { position: fixed; z-index: 69; width: min(350px, calc(100vw - 36px)); max-height: calc(100vh - 36px); overflow: auto; padding: 20px; border: 1px solid #efd3ca; border-radius: 19px; background: #fffaf5; color: #4b2a20; box-shadow: 0 22px 60px #4b2a2050; animation: detalhe-pronta-entra .22s ease-out both }
-.detalhe-pronta>img { width: 100%; height: 155px; margin-bottom: 15px; border-radius: 12px; object-fit: cover; background: #f8d9d0 }
+.detalhe-pronta>img { display: block; box-sizing: border-box; width: calc(100% + 40px); max-width: none; height: auto; aspect-ratio: 4 / 3; margin: -20px -20px 20px; border-radius: 0; object-fit: cover; object-position: center; background: #f8d9d0 }
 .detalhe-pronta .sobretitulo { margin-bottom: 7px; font-size: 9px }
 .detalhe-pronta h2 { margin: 0 28px 9px 0; font: 700 28px/1.05 'Playfair Display', serif }
 .detalhe-pronta>p:not(.sobretitulo) { margin: 0; color: #76584d; font: 13px/1.55 'DM Sans', sans-serif }

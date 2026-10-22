@@ -130,7 +130,7 @@
     padding: 0;
     overflow: auto;
     overscroll-behavior: contain;
-    border: 1px solid #efdcd2;
+    border: 0;
     border-radius: 20px;
     background: #fffaf5;
     color: #4b2a20;
@@ -149,6 +149,38 @@
 .total-informacoes-produto { display: flex; justify-content: space-between; gap: 12px; margin: 20px 0 14px }
 .adicionar-informacoes-produto { width: 100%; min-height: 44px; padding: 12px; border: 0; border-radius: 9px; background: #4b2a20; color: #fffaf5; font-size: 14px; font-weight: 700; cursor: pointer }
 .informacoes-produto button:focus-visible, .informacoes-produto select:focus-visible { outline: 2px solid #bd5967; outline-offset: 3px }
+
+/* As fotos dos detalhes devem ficar encostadas no topo e nas laterais do modal,
+   mantendo o produto inteiro visível dentro do enquadramento. */
+.informacoes-produto .conteudo-informacoes-produto:has(>img) { padding-top: 0 }
+.informacoes-produto .conteudo-informacoes-produto>img {
+    box-sizing: border-box;
+    width: calc(100% + 40px);
+    max-width: none;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    margin: 0 -20px 18px;
+    border-radius: 0;
+    object-fit: cover !important;
+    object-position: center;
+}
+.informacoes-copos-doces:has(.conteudo-informacoes-produto>img) { border: 0 }
+.informacoes-copos-doces .conteudo-informacoes-produto:has(>img) { padding-top: 0 }
+.informacoes-produto.informacoes-copos-doces .conteudo-informacoes-produto>img {
+    width: calc(100% + 40px);
+    max-width: none;
+    height: 180px;
+    aspect-ratio: auto;
+    margin: 0 -20px;
+    border-radius: 0;
+    object-fit: cover;
+    background: transparent;
+}
+.informacoes-produto.informacoes-copos-doces .conteudo-informacoes-produto>img {
+    height: auto;
+    aspect-ratio: 4 / 3;
+    margin-bottom: 18px;
+}
 @media (max-width: 700px) {
     .informacoes-produto { inset: auto 12px 12px !important; width: auto; max-height: calc(100dvh - 24px) }
     .informacoes-produto::backdrop { background: #2e171170 }
@@ -255,7 +287,7 @@
         aspect-ratio: 1;
         margin: 0 -20px;
         border-radius: 0;
-        object-fit: cover;
+        object-fit: cover !important;
         object-position: center;
     }
     .conteudo-informacoes-produto:not(.informacoes-bolo)>img { aspect-ratio: 4 / 3 }

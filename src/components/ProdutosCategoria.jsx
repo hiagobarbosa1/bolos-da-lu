@@ -43,7 +43,7 @@ function InformacoesProduto({ produto, origem, quantidade, aoQuantidade, erro, a
     }
   }, [origem])
 
-  return createPortal(<dialog ref={dialogo} className="informacoes-produto" aria-labelledby="titulo-informacoes-produto" onCancel={aoFechar} onClick={(event) => { if (event.target === event.currentTarget) aoFechar() }}>
+  return createPortal(<dialog ref={dialogo} className={`informacoes-produto${produto.categoria === 'Copos e doces' ? ' informacoes-copos-doces' : ''}`} aria-labelledby="titulo-informacoes-produto" onCancel={aoFechar} onClick={(event) => { if (event.target === event.currentTarget) aoFechar() }}>
     <div className={`conteudo-informacoes-produto${produto.categoria === 'Bolos' ? ' informacoes-bolo' : ''}`}>
       <button className="fechar-informacoes-produto" type="button" aria-label="Fechar informações do produto" onClick={aoFechar} autoFocus>×</button>
       {produto.imagem ? <img src={produto.imagem} alt={produto.nome} /> : <div className="imagem-informacoes-ausente" aria-hidden="true">🧁</div>}

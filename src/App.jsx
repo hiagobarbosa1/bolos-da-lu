@@ -1,17 +1,16 @@
 import { prepararBolo, chaveItemCarrinho } from './services/formatosBolos'
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import './App.css'
+import './components/ModalEncomenda.css'
 import './Encomenda.css'
-import Admin from './pages/Admin'
-import ModalEncomenda from './components/ModalEncomenda'
 import CarrosselBolos from './components/CarrosselBolos'
+import BannersInicio from './components/BannersInicio'
 import LojaFisica from './components/LojaFisica'
 import Avaliacoes from './components/Avaliacoes'
-import bannerBoloPersonalizado from './assets/bannerbolopersonalizado.png'
-import bannerBoloPersonalizadoMobile from './assets/bannermobilepersonalizado.png'
-import Auth from './components/Auth'
+import bannerBoloPersonalizado from './assets/bannerbolopersonalizado.webp'
+import bannerBoloPersonalizadoMobile from './assets/bannermobilepersonalizado.webp'
 import { perfilAtual, sair } from './services/usuariosService'
 import './Conta.css'
 import { listarProdutos } from './services/produtosService'
@@ -24,27 +23,38 @@ import './ProntaEntrega.css'
 import './Carrinho.css'
 import './AvisoCarrinho.css'
 import './ModalCategoria.css'
-import ProdutosCategoria from './components/ProdutosCategoria'
 import { prepararDocinho, tipoDocinho, quantidadesDocinhos } from './services/tiposDocinhos'
 import './AvisoConta.css'
-import MeusPedidos from './components/MeusPedidos'
-import ConfirmacaoWhatsApp from './components/ConfirmacaoWhatsApp'
 import AvisoPagamentoPendente from './components/AvisoPagamentoPendente'
+import ConfirmacaoWhatsApp from './components/ConfirmacaoWhatsApp'
 import { linkWhatsApp } from './services/whatsappService'
-import imagemBolos from './assets/bolos.png'
-import imagemDocinhos from './assets/docinhos.png'
-import imagemCopos from './assets/copo.png'
-import imagemKits from './assets/kit.png'
-import banner1 from './assets/banner1.png'
-import banner2 from './assets/banner2.png'
-import banner3 from './assets/banner3.png'
-import bannerMobile1 from './assets/bannermobile.png'
-import bannerMobile2 from './assets/bannermobile2.png'
-import bannerMobile3 from './assets/bannermobile3.png'
+import { formasPagamento } from './services/formasPagamento'
+import imagemBolos from './assets/bolos.webp'
+import imagemDocinhos from './assets/docinhos.webp'
+import imagemCopos from './assets/copo.webp'
+import imagemKits from './assets/kit.webp'
+import banner1 from './assets/banner1.webp'
+import banner2 from './assets/banner2.webp'
+import banner3 from './assets/banner3.webp'
+import bannerMobile1 from './assets/bannermobile.webp'
+import bannerMobile2 from './assets/bannermobile2.webp'
+import bannerMobile3 from './assets/bannermobile3.webp'
 import logo from './assets/logo2.png'
-import bannerProntaEntrega from './assets/bannerprontaentrega.png'
-import fotoLu from './assets/fotolu.png'
+import bannerProntaEntrega from './assets/bannerprontaentrega.webp'
+import fotoLu from './assets/fotolu.webp'
 
+function sobDemanda(carregar) {
+  const Componente = lazy(carregar)
+  return function ComponenteSobDemanda(props) {
+    return <Suspense fallback={<div className="carregando-tela" role="status">Carregando…</div>}><Componente {...props} /></Suspense>
+  }
+}
+
+const Admin = sobDemanda(() => import('./pages/Admin'))
+const Auth = sobDemanda(() => import('./components/Auth'))
+const ModalEncomenda = sobDemanda(() => import('./components/ModalEncomenda'))
+const ProdutosCategoria = sobDemanda(() => import('./components/ProdutosCategoria'))
+const MeusPedidos = sobDemanda(() => import('./components/MeusPedidos'))
 
 const categorias = [
   ['🍰', 'Bolos', 'Sabores que abraçam', 'rosa'],
@@ -136,7 +146,6 @@ function App() {
   const [carregandoFotosReferencia, setCarregandoFotosReferencia] = useState(false)
   const [erroFotosReferencia, setErroFotosReferencia] = useState('')
   const [mostrarEncomenda, setMostrarEncomenda] = useState(false)
-  const [bannerAtual, setBannerAtual] = useState(0)
   const conversaWhatsApp = linkWhatsApp('Olá, Bolos da Lu! Gostaria de tirar uma dúvida.')
 
   useEffect(() => {
@@ -200,13 +209,6 @@ function App() {
     const tempo = window.setTimeout(() => setAvisoConta(''), 3500)
     return () => window.clearTimeout(tempo)
   }, [avisoConta])
-  useEffect(() => {
-    const intervalo = window.setInterval(() => {
-      setBannerAtual((atual) => (atual + 1) % banners.length)
-    }, 3500)
-
-    return () => window.clearInterval(intervalo)
-  }, [])
 
   function incluirNoCarrinho(item, tipo, substituirItens = false) { setCarrinho((itens) => { const base = substituirItens ? itens.filter((atual) => atual.tipo === tipo) : itens; const existente = base.find((atual) => chaveItemCarrinho(atual) === chaveItemCarrinho({ ...item, tipo })); const limite = tipo === 'pronta_entrega' ? Number(item.quantidade_disponivel) : Infinity; const quantidade = Math.max(1, Number(item.quantidade) || 1); return existente ? base.map((atual) => atual === existente ? { ...atual, ...item, quantidade: item.vendaDocinhos ? quantidade : Math.min(atual.quantidade + quantidade, limite) } : atual) : limite > 0 ? [...base, { ...item, tipo, quantidade }] : base }); setCarrinhoAberto(true) }
   function adicionarAoCarrinho(item, tipo) { if (tipo === 'produto' && (item.vendaDocinhos || tipoDocinho(item)) && !quantidadesDocinhos.includes(Number(item.quantidade))) { setProdutoQuantidadePendente(item.id); setCategoriaAberta(item.categoria); return } setProdutoQuantidadePendente(null); if (tipo === 'produto') item = prepararBolo(prepararDocinho(item)); if (!usuario) { setAvisoCadastroCarrinho(true); return } if (carrinho.some((atual) => atual.tipo !== tipo)) { setDoceAConfirmar({ item, tipo }); return } incluirNoCarrinho(item, tipo) }
@@ -250,9 +252,6 @@ function App() {
     setMostrarEncomenda(false)
   }
 
-  function mudarBanner(direcao) {
-    setBannerAtual((atual) => (atual + direcao + banners.length) % banners.length)
-  }
 
   function abrirDetalhesDoce(evento, doce) {
     const area = evento.currentTarget.getBoundingClientRect()
@@ -262,7 +261,7 @@ function App() {
   }
 
   function cardDocePronta(doce, classe = '') {
-    return <article className={classe} key={doce.id} data-aos="fade-up" onClick={(evento) => abrirDetalhesDoce(evento, doce)}>{doce.imagem ? <img src={doce.imagem} alt={doce.nome}/> : <div className="doce-sem-imagem">🧁</div>}<div><h3>{doce.nome}</h3><strong>R$ {Number(doce.preco).toFixed(2)}</strong><em>● {doce.quantidade_disponivel} disponíveis</em><button className="adicionar-pronta" onClick={(evento) => { evento.stopPropagation(); adicionarAoCarrinho(doce, 'pronta_entrega') }}>🛒 Adicionar</button></div></article>
+    return <article className={classe} key={doce.id} data-aos="fade-up" onClick={(evento) => abrirDetalhesDoce(evento, doce)}>{doce.imagem ? <img src={doce.imagem} alt={doce.nome} loading="lazy" decoding="async"/> : <div className="doce-sem-imagem">🧁</div>}<div><h3>{doce.nome}</h3><strong>R$ {Number(doce.preco).toFixed(2)}</strong><em>● {doce.quantidade_disponivel} disponíveis</em><button className="adicionar-pronta" onClick={(evento) => { evento.stopPropagation(); adicionarAoCarrinho(doce, 'pronta_entrega') }}>🛒 Adicionar</button></div></article>
   }
 
   function abrirDetalhesProduto(evento, produto) {
@@ -299,7 +298,7 @@ function App() {
   return <main data-sobre-mobile={sobreMobileVisivel}>
     <header className={`topo ${menuFlutuanteVisivel ? 'menu-flutuante-visivel' : ''}`}>
       <a className="marca" href="#inicio"><img src={logo} alt="Bolos da Lu"/></a>
-      <nav className={menuMobileAberto ? 'nav-aberta' : ''}><a href="#cardapio" onClick={() => setMenuMobileAberto(false)}>Cardápio</a><a href="#sobre" onClick={abrirSobre}>Sobre nós</a><a href="#encomenda" onClick={() => setMenuMobileAberto(false)}>Encomendas</a>{usuario && <button className="link-meus-pedidos-mobile" type="button" onClick={() => { setMenuMobileAberto(false); setMostrarMeusPedidos(true) }}>Meus pedidos</button>}</nav>
+      <nav className={menuMobileAberto ? 'nav-aberta' : ''}><a href="#cardapio" onClick={() => setMenuMobileAberto(false)}>Cardápio</a><a href="#sobre" onClick={abrirSobre}>Sobre nós</a><a href="#loja-fisica" onClick={() => setMenuMobileAberto(false)}>Nosso espaço</a><a href="#encomenda" onClick={() => setMenuMobileAberto(false)}>Encomendas</a>{usuario && <button className="link-meus-pedidos-mobile" type="button" onClick={() => { setMenuMobileAberto(false); setMostrarMeusPedidos(true) }}>Meus pedidos</button>}</nav>
       <div className="acoes-topo">{usuario ? <div className="conta"><button className="meus-pedidos-topo" onClick={() => setMostrarMeusPedidos(true)}>Meus pedidos</button><span>Olá, {usuario.nome.split(' ')[0]}</span><button onClick={() => setConfirmarSaida(true)}>Sair</button></div> : <button className="botao pequeno" onClick={() => { setAuthCadastro(false); setMostrarAuth(true) }}>Entrar <b>→</b></button>}</div>
       <button className="botao-menu" type="button" onClick={() => setMenuMobileAberto((aberto) => !aberto)} aria-label="Abrir menu de navegação" aria-expanded={menuMobileAberto}><i /><i /><i /></button>
     </header>
@@ -307,13 +306,13 @@ function App() {
     {conversaWhatsApp && <a className="botao-whatsapp" href={conversaWhatsApp} target="_blank" rel="noreferrer" aria-label="Conversar com a Bolos da Lu pelo WhatsApp" title="Falar pelo WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2A9.8 9.8 0 0 0 4.1 17.55L3 22l4.55-1.08A9.98 9.98 0 1 0 12.04 2Zm5.82 13.84c-.24.67-1.18 1.23-1.92 1.39-.5.1-1.14.18-3.32-.72-2.78-1.15-4.57-3.97-4.7-4.16-.13-.18-1.12-1.49-1.12-2.84 0-1.35.7-2 1-2.28.24-.24.63-.35 1-.35h.36c.12 0 .28-.05.44.34.17.4.58 1.4.63 1.5.06.1.1.23.02.4-.07.16-.1.26-.23.39-.12.14-.26.3-.37.4-.12.12-.25.25-.11.5.14.25.63 1.03 1.35 1.67.93.82 1.7 1.08 1.95 1.2.24.12.39.1.53-.06.14-.17.6-.7.76-.94.16-.25.33-.2.55-.12.23.08 1.43.67 1.68.8.25.12.42.18.48.28.06.1.06.57-.18 1.24Z" /></svg><span>WhatsApp</span></a>}
 
     <section className="hero hero-banners" id="inicio">
-      <div className="carrossel-banner" aria-label="Carrossel de banners da loja"><div className="carrossel-track" style={{ transform: `translateX(-${bannerAtual * 100}%)` }}>{banners.map((banner) => <div className="carrossel-slide" key={banner.src}><picture><source media="(max-width: 760px)" srcSet={banner.mobileSrc}/><img src={banner.src} alt={banner.alt}/></picture></div>)}</div><button className="carrossel-controle anterior" type="button" onClick={() => mudarBanner(-1)} aria-label="Banner anterior">‹</button><button className="carrossel-controle proximo" type="button" onClick={() => mudarBanner(1)} aria-label="Próximo banner">›</button><div className="carrossel-dots" aria-label="Indicadores do carrossel">{banners.map((banner, index) => <button key={banner.src} type="button" className={`carrossel-dot ${index === bannerAtual ? 'ativo' : ''}`} onClick={() => setBannerAtual(index)} aria-label={`Ir para o banner ${index + 1}`}/>)}</div></div><a className="indicador-rolagem" href="#pronta-entrega" aria-label="Ver doces à pronta entrega"><span>Role para ver</span><b>↓</b></a>
+      <BannersInicio banners={banners} />
     </section>
 
     <section className="pronta-entrega pronta-entrega-banner" id="pronta-entrega" style={{ backgroundImage: `url(${bannerProntaEntrega})` }}><div className="conteudo-pronta"><div className="cabecalho-pronta" data-aos="fade-right"><p className="sobretitulo">disponível hoje</p><h2><span>Doces à</span><i>pronta entrega</i></h2><p>Escolha suas delícias e aproveite enquanto ainda temos por aqui. ♥</p></div><div className="grade-pronta">{docesProntaEntrega.slice(0, 4).map((doce) => cardDocePronta(doce))}</div>{docesProntaEntrega.length > 0 && <div className="acoes-pronta"><button className="ver-todos-pronta" onClick={() => setMostrarTodosPronta(true)}>Ver todos os produtos <b>→</b></button></div>}{docesProntaEntrega.length === 0 && <p className="sem-doces-pronta">Nenhum doce à pronta entrega disponível neste momento.</p>}</div></section>
 
 
-    <section className="secao cardapio-novo" id="cardapio"><div className="centralizado"><p className="sobretitulo">nosso cardápio</p><h2>Qual delícia combina<br />com o seu momento?</h2></div><div className="categorias categorias-imagem">{categoriasCardapio.map(({ nome, texto, imagem }) => { return <button className={`categoria categoria-foto ${categoriaSelecionada === nome ? 'categoria-ativa' : ''}`} onClick={() => { setProdutoQuantidadePendente(null); setCategoriaAberta(nome) }} key={nome} aria-label={`Ver produtos da categoria ${nome}`}><img src={imagem} alt="" /><div><h3>{nome}</h3><small>{texto}</small></div><b>Ver produtos →</b></button> })}</div></section>
+    <section className="secao cardapio-novo" id="cardapio"><div className="centralizado"><p className="sobretitulo">nosso cardápio</p><h2>Qual delícia combina<br />com o seu momento?</h2></div><div className="categorias categorias-imagem">{categoriasCardapio.map(({ nome, texto, imagem }) => { return <button className={`categoria categoria-foto ${categoriaSelecionada === nome ? 'categoria-ativa' : ''}`} onClick={() => { setProdutoQuantidadePendente(null); setCategoriaAberta(nome) }} key={nome} aria-label={`Ver produtos da categoria ${nome}`}><img src={imagem} alt="" loading="lazy" decoding="async" /><div><h3>{nome}</h3><small>{texto}</small></div><b>Ver produtos →</b></button> })}</div></section>
 
     <section className="banner-encomenda" id="encomenda" aria-label="Bolos personalizados">
       <picture><source media="(max-width: 760px)" srcSet={bannerBoloPersonalizadoMobile}/><img src={bannerBoloPersonalizado} alt="Bolos personalizados: seu momento merece um bolo especial. Bolos feitos para transformar cada comemoração em uma lembrança deliciosa." width="1920" height="560" loading="lazy" /></picture>
@@ -329,13 +328,31 @@ function App() {
         <div className="referencia"><div className="referencia-texto"><b>Foto de referência <small>(opcional)</small></b><span>Envie uma inspiração ou selecione um bolo da nossa galeria.</span></div><div className="acoes-imagem"><button className="galeria-botao" type="button" onClick={abrirGaleriaReferencia}>Ver galeria de bolos</button><label className="upload"><input type="file" accept="image/*" onChange={selecionarReferencia} /> Enviar imagem</label></div>{referencia && <div className="preview"><img src={referencia.url} alt="Referência enviada" /><small>{referencia.nome}</small><button type="button" onClick={() => setReferencia(null)}>×</button></div>}</div>
         <button className="botao enviar" type="submit">Adicionar ao carrinho</button>
       </form>
-      {galeriaReferenciaAberta && <div className="galeria-referencia-fundo" onMouseDown={() => setGaleriaReferenciaAberta(false)}><section className="galeria-referencia" role="dialog" aria-modal="true" aria-label="Escolher foto de referência" onMouseDown={(event) => event.stopPropagation()}><header><div><p className="sobretitulo">INSPIRAÇÕES</p><h3>Escolha uma referência</h3></div><button type="button" onClick={() => setGaleriaReferenciaAberta(false)} aria-label="Fechar galeria">×</button></header>{carregandoFotosReferencia && <p>Carregando galeria...</p>}{erroFotosReferencia && <p className="galeria-referencia-erro">{erroFotosReferencia}</p>}{!carregandoFotosReferencia && !erroFotosReferencia && <div className="galeria-referencia-grade">{fotosReferencia.map((foto) => <button key={foto.id} type="button" onClick={() => selecionarFotoGaleria(foto)}><img src={foto.imagem} alt="Selecionar esta referência de bolo" /></button>)}</div>}{!carregandoFotosReferencia && !erroFotosReferencia && fotosReferencia.length === 0 && <p>A galeria ainda não possui fotos disponíveis.</p>}</section></div>}
+      {galeriaReferenciaAberta && <div className="galeria-referencia-fundo" onMouseDown={() => setGaleriaReferenciaAberta(false)}><section className="galeria-referencia" role="dialog" aria-modal="true" aria-label="Escolher foto de referência" onMouseDown={(event) => event.stopPropagation()}><header><div><p className="sobretitulo">INSPIRAÇÕES</p><h3>Escolha uma referência</h3></div><button type="button" onClick={() => setGaleriaReferenciaAberta(false)} aria-label="Fechar galeria">×</button></header>{carregandoFotosReferencia && <p>Carregando galeria...</p>}{erroFotosReferencia && <p className="galeria-referencia-erro">{erroFotosReferencia}</p>}{!carregandoFotosReferencia && !erroFotosReferencia && <div className="galeria-referencia-grade">{fotosReferencia.map((foto) => <button key={foto.id} type="button" onClick={() => selecionarFotoGaleria(foto)}><img loading="lazy" decoding="async" src={foto.imagem} alt="Selecionar esta referência de bolo" /></button>)}</div>}{!carregandoFotosReferencia && !erroFotosReferencia && fotosReferencia.length === 0 && <p>A galeria ainda não possui fotos disponíveis.</p>}</section></div>}
     </ModalEncomenda>}
 
-    <section className="sobre" id="sobre"><div className="sobre-conteudo"><p className="sobretitulo">um toque de carinho</p><h2>Doces feitos para<br /><i>celebrar</i> você.</h2><p>Na Bolos da Lu, cada receita é preparada em pequenas fornadas, com ingredientes selecionados e cuidado em cada detalhe. Criamos bolos, docinhos, copos e kits personalizados para festas, presentes e momentos especiais. Faça sua encomenda e conte para a gente como você imagina essa delícia.</p><div className="sobre-detalhes"><b aria-hidden="true">♡</b><strong>100%</strong><span>feito com carinho<br />em cada receita</span></div></div><div className="sobre-imagem"><i className="forma-amarela"/><i className="forma-rosa"/><img src={fotoLu} alt="Lu, confeiteira da Bolos da Lu, com um bolo"/></div></section>
+    <section className="sobre" id="sobre"><div className="sobre-conteudo"><p className="sobretitulo">um toque de carinho</p><h2>Doces feitos para<br /><i>celebrar</i> você.</h2><p>Na Bolos da Lu, cada receita é preparada em pequenas fornadas, com ingredientes selecionados e cuidado em cada detalhe. Criamos bolos, docinhos, copos e kits personalizados para festas, presentes e momentos especiais. Faça sua encomenda e conte para a gente como você imagina essa delícia.</p><div className="sobre-detalhes"><b aria-hidden="true">♡</b><strong>100%</strong><span>feito com carinho<br />em cada receita</span></div></div><div className="sobre-imagem"><i className="forma-amarela"/><i className="forma-rosa"/><img loading="lazy" decoding="async" src={fotoLu} alt="Lu, confeiteira da Bolos da Lu, com um bolo"/></div></section>
     <LojaFisica />
     <Avaliacoes usuario={usuario} aoEntrar={() => { setAuthCadastro(false); setMostrarAuth(true) }} />
-    <footer className="rodape-site">© 2026 Bolos da Lu <span>•</span> Feito com muito amor ♥ {usuario?.papel === 'admin' && <><span>•</span><a href="#admin">Área administrativa</a></>}</footer>
+    <footer className="rodape-site"><div className="rodape-conteudo">
+      <section className="rodape-marca" aria-label="Bolos da Lu">
+        <a className="rodape-logo" href="#inicio" aria-label="Bolos da Lu — início"><img src={logo} alt="Bolos da Lu" /></a>
+        <p>Doces momentos em<br />cada fatia.</p>
+        <div className="rodape-redes">
+          <a className="rodape-instagram" href="https://www.instagram.com/bolosdalu.ma/" target="_blank" rel="noopener noreferrer" aria-label="Acompanhe Bolos da Lu no Instagram (abre em nova aba)">
+            <span className="rodape-instagram-icone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle className="instagram-ponto" cx="18" cy="6" r="1"/></svg></span><span>@bolosdalu.ma</span>
+          </a>
+          <a className="rodape-facebook" href="https://www.facebook.com/share/19YZP9URim/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" aria-label="Acompanhe Bolos da Lu no Facebook (abre em nova aba)"><span className="rodape-facebook-icone" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13.4 21v-8.2h2.8l.4-3.2h-3.2v-2c0-.9.3-1.5 1.6-1.5h1.7V3.2c-.3 0-1.4-.2-2.6-.2-2.6 0-4.4 1.6-4.4 4.6v2.1H7v3.2h2.7V21h3.7Z"/></svg></span><span>Facebook</span></a>
+        </div>
+      </section>
+      <nav className="rodape-navegacao" aria-label="Navegação do rodapé"><h2>Navegação</h2><a href="#inicio">Início</a><a href="#cardapio">Produtos</a><a href="#sobre">Sobre nós</a><a href="#loja-fisica">Nosso espaço</a><a href="#loja-fisica">Contato</a></nav>
+      <section className="rodape-contato"><h2>Contato</h2>
+        {conversaWhatsApp ? <a className="rodape-contato-item" href={conversaWhatsApp} target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.4L3 20l.9-4.7a8.5 8.5 0 1 1 16.6-3.6Z"/><path d="M8.2 7.8c.3-.4.5-.4.8-.4h.4c.2 0 .3.1.4.4l.8 1.8c.1.2.1.4 0 .5l-.6.8c-.2.2-.2.4 0 .6.5.8 1.2 1.4 2 1.8.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.7.8c.2.1.3.2.3.4 0 .4-.2 1.2-.7 1.6-.5.5-1.2.7-2 .5-1.1-.3-2.5-.9-3.9-2.2-1.2-1.1-2-2.6-2.2-3.6-.2-.8 0-1.5.5-2Z"/></svg><span><b>WhatsApp</b><small>Atendimento e pedidos</small></span></a> : <a className="rodape-contato-item" href="#loja-fisica"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><span><b>Visite nossa loja</b><small>Monte Alto · SP</small></span></a>}
+        <a className="rodape-contato-item" href="#loja-fisica"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg><span><b>Rua das Flores, 142</b><small>Centro · Monte Alto, SP</small></span></a>
+      </section>
+      <section className="rodape-pagamentos"><h2>Formas de pagamento</h2><div>{formasPagamento.map((forma) => <span className={`rodape-pagamento rodape-pagamento-${forma.toLowerCase()}`} key={forma}><i aria-hidden="true">{forma === 'Pix' ? <svg viewBox="0 0 24 24"><path d="M9 3.8 12 1l3 2.8 4.4 4.4L22.2 12l-2.8 3.8L15 20.2l-3 2.8-3-2.8-4.4-4.4L1.8 12l2.8-3.8L9 3.8Z"/><path d="m7.4 12 4.6-4.6 4.6 4.6-4.6 4.6L7.4 12Z"/></svg> : <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M6 6V4h12v2M6 19v2h12v-2"/><circle cx="12" cy="12.5" r="3"/></svg>}</i>{forma}</span>)}</div></section>
+      <div className="rodape-assinatura">© 2026 Bolos da Lu <span>•</span> Feito com muito amor ♥ {usuario?.papel === 'admin' && <><span>•</span><a href="#admin">Área administrativa</a></>}</div>
+    </div></footer>
     {avisoConta && <div className="aviso-conta-fundo"><div className="aviso-conta" role="status"><span className="icone-aviso-conta">♥</span><div><small>CONTA ACESSADA</small><b>{avisoConta}</b></div><button onClick={() => setAvisoConta('')} aria-label="Fechar aviso">×</button></div></div>}
     {mostrarMeusPedidos && usuario && <MeusPedidos usuario={usuario} aoFechar={() => setMostrarMeusPedidos(false)} />}
     {mostrarAuth && <Auth iniciarCadastro={authCadastro} onClose={() => setMostrarAuth(false)} onAutenticado={async () => { await carregarPerfil(); setMostrarAuth(false); setAvisoConta('Você entrou na sua conta com sucesso! ♥') }} />}

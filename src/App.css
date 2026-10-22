@@ -966,3 +966,95 @@ h2 {
 
 .rodape-site{background:#f7eadc}.rodape-site a{display:inline-block;padding:9px 14px;border:1px solid #d9b7a4;border-radius:8px;color:#75432e;font-weight:700;text-decoration:none}.rodape-site a:hover{background:#eed9c7}.rodape-site a:focus-visible{outline:2px solid #bd5967;outline-offset:3px}
 @media(max-width:760px){.rodape-site{padding-bottom:96px}.rodape-site a{margin-top:10px}}
+
+.rodape-site { padding: 32px max(24px, 7vw) 24px; background: #f7eadc; text-align: left }
+.rodape-conteudo { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 18px 36px; max-width: 1160px; margin: 0 auto }
+.rodape-site .rodape-instagram { display: inline-flex; align-items: center; gap: 11px; width: max-content; max-width: 100%; padding: 10px 13px; border: 1px solid #e4c9ba; border-radius: 14px; background: #fffaf5; color: #4b2a20; text-decoration: none; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease }
+.rodape-site .rodape-instagram:hover { transform: translateY(-2px); border-color: #d98a98; background: #fffaf5; box-shadow: 0 8px 18px #58352a12 }
+.rodape-instagram-icone { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 11px; background: #f8e1df; color: #b84e60 }
+.rodape-instagram-icone svg { display: block; width: 22px; height: 22px; fill: none; stroke: #fffaf5; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+.rodape-instagram-icone svg>* { fill: none; stroke: #fffaf5; stroke-width: 1.8 }
+.rodape-instagram-icone .instagram-ponto { fill: currentColor; stroke: none }
+.rodape-instagram-texto b, .rodape-instagram-texto small { display: block }
+.rodape-instagram-texto b { font: 700 13px 'DM Sans', sans-serif }
+.rodape-instagram-texto small { margin-top: 3px; color: #89685e; font-size: 11px }
+.rodape-link-externo { margin-left: 4px; color: #b84e60; font-size: 16px }
+.rodape-links { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 8px }
+.rodape-site .rodape-links a { padding: 8px 10px; border: 0; border-radius: 8px; color: #75432e; font-size: 12px; font-weight: 600; text-decoration: none }
+.rodape-site .rodape-links a:hover { background: #eed9c7 }
+.rodape-assinatura { grid-column: 1 / -1; padding-top: 15px; border-top: 1px solid #e8d5c6; color: #86685f; text-align: center; font-size: 11px }
+.rodape-site .rodape-assinatura a { padding: 0; border: 0; border-radius: 0; background: transparent; color: #75432e; text-decoration: underline; text-underline-offset: 3px }
+.rodape-site .rodape-assinatura a:hover { background: transparent }
+@media(max-width:760px) {
+    .rodape-site { padding: 26px 16px 96px; text-align: center }
+    .rodape-conteudo { grid-template-columns: 1fr; justify-items: center; gap: 12px }
+    .rodape-links { justify-content: center; gap: 2px }
+    .rodape-assinatura { width: 100%; margin-top: 4px }
+}
+
+.rodape-site { padding: 48px max(28px, 7vw) 22px; background: #f7eee2; color: #76503e; text-align: left }
+.rodape-conteudo { grid-template-columns: minmax(220px, 1.1fr) minmax(120px, .65fr) minmax(220px, 1fr) minmax(240px, 1.1fr); align-items: start; gap: 28px; max-width: 1480px }
+.rodape-conteudo>section, .rodape-navegacao { min-width: 0; min-height: 170px }
+.rodape-navegacao, .rodape-contato, .rodape-pagamentos { padding-left: 30px; border-left: 1px solid #e6d2c1 }
+.rodape-marca { display: flex; flex-direction: column; align-items: center; text-align: center }
+.rodape-site .rodape-logo { display: inline-flex; align-items: center; justify-content: center; width: 100%; max-width: 300px; padding: 0; border: 0; background: transparent }
+.rodape-site .rodape-logo:hover { background: transparent }
+.rodape-logo img { display: block; width: min(100%, 270px); height: 70px; object-fit: contain }
+.rodape-marca>p { margin: 12px 0 15px; color: #8a6a58; font: 16px/1.45 'DM Sans', sans-serif }
+.rodape-redes { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px }
+.rodape-site .rodape-instagram { display: inline-flex; align-items: center; gap: 11px; width: max-content; max-width: 100%; padding: 0; border: 0; background: transparent; color: #714934; font-size: 14px; text-decoration: none }
+.rodape-site .rodape-instagram:hover { transform: translateY(-1px); border: 0; background: transparent; box-shadow: none; color: #a74a5b }
+.rodape-instagram-icone { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 50%; background: #e97483; color: #fffaf5 }
+.rodape-instagram-icone svg { display: block; width: 22px; height: 22px; fill: none; stroke: #fffaf5; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+.rodape-instagram-icone svg rect, .rodape-instagram-icone svg circle { fill: none!important; stroke: #fffaf5!important; stroke-width: 1.8 }
+.rodape-instagram-icone .instagram-ponto { fill: currentColor; stroke: none }
+.rodape-site .rodape-facebook { display: inline-flex; align-items: center; gap: 8px; padding: 0; border: 0; background: transparent; color: #714934; font-size: 13px; text-decoration: none }
+.rodape-site .rodape-facebook:hover { background: transparent; color: #a74a5b }
+.rodape-facebook-icone { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 50%; background: #7899c8; color: #fff }
+.rodape-facebook-icone svg { display: block; width: 21px; height: 21px; fill: currentColor }
+.rodape-navegacao h2, .rodape-contato h2, .rodape-pagamentos h2 { margin: 4px 0 20px; color: #704832; font: 800 11px 'DM Sans', sans-serif; letter-spacing: 2.7px; text-transform: uppercase }
+.rodape-navegacao { display: flex; flex-direction: column; align-items: flex-start; gap: 0 }
+.rodape-site .rodape-navegacao a { display: block; margin: 0 0 9px; padding: 0; border: 0; background: transparent; color: #806657; font-size: 14px; font-weight: 500; line-height: 1.4; text-decoration: none }
+.rodape-site .rodape-navegacao a:hover { background: transparent; color: #b84e60; text-decoration: underline; text-underline-offset: 4px }
+.rodape-contato { display: flex; flex-direction: column; gap: 17px }
+.rodape-contato h2 { margin-bottom: 2px }
+.rodape-site .rodape-contato-item { display: flex; align-items: flex-start; gap: 12px; padding: 0; border: 0; background: transparent; color: #704832; text-decoration: none }
+.rodape-site .rodape-contato-item:hover { background: transparent; color: #a74a5b }
+.rodape-contato-item>svg { flex: 0 0 25px; width: 25px; height: 25px; margin-top: 1px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round }
+.rodape-contato-item b, .rodape-contato-item small { display: block }
+.rodape-contato-item b { color: #dc6372; font-size: 13px; font-weight: 600 }
+.rodape-contato-item small { margin-top: 4px; color: #907666; font-size: 11px }
+.rodape-pagamentos>div { display: flex; flex-wrap: wrap; gap: 18px }
+.rodape-pagamento { display: inline-flex; align-items: center; gap: 10px; color: #806657; font-size: 14px }
+.rodape-pagamento { color: #dc6372 }
+.rodape-pagamento i { display: grid; width: 48px; height: 48px; place-items: center; border-radius: 50%; background: #f4dfae; color: #865634; font-style: normal }
+.rodape-pagamento-pix i { background: #cce8df; color: #0a9f91 }
+.rodape-pagamento svg { width: 25px; height: 25px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round }
+.rodape-pagamento-pix svg path:first-child { fill: currentColor; stroke: none }
+.rodape-pagamento-pix svg path:last-child { fill: #cce8df; stroke: none }
+.rodape-assinatura { grid-column: 1 / -1; margin-top: 7px; padding-top: 15px; border-top: 1px solid #e6d2c1; color: #927868; text-align: center; font-size: 11px }
+.rodape-site .rodape-assinatura a { display: inline; margin: 0; padding: 0; border: 0; background: transparent; color: #75432e; text-decoration: underline; text-underline-offset: 3px }
+@media(max-width:1000px) {
+    .rodape-site { padding: 38px 28px 22px }
+    .rodape-conteudo { grid-template-columns: minmax(190px, 1fr) minmax(140px, .7fr) minmax(220px, 1.2fr); gap: 24px }
+    .rodape-pagamentos { grid-column: 2 / -1; min-height: auto!important; padding-top: 18px; border-top: 1px solid #e6d2c1 }
+    .rodape-navegacao { grid-column: 2 }
+}
+@media(max-width:600px) {
+    .rodape-site { padding: 34px 22px 96px }
+    .rodape-conteudo { grid-template-columns: 1fr 1fr; gap: 24px 12px }
+    .rodape-marca { grid-column: 1 / -1; padding-bottom: 18px; border-bottom: 1px solid #e6d2c1 }
+    .rodape-logo img { height: 58px }
+    .rodape-navegacao { grid-column: 1; min-height: auto; padding: 0; border: 0 }
+    .rodape-navegacao h2, .rodape-contato h2, .rodape-pagamentos h2 { margin-bottom: 13px; font-size: 10px; letter-spacing: 1.8px }
+    .rodape-site .rodape-navegacao a { font-size: 12px }
+    .rodape-contato { grid-column: 2; min-height: auto; gap: 13px; padding: 0; border: 0 }
+    .rodape-site .rodape-contato-item { gap: 8px }
+    .rodape-contato-item>svg { flex-basis: 20px; width: 20px; height: 20px }
+    .rodape-contato-item b { font-size: 11px }
+    .rodape-contato-item small { font-size: 10px; line-height: 1.35 }
+    .rodape-pagamentos { grid-column: 1 / -1; min-height: auto!important; padding: 18px 0 0; border-top: 1px solid #e6d2c1; border-left: 0 }
+    .rodape-pagamentos>div { gap: 20px }
+    .rodape-pagamento i { width: 40px; height: 40px }
+    .rodape-assinatura { margin-top: 0; line-height: 1.7 }
+}

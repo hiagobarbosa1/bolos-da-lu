@@ -112,7 +112,7 @@ export default function Avaliacoes({ usuario, aoEntrar }) {
   }, [modoMobile, itens.length, totalPaginas])
   const itensDoSlide = modoMobile ? itens : itens.slice(slide * itensPorPagina, (slide + 1) * itensPorPagina)
   return <section className="avaliacoes" aria-labelledby="avaliacoes-titulo">
-    <div className="avaliacoes-decoracao" aria-hidden="true"><i className="avaliacoes-mancha rosa" /><svg viewBox="0 0 200 150" fill="none"><path d="M30 80C-5 35 30 25 42 57C50 10 90 23 60 70L43 95Z" /><path d="M100 110q25-50 40-35t-40 35m-3-10q-20-50-32-30t32 30m12 27 50-2" /></svg></div>
+    <div className="avaliacoes-decoracao" aria-hidden="true"><i className="avaliacoes-mancha rosa" /></div>
     <div className="avaliacoes-conteudo">
       <div className="avaliacoes-cabecalho">
         <div><p className="sobretitulo">COMENTÁRIOS</p><h2 id="avaliacoes-titulo">Quem prova, se apaixona <em>pelos nossos doces</em></h2><div className="avaliacoes-resumo"><strong><span aria-hidden="true">★</span> {media}</strong><i /><div><b>de {itens.length} avaliações</b><small>Clientes que já viveram essa doce experiência</small></div></div></div>

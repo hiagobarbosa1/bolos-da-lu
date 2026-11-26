@@ -1042,21 +1042,21 @@ h2 {
 }
 @media(max-width:600px) {
     .rodape-site { padding: 34px 22px 96px }
-    .rodape-conteudo { width: min(100%, 390px); grid-template-columns: 1fr 1fr; gap: 26px 14px }
+    .rodape-conteudo { width: min(100%, 390px); grid-template-columns: 1fr 1fr; justify-items: stretch; gap: 26px 14px }
     .rodape-marca { grid-column: 1 / -1; padding-bottom: 22px; border-bottom: 1px solid #e6d2c1 }
     .rodape-logo img { height: 58px }
-    .rodape-navegacao { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; column-gap: 10px; min-height: auto; padding: 0; border: 0; text-align: left }
+    .rodape-conteudo>nav.rodape-navegacao { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; column-gap: 10px; min-height: 0; padding: 0; border: 0; text-align: left }
     .rodape-navegacao h2, .rodape-contato h2, .rodape-pagamentos h2 { margin-bottom: 13px; font-size: 10px; letter-spacing: 1.8px }
     .rodape-navegacao h2 { grid-column: 1 / -1 }
     .rodape-site .rodape-navegacao a { margin: 0; padding: 10px 12px; border-radius: 9px; background: #fffaf5; font-size: 12px }
     .rodape-site .rodape-navegacao a:hover { background: #fffaf5 }
-    .rodape-contato { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; align-items: start; column-gap: 14px; row-gap: 13px; min-height: auto; padding: 0; border: 0 }
+    .rodape-conteudo>section.rodape-contato { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; align-items: start; column-gap: 14px; row-gap: 13px; min-height: 0; padding: 0; border: 0 }
     .rodape-contato h2 { grid-column: 1 / -1 }
     .rodape-site .rodape-contato-item { gap: 8px }
     .rodape-contato-item>svg { flex-basis: 20px; width: 20px; height: 20px }
     .rodape-contato-item b { font-size: 11px }
     .rodape-contato-item small { font-size: 10px; line-height: 1.35 }
-    .rodape-pagamentos { grid-column: 1 / -1; min-height: auto!important; padding: 18px 0 0; border-top: 1px solid #e6d2c1; border-left: 0; text-align: center }
+    .rodape-conteudo>section.rodape-pagamentos { grid-column: 1 / -1; min-height: 0!important; padding: 18px 0 0; border-top: 1px solid #e6d2c1; border-left: 0; text-align: center }
     .rodape-pagamentos>div { justify-content: center; gap: 24px }
     .rodape-pagamento i { width: 40px; height: 40px }
     .rodape-assinatura { margin-top: 0; line-height: 1.7 }

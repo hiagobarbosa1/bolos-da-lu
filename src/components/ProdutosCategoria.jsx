@@ -6,6 +6,16 @@ import { selecionarBolo } from '../services/formatosBolos'
 import SeletorFormatoBolo from './SeletorFormatoBolo'
 
 const moeda = (valor) => Number(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+const saboresBolo = ['Prestígio', 'Bombom de morango', 'Doce de leite com gotas', 'Maracujá trufado', 'Choconinho', 'Dois amores', 'Dois amores com bombom', 'Leite Ninho', 'Leite Ninho com morango', 'Leite Ninho com abacaxi', 'Leite Ninho com Nutella', 'Doce de leite', 'Doce de leite com morango', 'Doce de leite com nozes', 'Doce de leite com ameixa', 'Torta de abacaxi']
+
+function SeletorSaborKit({ valor, aoAlterar }) {
+  return <label className="seletor-sabor-kit">Sabor do bolo
+    <select value={valor || ''} onChange={(event) => aoAlterar(event.target.value)}>
+      <option value="" disabled>Escolha o sabor</option>
+      {saboresBolo.map((sabor) => <option key={sabor} value={sabor}>{sabor}</option>)}
+    </select>
+  </label>
+}
 
 function SeletorQuantidade({ produto, quantidade, aoQuantidade, erro, compacto = false }) {
   return <label className="quantidade-docinhos">Quantidade
@@ -18,7 +28,7 @@ function SeletorQuantidade({ produto, quantidade, aoQuantidade, erro, compacto =
   </label>
 }
 
-function InformacoesProduto({ produto, origem, quantidade, aoQuantidade, erro, aoFechar, aoAdicionar, aoFormato, aoTamanho }) {
+function InformacoesProduto({ produto, origem, quantidade, aoQuantidade, erro, aoFechar, aoAdicionar, aoFormato, aoTamanho, saborKit, aoSaborKit }) {
   const dialogo = useRef(null)
   const tipo = tipoDocinho(produto)
 
@@ -52,9 +62,10 @@ function InformacoesProduto({ produto, origem, quantidade, aoQuantidade, erro, a
       {produto.descricao && <p className="descricao-informacoes-produto">{produto.descricao}</p>}
       <strong className="preco-informacoes-produto">{moeda(produto.preco)}{tipo && ' / cento'}</strong>
       {produto.categoria === 'Bolos' && <><SeletorFormatoBolo valor={produto.formato} aoAlterar={aoFormato} /><SeletorTamanhoBolo produto={produto} aoAlterar={aoTamanho} detalhado /></>}
+      {produto.categoria === 'Kits' && <SeletorSaborKit valor={saborKit} aoAlterar={aoSaborKit} />}
       {tipo && <SeletorQuantidade produto={produto} quantidade={quantidade} aoQuantidade={aoQuantidade} erro={erro} />}
       {(!tipo || quantidade) && <div className="total-informacoes-produto"><span>Total</span><strong>{moeda(tipo ? Number(produto.preco) * quantidade / 100 : produto.preco)}</strong></div>}
-      <button type="button" className="adicionar-informacoes-produto" disabled={produto.categoria === 'Bolos' && !produto.tamanho} onClick={(event) => { if (aoAdicionar(produto, event)) aoFechar() }}>{produto.categoria === 'Bolos' && !produto.tamanho ? 'Selecione o tamanho' : 'Adicionar ao carrinho +'}</button>
+      <button type="button" className="adicionar-informacoes-produto" disabled={(produto.categoria === 'Bolos' && !produto.tamanho) || (produto.categoria === 'Kits' && !saborKit)} onClick={(event) => { if (aoAdicionar(produto.categoria === 'Kits' ? { ...produto, sabor: saborKit } : produto, event)) aoFechar() }}>{produto.categoria === 'Bolos' && !produto.tamanho ? 'Selecione o tamanho' : produto.categoria === 'Kits' && !saborKit ? 'Escolha o sabor' : 'Adicionar ao carrinho +'}</button>
     </div>
   </dialog>, document.body)
 }
@@ -63,6 +74,7 @@ export default function ProdutosCategoria({ categoria, produtos, aoAdicionar, pr
   const [quantidades, setQuantidades] = useState({})
   const [formatos, setFormatos] = useState({})
   const [tamanhos, setTamanhos] = useState({})
+  const [saboresKits, setSaboresKits] = useState({})
   const [erros, setErros] = useState(() => produtoQuantidadePendente ? { [produtoQuantidadePendente]: true } : {})
   const [selecionado, setSelecionado] = useState(null)
   const doces = ['Docinhos', 'Doces'].includes(categoria)
@@ -77,10 +89,18 @@ export default function ProdutosCategoria({ categoria, produtos, aoAdicionar, pr
     setTamanhos((atual) => ({ ...atual, [produto.id]: tamanho }))
   }
 
+  function escolherSaborKit(produto, sabor) {
+    setSaboresKits((atual) => ({ ...atual, [produto.id]: sabor }))
+  }
+
   function adicionar(produto, event) {
     const tipo = tipoDocinho(produto)
     const quantidade = quantidades[produto.id]
     if (produto.categoria === 'Bolos' && !produto.tamanho) return false
+    if (produto.categoria === 'Kits' && !produto.sabor) {
+      event.currentTarget.parentElement.querySelector('.seletor-sabor-kit select')?.focus()
+      return false
+    }
     if (tipo && !quantidadesDocinhos.includes(quantidade)) {
       setErros((atual) => ({ ...atual, [produto.id]: true }))
       event.currentTarget.parentElement.querySelector('select')?.focus()
@@ -99,20 +119,21 @@ export default function ProdutosCategoria({ categoria, produtos, aoAdicionar, pr
       <div className="foto-produto-categoria">{produto.imagem ? <img src={produto.imagem} alt={produto.nome} /> : <span>🧁</span>}</div>
       <h3>{produto.nome}</h3>
       {!tipoDocinho(produto) && <strong>{moeda(produto.preco)}</strong>}
+      {produto.categoria === 'Kits' && <SeletorSaborKit valor={saboresKits[produto.id]} aoAlterar={(valor) => escolherSaborKit(produto, valor)} />}
       <button className="link-informacoes-produto" type="button" aria-haspopup="dialog" aria-label={`Ver informações do produto: ${produto.nome}`} onClick={(event) => setSelecionado({ produto, origem: event.currentTarget.closest('article') })}><span className="detalhes-texto-completo">Ver informações do produto</span>{produto.categoria === 'Bolos' && <span className="detalhes-bolo-mobile">Ver detalhes <span aria-hidden="true">›</span></span>}</button>
       {produto.categoria === 'Bolos' && <SeletorFormatoBolo valor={formato} aoAlterar={(valor) => setFormatos((atual) => ({ ...atual, [produto.id]: valor }))} />}
       {produto.categoria === 'Bolos' && <SeletorTamanhoBolo produto={produto} aoAlterar={(valor) => escolherTamanho(produto, valor)} />}
       {produto.categoria === 'Bolos' && <button className="selecionar-tamanho-mobile" type="button" aria-haspopup="dialog" aria-label={`Selecionar tamanho: ${produto.nome}`} onClick={(event) => setSelecionado({ produto, origem: event.currentTarget.closest('article') })}>Selecionar tamanho<svg aria-hidden="true" width="18" height="20" viewBox="0 0 24 26" fill="none" stroke="currentColor" strokeWidth="1.7"><rect x="4" y="8" width="16" height="16" rx="3"/><path d="M8 12V6a4 4 0 0 1 8 0v6"/></svg></button>}
       {tipoDocinho(produto) && <SeletorQuantidade compacto produto={produto} quantidade={quantidades[produto.id]} aoQuantidade={(quantidade) => escolherQuantidade(produto, quantidade)} erro={erros[produto.id]} />}
-      <button className="adicionar-produto-categoria" type="button" disabled={produto.categoria === 'Bolos' && !produto.tamanho} onClick={(event) => adicionar(produto, event)}><span className="adicionar-texto-desktop">{produto.categoria === 'Bolos' && !produto.tamanho ? 'Selecione o tamanho' : 'Adicionar ao carrinho +'}</span><span className="adicionar-texto-mobile">{produto.categoria === 'Bolos' && !produto.tamanho ? 'Selecione o tamanho' : 'Adicionar +'}</span></button>
+      <button className="adicionar-produto-categoria" type="button" disabled={(produto.categoria === 'Bolos' && !produto.tamanho) || (produto.categoria === 'Kits' && !saboresKits[produto.id])} onClick={(event) => adicionar(produto.categoria === 'Kits' ? { ...produto, sabor: saboresKits[produto.id] } : produto, event)}><span className="adicionar-texto-desktop">{produto.categoria === 'Bolos' && !produto.tamanho ? 'Selecione o tamanho' : produto.categoria === 'Kits' && !saboresKits[produto.id] ? 'Escolha o sabor' : 'Adicionar ao carrinho +'}</span><span className="adicionar-texto-mobile">{produto.categoria === 'Bolos' && !produto.tamanho ? 'Selecione o tamanho' : produto.categoria === 'Kits' && !saboresKits[produto.id] ? 'Escolha o sabor' : 'Adicionar +'}</span></button>
     </article>})}</div>
   }
 
   const originalSelecionado = selecionado && itens.find((produto) => produto.id === selecionado.produto.id)
   const formatoSelecionado = selecionado && (formatos[selecionado.produto.id] || 'Redondo')
   const tamanhoSelecionado = selecionado && tamanhos[selecionado.produto.id]
-  const produtoSelecionado = originalSelecionado?.categoria === 'Bolos' ? { ...selecionarBolo(originalSelecionado, formatoSelecionado, tamanhoSelecionado || 'P'), tamanho: tamanhoSelecionado } : selecionado?.produto
-  const painel = selecionado && <InformacoesProduto produto={produtoSelecionado} origem={selecionado.origem} quantidade={quantidades[selecionado.produto.id]} aoQuantidade={(quantidade) => escolherQuantidade(selecionado.produto, quantidade)} erro={erros[selecionado.produto.id]} aoFechar={() => setSelecionado(null)} aoAdicionar={adicionar} aoTamanho={(valor) => escolherTamanho(selecionado.produto, valor)} aoFormato={(valor) => setFormatos((atual) => ({ ...atual, [selecionado.produto.id]: valor }))} />
+  const produtoSelecionado = originalSelecionado?.categoria === 'Bolos' ? { ...selecionarBolo(originalSelecionado, formatoSelecionado, tamanhoSelecionado || 'P'), tamanho: tamanhoSelecionado } : originalSelecionado?.categoria === 'Kits' ? { ...originalSelecionado, sabor: saboresKits[originalSelecionado.id] } : selecionado?.produto
+  const painel = selecionado && <InformacoesProduto produto={produtoSelecionado} origem={selecionado.origem} quantidade={quantidades[selecionado.produto.id]} aoQuantidade={(quantidade) => escolherQuantidade(selecionado.produto, quantidade)} erro={erros[selecionado.produto.id]} aoFechar={() => setSelecionado(null)} aoAdicionar={adicionar} aoTamanho={(valor) => escolherTamanho(selecionado.produto, valor)} aoFormato={(valor) => setFormatos((atual) => ({ ...atual, [selecionado.produto.id]: valor }))} saborKit={saboresKits[selecionado.produto.id]} aoSaborKit={(valor) => escolherSaborKit(selecionado.produto, valor)} />
 
   if (!doces) return <>{cards(itens)}{!itens.length && <p className="modal-vazio">Ainda não há produtos cadastrados nesta categoria.</p>}{painel}</>
 

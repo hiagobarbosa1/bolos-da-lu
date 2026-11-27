@@ -28,5 +28,6 @@ export function prepararBolo(produto) {
 
 export function chaveItemCarrinho(item) {
   const formato = item.tipo === 'produto' && item.categoria === 'Bolos' && !item.personalizado ? item.formato || 'Redondo' : ''
-  return `${item.tipo}:${item.id}:${formato}:${formato ? item.tamanho || 'P' : ''}`
+  const saborKit = item.tipo === 'produto' && item.categoria === 'Kits' ? item.sabor || '' : ''
+  return `${item.tipo}:${item.id}:${formato}:${formato ? item.tamanho || 'P' : ''}:${saborKit}`
 }

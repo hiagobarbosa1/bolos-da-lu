@@ -38,8 +38,114 @@
 .cliente-historico { margin-top: 28px; padding-top: 20px; border-top: 1px solid #ddc1b5; overflow-wrap: anywhere }
 .cliente-historico-titulo { display: flex; justify-content: space-between; align-items: center; gap: 12px }
 .cliente-historico>p { font-size: 13px; line-height: 1.6 }
+
+.admin-consultas {
+    padding: clamp(18px, 2.4vw, 30px);
+    border: 1px solid #ede3dd;
+    border-radius: 20px;
+    background: #fffdfb;
+    box-shadow: 0 12px 32px #4b2a200a;
+}
+
+.consulta-filtros {
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.consulta-filtros label {
+    color: #6f4b41;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.consulta-filtros input {
+    box-sizing: border-box;
+    min-height: 48px;
+    padding: 12px 15px;
+    border: 1px solid #eadbd4;
+    border-radius: 12px;
+    background: #fffaf7;
+    color: #4b2a20;
+    font: 400 14px 'DM Sans', sans-serif;
+    transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+.consulta-filtros input:focus {
+    border-color: #d87984;
+    box-shadow: 0 0 0 4px #e974831c;
+    outline: 0;
+}
+
+.consulta-filtros button,
+.admin-consultas button {
+    border-radius: 11px;
+    transition: transform .18s ease, background .18s ease, box-shadow .18s ease;
+}
+
+.consulta-filtros button:hover,
+.clientes-consulta article>button:hover,
+.cliente-historico-titulo button:hover {
+    transform: translateY(-1px);
+    background: #f3d9d0;
+    box-shadow: 0 5px 12px #4b2a2012;
+}
+
+.admin-consultas>p[role="status"] {
+    margin: 0 0 14px;
+    color: #8a7168;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.clientes-consulta { gap: 10px; }
+
+.clientes-consulta article {
+    padding: 17px 18px;
+    border-color: #eee3dd;
+    border-radius: 14px;
+    background: linear-gradient(110deg, #fff 0%, #fffdfa 100%);
+    box-shadow: 0 4px 14px #4b2a2008;
+    transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+.clientes-consulta article:hover {
+    transform: translateY(-2px);
+    border-color: #e6c9c0;
+    box-shadow: 0 9px 22px #4b2a2012;
+}
+
+.clientes-consulta h3 {
+    margin-bottom: 6px;
+    color: #4b2a20;
+    font: 700 18px 'Playfair Display', serif;
+}
+
+.clientes-consulta p { color: #654b42; }
+.clientes-consulta small { display: inline-block; margin-top: 5px; color: #9a766b; }
+
+.clientes-consulta article>button,
+.cliente-historico-titulo button {
+    flex: 0 0 auto;
+    border-color: #ecd5cc;
+    background: #fff4ee;
+    color: #734c40;
+}
+
+.cliente-historico {
+    margin-top: 22px;
+    padding: 22px;
+    border: 1px solid #ede0d9;
+    border-radius: 16px;
+    background: #fffaf7;
+}
+
+.cliente-historico-titulo { margin-bottom: 12px; }
+.cliente-historico-titulo h2 { margin: 0; }
+
 @media(max-width:600px) {
     .consulta-filtros, .clientes-consulta article, .cliente-historico-titulo { align-items: stretch; flex-direction: column }
     .consulta-metricas { grid-template-columns: minmax(0, 1fr) }
     .historico-admin summary { flex-wrap: wrap; font-size: 13px }
+    .admin-consultas { padding: 16px; border-radius: 15px; }
+    .clientes-consulta article>button { width: 100%; }
 }

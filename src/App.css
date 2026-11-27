@@ -14,26 +14,27 @@ main {
 .topo {
     position: fixed;
     z-index: 60;
-    top: 0;
-    left: 0;
-    height: 82px;
-    width: 100%;
+    top: 5px;
+    left: 50%;
+    height: 70px;
+    width: min(1440px, calc(100% - 40px));
     box-sizing: border-box;
-    padding: 0 32px;
+    padding: 0 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 24px;
     background: #f1e0ca;
-    border-bottom: 1px solid #f0dfd8;
-    box-shadow: 0 9px 24px #4b2a2017;
-    transform: translateY(-115%);
+    border: 1px solid #efdfd4;
+    border-radius: 22px;
+    box-shadow: 0 5px 12px #00000020, 0 12px 24px #00000024;
+    transform: translate(-50%, -115%);
     opacity: 0;
     pointer-events: none;
     transition: transform .35s ease, opacity .25s ease
 }
 
-.topo.menu-flutuante-visivel { transform: translateY(0); opacity: 1; pointer-events: auto }
+.topo.menu-flutuante-visivel { transform: translate(-50%, 0); opacity: 1; pointer-events: auto }
 
 .marca {
     display: flex;
@@ -44,7 +45,7 @@ main {
     white-space: nowrap
 }
 
-.marca img { display: block; width: 185px; height: 54px; object-fit: cover; object-position: center 60% }
+.marca img { display: block; width: 150px; height: 46px; object-fit: cover; object-position: center 60% }
 
 .marca span,
 .marca em {
@@ -736,7 +737,8 @@ h2 {
 @media(max-width:760px) {
     .topo {
         height: auto;
-        padding: 16px 20px
+        padding: 10px 16px;
+        border-radius: 18px
     }
 
     .topo nav,
@@ -748,15 +750,17 @@ h2 {
 
     .topo nav.nav-aberta {
         position: absolute;
-        top: 100%;
+        top: calc(100% - 1px);
         right: 0;
         left: 0;
         display: grid;
         gap: 0;
-        padding: 8px 20px 16px;
+        padding: 8px 16px 14px;
         background: #f1e0ca;
-        border: 0;
-        box-shadow: none
+        border: 1px solid #efdfd4;
+        border-top: 0;
+        border-radius: 0 0 18px 18px;
+        box-shadow: 0 12px 20px #4b2a2017
     }
 
     .topo nav.nav-aberta a { padding: 13px 4px; border-bottom: 1px solid #e5cfc2 }
@@ -941,7 +945,7 @@ h2 {
 
 @media (max-width: 480px) {
     .topo { padding: 10px 14px; gap: 10px }
-    .marca img { width: 138px; height: 42px }
+    .marca img { width: 122px; height: 38px }
     .acoes-topo { min-width: 0 }
     .botao-menu { width: 38px; height: 38px; padding: 8px }
     .acoes-topo .botao.pequeno { padding: 9px 10px; font-size: 12px }
